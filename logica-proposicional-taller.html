@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lógica Proposicional · Taller interactivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #E9EEF3;
+    --bg-panel: #FFFFFF;
+    --bg-panel-2: #F2F5F9;
+    --bg-raised: #E1E8EF;
+    --line: #C7D3DE;
+    --line-strong: #9FB0C1;
+    --text: #16212B;
+    --text-dim: #51637A;
+    --text-faint: #8698AC;
+    --blue: #1B5FA6;
+    --blue-soft: rgba(27,95,166,0.10);
+    --orange: #D9662B;
+    --orange-soft: rgba(217,102,43,0.12);
+    --green: #2F8F5B;
+    --green-soft: rgba(47,143,91,0.12);
+    --red: #C1443A;
+    --red-soft: rgba(193,68,58,0.12);
+    --font-display: 'IBM Plex Serif', Georgia, serif;
+    --font-body: 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      repeating-linear-gradient(0deg, rgba(159,176,193,0.16) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(159,176,193,0.16) 0 1px, transparent 1px 28px),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--orange-soft); color: var(--orange); }
+
+  .wrap{ max-width: 1000px; margin: 0 auto; padding: 28px 20px 80px; }
+
+  header.top{ margin-bottom: 20px; }
+  .eyebrow{
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--blue); margin: 0 0 10px; font-weight: 600;
+  }
+  h1.title{ font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4.4vw, 42px); margin: 0 0 8px; letter-spacing: -0.01em; }
+  h1.title em{ font-style: italic; color: var(--orange); }
+  .subtitle{ color: var(--text-dim); font-size: 15.5px; max-width: 660px; margin: 0; }
+  .affiliation{ color: var(--text-faint); font-family: var(--font-mono); font-size: 12.5px; margin: 10px 0 0; }
+
+  .signal{ position: relative; height: 30px; margin: 20px 0 24px; }
+  .signal svg{ width: 100%; height: 100%; display:block; }
+  .signal .rail{ fill:none; stroke: var(--line-strong); stroke-width: 1.5; }
+  .signal .plate{ fill:none; stroke: var(--blue); stroke-width: 3; stroke-dasharray: 5 9; animation: dash 3.6s linear infinite; }
+  @keyframes dash{ to{ stroke-dashoffset: -168; } }
+  @media (prefers-reduced-motion: reduce){ .signal .plate{ animation:none; } }
+
+  nav.tabs{ display:flex; gap: 6px; margin-bottom: 24px; border-bottom: 2px solid var(--line); }
+  nav.tabs button{
+    font-family: var(--font-body); font-weight: 700; font-size: 14.5px; color: var(--text-dim);
+    background: transparent; border: none; border-bottom: 3px solid transparent;
+    padding: 11px 6px 12px; margin-right: 20px; margin-bottom: -2px; cursor: pointer;
+  }
+  nav.tabs button .n{ font-family: var(--font-mono); color: var(--text-faint); margin-right: 8px; font-size: 12px; font-weight: 500;}
+  nav.tabs button:hover{ color: var(--text); }
+  nav.tabs button.active{ color: var(--blue); border-bottom-color: var(--blue); }
+  nav.tabs button.active .n{ color: var(--blue); }
+
+  .panel{ display: none; }
+  .panel.active{ display: block; animation: fade .22s ease; }
+  @keyframes fade{ from{ opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+
+  /* ---------- tutorial ---------- */
+  details.topic{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+  details.topic[open]{ border-color: var(--line-strong); }
+  details.topic summary{
+    list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: baseline; gap: 12px;
+    font-family: var(--font-display); font-size: 18px; font-weight: 600;
+  }
+  details.topic summary::-webkit-details-marker{ display:none; }
+  details.topic summary .idx{ font-family: var(--font-mono); font-size: 13px; color: var(--orange); font-weight: 600; flex-shrink: 0; }
+  details.topic summary::after{ content: '+'; margin-left: auto; font-family: var(--font-mono); color: var(--text-faint); font-size: 18px; }
+  details.topic[open] summary::after{ content: '–'; color: var(--blue); }
+  .topic-body{ padding: 0 20px 22px; font-size: 15px; border-top: 1px solid var(--line); }
+  .topic-body p{ color: var(--text); margin: 14px 0 12px; }
+  .topic-body h4{ font-family: var(--font-body); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--blue); margin: 20px 0 8px; font-weight:700;}
+
+  .formula{ font-family: var(--font-mono); color: var(--blue); background: var(--bg-panel-2); border:1px solid var(--line); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+
+  .example{ background: var(--bg-panel-2); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .example .lbl{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--orange); display:block; margin-bottom: 6px; font-weight:600; }
+
+  table.tv{ border-collapse: collapse; font-family: var(--font-mono); font-size: 13.5px; margin: 10px 0 16px; }
+  table.tv th, table.tv td{ border: 1px solid var(--line); padding: 6px 14px; text-align: center; }
+  table.tv th{ background: var(--bg-raised); color: var(--blue); font-weight: 700; }
+  table.tv td.one{ color: var(--blue); font-weight:600; }
+  table.tv td.zero{ color: var(--text-faint); }
+
+  ul.laws{ margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+  ul.laws li{ font-size: 13.8px; border-bottom: 1px dashed var(--line); padding: 7px 0; }
+  ul.laws li b{ display:block; color: var(--text-dim); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px;}
+  @media (max-width: 620px){ ul.laws{ grid-template-columns: 1fr; } }
+
+  .rule-card{ display: grid; grid-template-columns: 1fr 1.3fr; gap: 18px; background: var(--bg-panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; align-items: center; }
+  .rule-card .scheme{ font-family: var(--font-mono); font-size: 14px; }
+  .rule-card .scheme .name{ color: var(--orange); font-weight: 700; display:block; margin-bottom: 6px; font-family: var(--font-body); font-size: 13px;}
+  .rule-card .story{ font-size: 13.5px; color: var(--text-dim); }
+  @media (max-width: 620px){ .rule-card{ grid-template-columns: 1fr; } }
+
+  /* ---------- simulator ---------- */
+  .sim-tabs{ display:flex; gap:8px; margin-bottom:16px; flex-wrap: wrap; }
+  .sim-tabs button{
+    font-family: var(--font-mono); font-size: 12.5px; letter-spacing:.02em; font-weight:600;
+    background: var(--bg-panel); color: var(--text-dim); border: 1px solid var(--line);
+    border-radius: 999px; padding: 7px 14px; cursor:pointer;
+  }
+  .sim-tabs button.active{ background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
+
+  .simbox{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
+  .simbox h3{ font-family: var(--font-display); font-size: 20px; margin: 0 0 6px; font-weight: 700;}
+  .simbox p.hint{ color: var(--text-dim); font-size: 13.8px; margin: 0 0 14px; }
+
+  /* virtual keyboard */
+  .keyboard{
+    display:flex; flex-wrap:wrap; gap:6px; background: var(--bg-panel-2); border:1px solid var(--line);
+    border-radius: 8px; padding: 10px; margin: 12px 0 16px;
+  }
+  .keyboard .kb-label{ font-family: var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color: var(--text-faint); width:100%; margin-bottom:2px; }
+  .keyboard button{
+    font-family: var(--font-mono); font-size: 15px; font-weight:600; min-width: 38px;
+    background: var(--bg-panel); border:1px solid var(--line); color: var(--text);
+    border-radius: 6px; padding: 7px 4px; cursor:pointer;
+  }
+  .keyboard button:hover{ border-color: var(--blue); color: var(--blue); }
+  .keyboard button.op{ color: var(--blue); }
+  .keyboard button.var-key{ color: var(--orange); }
+  .keyboard button.util{ color: var(--text-dim); font-family: var(--font-body); font-size: 12px; padding: 7px 10px; }
+  .keyboard .spacer{ flex: 1 1 100%; height: 0; }
+
+  input.formula-input, textarea.formula-input{
+    width: 100%; font-family: var(--font-mono); font-size: 16px; background: var(--bg-panel-2);
+    border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 12px 14px; outline: none;
+  }
+  input.formula-input:focus, textarea.formula-input:focus{ border-color: var(--blue); background: var(--bg-panel); }
+  textarea.formula-input{ resize: vertical; min-height: 74px; }
+
+  button.go{
+    font-family: var(--font-body); font-weight: 700; font-size: 14px; background: var(--blue); color: #fff;
+    border: none; border-radius: 6px; padding: 12px 20px; cursor: pointer; margin-top: 4px;
+  }
+  button.go:hover{ background: #17518F; }
+  button.go:active{ transform: translateY(1px); }
+
+  .field-lbl{ font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin-bottom: 6px; display:block; }
+
+  .error-box{ background: var(--red-soft); border: 1px solid var(--red); color: #8C2E26; border-radius: 6px; padding: 10px 14px; font-size: 13.5px; margin-top: 14px; font-family: var(--font-mono); }
+
+  .result{ margin-top: 22px; }
+  .badge{ display:inline-block; font-family: var(--font-mono); font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 999px; letter-spacing: .03em; margin-bottom: 14px; }
+  .badge.taut{ background: var(--blue-soft); color: var(--blue); }
+  .badge.contra{ background: var(--red-soft); color: var(--red); }
+  .badge.conting{ background: var(--orange-soft); color: var(--orange); }
+  .badge.valid{ background: var(--green-soft); color: var(--green); }
+  .badge.invalid{ background: var(--red-soft); color: var(--red); }
+
+  table.result-table{ border-collapse: collapse; font-family: var(--font-mono); font-size: 13.5px; width: 100%; overflow-x:auto; display:block; }
+  table.result-table th, table.result-table td{ border:1px solid var(--line); padding: 8px 12px; text-align:center; white-space:nowrap; }
+  table.result-table th{ background: var(--bg-raised); color: var(--text-dim); font-size: 12px; }
+  table.result-table th.concl{ color: var(--orange); }
+  table.result-table td.v1{ color: var(--blue); font-weight:700; }
+  table.result-table td.v0{ color: var(--text-faint); }
+  table.result-table tr.counter{ background: var(--red-soft); }
+
+  .circuit-frame{ background: var(--bg-panel-2); border:1px solid var(--line); border-radius: 8px; padding: 18px; overflow-x:auto; }
+  .circuit-frame svg{ display:block; margin:0 auto; }
+  .circuit-note{ font-size: 13px; color: var(--text-dim); margin-top: 12px; }
+
+  .deriv{ margin-bottom: 16px; }
+  .deriv-step{
+    display:grid; grid-template-columns: 22px auto 1fr; gap: 12px; align-items:center;
+    padding: 9px 0; border-bottom: 1px dashed var(--line);
+    opacity: 0; animation: derivIn .35s ease forwards;
+  }
+  @keyframes derivIn{ from{ opacity:0; transform: translateX(-6px); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .deriv-step{ animation: none; opacity:1; } }
+  .deriv-n{
+    font-family: var(--font-mono); font-size: 11px; font-weight:700; color: #fff;
+    background: var(--blue); border-radius: 50%; width:22px; height:22px; display:flex;
+    align-items:center; justify-content:center;
+  }
+  .deriv-law{ font-family: var(--font-body); font-size: 12.5px; font-weight:700; color: var(--orange); white-space:nowrap; }
+  .deriv-rule{ display:block; font-family: var(--font-mono); font-size: 11px; font-weight:400; color: var(--text-faint); }
+  .deriv-formula{ font-family: var(--font-mono); font-size: 14px; color: var(--text); }
+  .deriv-arrow{ color: var(--blue); margin: 0 10px; }
+  .deriv-final{ font-family: var(--font-mono); font-size: 14px; color: var(--text); background: var(--bg-raised); border-radius: 6px; padding: 10px 14px; margin-top: 10px; }
+  .deriv-final b{ color: var(--blue); }
+
+  .assign-badge{
+    display:inline-block; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim);
+    background: var(--bg-raised); border:1px solid var(--line); border-radius: 999px; padding: 5px 12px;
+    margin-left: 8px; margin-bottom: 14px;
+  }
+
+  /* ---------- quiz ---------- */
+  .quiz-top{ display:flex; justify-content: space-between; align-items:center; margin-bottom: 16px; }
+  .quiz-progress{ font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim); }
+  .progress-bar{ height: 4px; background: var(--line); border-radius: 4px; overflow:hidden; margin-bottom: 22px; }
+  .progress-fill{ height: 100%; background: var(--blue); transition: width .3s ease; }
+
+  .q-card{ background: var(--bg-panel); border:1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .q-topic{ font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing:.08em; color: var(--blue); margin-bottom: 10px; font-weight:600;}
+  .q-text{ font-family: var(--font-display); font-size: 19px; font-weight: 600; margin-bottom: 18px; line-height:1.4; }
+  .q-options{ display:flex; flex-direction:column; gap: 9px; margin-bottom: 18px; }
+  .q-opt{ text-align:left; font-family: var(--font-body); font-size: 14.5px; background: var(--bg-panel-2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 11px 14px; cursor:pointer; }
+  .q-opt:hover{ border-color: var(--blue); }
+  .q-opt.selected{ border-color: var(--orange); background: var(--orange-soft); }
+  .q-opt.correct{ border-color: var(--green); background: var(--green-soft); }
+  .q-opt.wrong{ border-color: var(--red); background: var(--red-soft); }
+  .q-opt:disabled{ cursor: default; }
+
+  .q-explain{ font-size: 13.5px; color: var(--text-dim); background: var(--bg-panel-2); border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; display:none; }
+  .q-explain.show{ display:block; }
+  .q-actions{ display:flex; justify-content:flex-end; gap:10px; }
+  button.next{ font-family: var(--font-body); font-weight:700; font-size: 13.5px; background: var(--bg-raised); color: var(--text); border:1px solid var(--line); border-radius: 6px; padding: 10px 18px; cursor:pointer; }
+  button.next:disabled{ opacity: .35; cursor: default; }
+
+  .score-card{ text-align:center; padding: 40px 20px; }
+  .score-num{ font-family: var(--font-display); font-size: 56px; font-weight:700; color: var(--blue); }
+  .score-label{ color: var(--text-dim); margin-bottom: 24px; }
+
+  footer{ margin-top: 50px; color: var(--text-faint); font-size: 12.5px; font-family: var(--font-mono); text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <p class="eyebrow">Arquitectura y Organización de Computadoras · FaCENA-UNNE</p>
+    <h1 class="title">Lógica <em>Proposicional</em></h1>
+    <p class="subtitle">Taller interactivo con teoría, simulador de tablas de verdad, constructor de redes de conmutación y autoevaluación. Basado en sintaxis, semántica, satisfacibilidad, consecuencia lógica, equivalencia, reglas de inferencia y circuitos.</p>
+    <p class="affiliation">Lic. Walter Barrios — UNNE</p>
+  </header>
+
+  <div class="signal">
+    <svg viewBox="0 0 900 30" preserveAspectRatio="none">
+      <path class="rail" d="M0,15 L380,15 M420,15 L900,15" />
+      <path class="rail" d="M380,4 L380,26 M420,4 L420,26" />
+      <path class="plate" d="M0,15 L900,15" />
+    </svg>
+  </div>
+
+  <nav class="tabs">
+    <button class="active" data-tab="tutorial"><span class="n">01</span>Tutorial</button>
+    <button data-tab="simulador"><span class="n">02</span>Simulador</button>
+    <button data-tab="quiz"><span class="n">03</span>Autoevaluación</button>
+  </nav>
+
+  <!-- ======================= TUTORIAL ======================= -->
+  <section id="panel-tutorial" class="panel active">
+
+    <details class="topic" open>
+      <summary><span class="idx">1.1</span>Introducción</summary>
+      <div class="topic-body">
+        <p>La Lógica Proposicional constituye la base para reconocer y validar razonamientos. Un buen argumento matemático, la corrección de un programa o la coherencia de un diseño de circuito dependen, en el fondo, de esta misma estructura: identificar afirmaciones con un valor de verdad definido y combinarlas mediante reglas precisas.</p>
+        <p>Trabajaremos dos aspectos complementarios de todo lenguaje formal: la <b>sintaxis</b>, que establece qué secuencias de símbolos están bien formadas, y la <b>semántica</b>, que asigna significado a esas secuencias y permite decidir su verdad o falsedad.</p>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.2</span>Sintaxis: alfabeto y fórmulas bien formadas</summary>
+      <div class="topic-body">
+        <p>El alfabeto de la Lógica Proposicional de Cálculo (LPC) es <span class="formula">Σ = {p, ¬, ∧, ∨, →, ↔, ( , )}</span> y contiene tres tipos de símbolos: variables proposicionales (p, q, r, s, t, …), conectivos lógicos (¬, ∧, ∨, →, ↔) y símbolos auxiliares de agrupación.</p>
+        <h4>Definición: fórmula bien formada (fbf)</h4>
+        <p>Una cadena de símbolos del alfabeto es una fbf cuando puede obtenerse mediante un número finito de aplicaciones de estas reglas:</p>
+        <div class="example">
+          <span class="lbl">Reglas de formación</span>
+          i) Una variable proposicional es una fbf.<br>
+          ii) Si θ es una fbf, entonces ¬θ es una fbf.<br>
+          iii) Si θ y φ son fbfs, entonces (θ∧φ), (θ∨φ), (θ→φ) y (θ↔φ) también son fbfs.<br>
+          iv) Una cadena es fbf si y solo si se obtiene mediante un número finito de aplicaciones de i), ii) y iii).
+        </div>
+        <p>Con <span class="formula">Var = {p, q, r}</span> son fbf: <span class="formula">p</span>, <span class="formula">¬q</span>, <span class="formula">((p∨q)→r)</span>. En cambio, <span class="formula">p ∨ q</span> no es una fbf estricta porque la regla iii) exige encerrar la disyunción entre paréntesis: la forma correcta es <span class="formula">(p∨q)</span>.</p>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.3</span>Semántica de los conectivos</summary>
+      <div class="topic-body">
+        <p>Cada conectivo define cómo el valor de verdad de una fórmula compuesta depende de sus componentes.</p>
+
+        <h4>Negación (¬)</h4>
+        <table class="tv"><tr><th>θ</th><th>¬θ</th></tr><tr><td class="one">1</td><td class="zero">0</td></tr><tr><td class="zero">0</td><td class="one">1</td></tr></table>
+        <div class="example"><span class="lbl">Ejemplo</span>Si p: "2 es número impar" (falsa), entonces ¬p: "2 es número par" (verdadera).</div>
+
+        <h4>Conjunción (∧)</h4>
+        <table class="tv"><tr><th>θ</th><th>φ</th><th>θ∧φ</th></tr><tr><td>0</td><td>0</td><td class="zero">0</td></tr><tr><td>0</td><td>1</td><td class="zero">0</td></tr><tr><td>1</td><td>0</td><td class="zero">0</td></tr><tr><td>1</td><td>1</td><td class="one">1</td></tr></table>
+        <div class="example"><span class="lbl">Ejemplo</span>"10 es múltiplo de 2 y de 5" es verdadera porque ambas proposiciones atómicas lo son. "10 es múltiplo de 2 y de 6" es falsa porque la segunda no se cumple.</div>
+
+        <h4>Disyunción incluyente (∨)</h4>
+        <table class="tv"><tr><th>θ</th><th>φ</th><th>θ∨φ</th></tr><tr><td>0</td><td>0</td><td class="zero">0</td></tr><tr><td>0</td><td>1</td><td class="one">1</td></tr><tr><td>1</td><td>0</td><td class="one">1</td></tr><tr><td>1</td><td>1</td><td class="one">1</td></tr></table>
+        <div class="example"><span class="lbl">Ejemplo</span>"Soy profesora o alumna": ambas opciones pueden ser verdaderas a la vez sin contradicción, por eso es incluyente.</div>
+
+        <h4>Disyunción excluyente o diferencia simétrica (Δ)</h4>
+        <p>El alfabeto de la LPC no incluye un símbolo propio para el "o" excluyente, pero se define a partir de los conectivos existentes: <span class="formula">θΔφ ⇔ (θ∧¬φ)∨(¬θ∧φ)</span>. Es verdadera cuando exactamente una de las dos fórmulas lo es.</p>
+        <table class="tv"><tr><th>θ</th><th>φ</th><th>θΔφ</th></tr><tr><td>0</td><td>0</td><td class="zero">0</td></tr><tr><td>0</td><td>1</td><td class="one">1</td></tr><tr><td>1</td><td>0</td><td class="one">1</td></tr><tr><td>1</td><td>1</td><td class="zero">0</td></tr></table>
+        <div class="example"><span class="lbl">Ejemplo</span>"Mi mascota está viva o muerta": la verdad de una excluye necesariamente la verdad de la otra.</div>
+
+        <h4>Implicación (→)</h4>
+        <p>Se lee "si θ entonces φ". θ se llama antecedente o hipótesis y φ, consecuente o conclusión. Es falsa únicamente cuando el antecedente es verdadero y el consecuente es falso.</p>
+        <table class="tv"><tr><th>θ</th><th>φ</th><th>θ→φ</th></tr><tr><td>0</td><td>0</td><td class="one">1</td></tr><tr><td>0</td><td>1</td><td class="one">1</td></tr><tr><td>1</td><td>0</td><td class="zero">0</td></tr><tr><td>1</td><td>1</td><td class="one">1</td></tr></table>
+        <div class="example"><span class="lbl">Ejemplo</span>"Si 3+4=8, entonces 4+5=10" es verdadera pese a que ambas proposiciones atómicas son falsas: alcanza con que el antecedente sea falso.</div>
+
+        <h4>Doble implicación (↔)</h4>
+        <p>Equivale a <span class="formula">(θ→φ)∧(φ→θ)</span>: es verdadera exactamente cuando θ y φ comparten el mismo valor de verdad.</p>
+        <table class="tv"><tr><th>θ</th><th>φ</th><th>θ↔φ</th></tr><tr><td>0</td><td>0</td><td class="one">1</td></tr><tr><td>0</td><td>1</td><td class="zero">0</td></tr><tr><td>1</td><td>0</td><td class="zero">0</td></tr><tr><td>1</td><td>1</td><td class="one">1</td></tr></table>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.4</span>Interpretación y valuación</summary>
+      <div class="topic-body">
+        <p><b>Interpretación:</b> función que asigna a cada variable proposicional de <span class="formula">Var</span> un valor 0 o 1. Suele identificarse con el subconjunto de átomos que reciben imagen 1.</p>
+        <div class="example"><span class="lbl">Ejemplo</span>Con <span class="formula">Var = {p, q, r}</span>, la interpretación <span class="formula">I = {p}</span> significa I(p)=1, I(q)=0, I(r)=0. Si <span class="formula">Var</span> tiene n átomos, existen 2ⁿ interpretaciones posibles.</div>
+        <p><b>Valuación:</b> extiende la interpretación a cualquier fórmula, respetando el comportamiento de cada conectivo. Se anota <span class="formula">vI(θ)</span>.</p>
+        <div class="example"><span class="lbl">Ejemplo</span>Sea θ = (p ∧ (q → ¬r)). Bajo J = {q}: vJ(p)=0, por lo tanto vJ(θ)=0. Bajo I = {p}: vI(p)=1 y vI(q)=0, entonces vI(q→¬r)=1, por lo que vI(θ)=1.</div>
+        <p>Podés comprobar este mismo ejemplo en el simulador de la pestaña siguiente.</p>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.5</span>Modelos, satisfacibilidad, tautologías, contradicciones y contingencias</summary>
+      <div class="topic-body">
+        <p>Si <span class="formula">vI(θ) = 1</span>, se dice que I <b>satisface</b> a θ, o que I es <b>modelo</b> de θ.</p>
+        <ul class="laws">
+          <li><b>Tautología (T₀)</b>Toda interpretación es modelo de la fórmula: siempre es verdadera.</li>
+          <li><b>Contradicción (F₀)</b>Ninguna interpretación es modelo: siempre es falsa. También se llama insatisfacible.</li>
+          <li><b>Contingencia</b>Es satisfacible, pero no es tautología: hay interpretaciones que la hacen verdadera y otras que la hacen falsa.</li>
+          <li><b>Conjunto de fórmulas satisfacible</b>Existe al menos una valuación que satisface simultáneamente a todas sus fórmulas.</li>
+        </ul>
+        <div class="example"><span class="lbl">Teorema</span>Una fórmula es tautológica si y solo si su negación es insatisfacible (contradicción).</div>
+        <div class="example"><span class="lbl">Ejemplo</span><span class="formula">(p∨q)∧(¬p∧¬q)</span> es una contradicción: probalo en el simulador y vas a ver que la última columna da 0 en las cuatro filas.</div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.6</span>Consecuencia lógica y teorema de la deducción</summary>
+      <div class="topic-body">
+        <p>Una fórmula φ es <b>consecuencia lógica</b> de un conjunto S (se escribe <span class="formula">S ⊨ φ</span>) cuando toda interpretación que satisface a todas las fórmulas de S también satisface a φ. Dicho de otro modo, no existe ninguna interpretación que haga verdaderas las premisas y falsa la conclusión.</p>
+        <div class="example"><span class="lbl">Teorema de la deducción</span><span class="formula">S ∪ {θ} ⊨ φ</span> si y solo si <span class="formula">S ⊨ (θ→φ)</span>. Este resultado permite trasladar una premisa al consecuente de una implicación, y es la base para encadenar demostraciones.</div>
+        <div class="example"><span class="lbl">Ejemplo</span><span class="formula">S = {(p→q), (q→r)}</span> implica lógicamente a <span class="formula">(p→r)</span>: en toda fila donde ambas premisas son verdaderas, la conclusión también lo es. Podés verificarlo con el comprobador de consecuencia lógica del simulador.</div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.7</span>Equivalencia lógica</summary>
+      <div class="topic-body">
+        <p>Dos fórmulas θ y φ son <b>lógicamente equivalentes</b> (<span class="formula">θ ⇔ φ</span>) cuando <span class="formula">vI(θ) = vI(φ)</span> para toda interpretación I. Equivale a decir que <span class="formula">(θ↔φ)</span> es una tautología.</p>
+        <h4>Leyes lógicas más usadas</h4>
+        <ul class="laws">
+          <li><b>Identidad</b>p∧V ⇔ p · p∨F ⇔ p</li>
+          <li><b>Dominación</b>p∨V ⇔ V · p∧F ⇔ F</li>
+          <li><b>Idempotencia</b>p∨p ⇔ p · p∧p ⇔ p</li>
+          <li><b>Doble negación</b>¬(¬p) ⇔ p</li>
+          <li><b>Conmutativa</b>p∨q ⇔ q∨p · p∧q ⇔ q∧p</li>
+          <li><b>Asociativa</b>(p∨q)∨r ⇔ p∨(q∨r)</li>
+          <li><b>Distributiva</b>p∨(q∧r) ⇔ (p∨q)∧(p∨r)</li>
+          <li><b>De Morgan</b>¬(p∧q) ⇔ ¬p∨¬q · ¬(p∨q) ⇔ ¬p∧¬q</li>
+          <li><b>Absorción</b>p∨(p∧q) ⇔ p · p∧(p∨q) ⇔ p</li>
+          <li><b>Negación</b>p∨¬p ⇔ V · p∧¬p ⇔ F</li>
+          <li><b>Implicación</b>p→q ⇔ ¬p∨q</li>
+          <li><b>Contrarrecíproca</b>p→q ⇔ ¬q→¬p</li>
+        </ul>
+        <p style="margin-top:14px">Estas equivalencias funcionan como esquemas de sustitución dentro de una demostración: permiten reescribir una fórmula por otra de igual valor de verdad hasta llegar a una forma más simple o más útil. Es la misma idea que usa el constructor de redes de conmutación del simulador para dibujar → y ↔.</p>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.8</span>Conectivos adecuados y reglas de prioridad</summary>
+      <div class="topic-body">
+        <h4>Conectivos adecuados</h4>
+        <p>Un conjunto de conectivos es <b>adecuado</b> cuando permite definir, a partir de sus elementos, a todos los demás. El conjunto <span class="formula">{¬, ∧, ∨}</span> es adecuado, y también lo son <span class="formula">{¬, ∧}</span>, <span class="formula">{¬, ∨}</span> y <span class="formula">{¬, →}</span>. En cambio, <span class="formula">{∧, ∨}</span> no lo es, porque sin negación no puede definirse ni siquiera la negación misma.</p>
+        <h4>Reglas de prioridad</h4>
+        <p>Para aligerar la escritura se pueden omitir paréntesis siguiendo un orden de precedencia, de mayor a menor:</p>
+        <div class="example" style="font-family:var(--font-mono); text-align:center; font-size:16px;">¬ &nbsp;&gt;&nbsp; ∧ &nbsp;&gt;&nbsp; ∨ &nbsp;&gt;&nbsp; → &nbsp;&gt;&nbsp; ↔</div>
+        <p>Cuando dos conectivos tienen igual precedencia, se evalúa de izquierda a derecha.</p>
+        <div class="example"><span class="lbl">Ejemplo</span><span class="formula">p → q ∧ t</span> equivale a <span class="formula">(p → (q ∧ t))</span>, porque ∧ liga más fuerte que →.</div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.9</span>Reglas de inferencia</summary>
+      <div class="topic-body">
+        <p>Una inferencia válida es, en el fondo, una implicación tautológica: <span class="formula">(p₁∧p₂∧…∧pₙ) → c</span>. Las premisas expresan un conocimiento ya obtenido, y la conclusión, el conocimiento nuevo que se obtiene a partir de ellas.</p>
+        <div class="rule-card"><div class="scheme"><span class="name">Modus Ponens</span>p ∧ (p→q) ⊨ q</div><div class="story">Si aprobé el examen, entonces te presto los apuntes. Aprobé el examen. Luego, te presto los apuntes.</div></div>
+        <div class="rule-card"><div class="scheme"><span class="name">Modus Tollens</span>(p→q) ∧ ¬q ⊨ ¬p</div><div class="story">Si aprobé el examen, entonces te presto los apuntes. No te presto los apuntes. Luego, no aprobé el examen.</div></div>
+        <div class="rule-card"><div class="scheme"><span class="name">Silogismo hipotético</span>(p→q) ∧ (q→r) ⊨ (p→r)</div><div class="story">Si hago mi trabajo más eficiente, gano más. Si gano más, mejora mi nivel de vida. Luego, si hago mi trabajo más eficiente, mejora mi nivel de vida.</div></div>
+        <div class="rule-card"><div class="scheme"><span class="name">Silogismo disyuntivo</span>(p∨q) ∧ ¬p ⊨ q</div><div class="story">Compramos un departamento o cambiamos el auto. No compramos un departamento. Luego, cambiamos el auto.</div></div>
+        <div class="rule-card"><div class="scheme"><span class="name">Dilema constructivo</span>(p∨q) ∧ (p→r) ∧ (q→r) ⊨ r</div><div class="story">Viajo a Salta o viajo a Córdoba. En cualquiera de los dos casos, voy a descansar. Luego, voy a descansar.</div></div>
+        <div class="rule-card"><div class="scheme"><span class="name">Dilema destructivo</span>(p→q) ∧ (r→s) ∧ (¬q∨¬s) ⊨ (¬p∨¬r)</div><div class="story">Si viajo a Salta, viajo a Córdoba. Si descanso, me siento mejor. No viajo a Córdoba o no me siento mejor. Luego, no viajo a Salta o no descanso.</div></div>
+        <p>Todos estos esquemas pueden verificarse como tautologías: cargalos en el simulador (por ejemplo <span class="formula">(p&(p-&gt;q))-&gt;q</span>) y vas a obtener siempre la etiqueta TAUTOLOGÍA.</p>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="idx">1.10</span>Circuitos de conmutación</summary>
+      <div class="topic-body">
+        <p>Las redes de interruptores ofrecen una interpretación física de la LPC. Un interruptor cerrado equivale a 1 (verdadero); uno abierto, a 0 (falso). La corriente circula del terminal T₁ al T₂ según cómo estén dispuestos los interruptores.</p>
+        <ul class="laws">
+          <li><b>Interruptores en serie</b>Ambos deben estar cerrados para que pase la corriente: modelan la conjunción p∧q.</li>
+          <li><b>Interruptores en paralelo</b>Basta con que uno esté cerrado: modelan la disyunción p∨q.</li>
+        </ul>
+        <div class="example"><span class="lbl">Simplificación de redes</span>Una red se traduce a una fórmula proposicional y luego se simplifica aplicando las leyes lógicas de la sección 1.7. Por ejemplo, la red <span class="formula">(p∧q)∨((¬p∧¬q)∨q)</span> se reduce, aplicando la ley distributiva, la ley inversa y la ley de absorción, a la expresión equivalente <span class="formula">(q∨¬p)</span>, con menos interruptores y el mismo comportamiento eléctrico.</div>
+        <p>En la pestaña <b>Simulador → Redes de conmutación</b> podés escribir cualquier fórmula con ¬, ∧ y ∨ (o con → y ↔, que se convierten automáticamente) y el sistema dibuja la red de interruptores correspondiente entre los terminales T₁ y T₂.</p>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- ======================= SIMULADOR ======================= -->
+  <section id="panel-simulador" class="panel">
+
+    <div class="sim-tabs">
+      <button class="active" data-sim="tabla">Tabla de verdad</button>
+      <button data-sim="consecuencia">Consecuencia lógica</button>
+      <button data-sim="circuito">Redes de conmutación</button>
+    </div>
+
+    <div class="keyboard" id="keyboard">
+      <span class="kb-label">Teclado de símbolos — se insertan en el campo que esté activo</span>
+      <button type="button" class="op" data-ins="¬">¬</button>
+      <button type="button" class="op" data-ins="∧">∧</button>
+      <button type="button" class="op" data-ins="∨">∨</button>
+      <button type="button" class="op" data-ins="→">→</button>
+      <button type="button" class="op" data-ins="↔">↔</button>
+      <button type="button" data-ins="(">(</button>
+      <button type="button" data-ins=")">)</button>
+      <span class="spacer"></span>
+      <button type="button" class="var-key" data-ins="p">p</button>
+      <button type="button" class="var-key" data-ins="q">q</button>
+      <button type="button" class="var-key" data-ins="r">r</button>
+      <button type="button" class="var-key" data-ins="s">s</button>
+      <button type="button" class="var-key" data-ins="t">t</button>
+      <span class="spacer"></span>
+      <button type="button" class="util" id="kb-back">⌫ borrar</button>
+      <button type="button" class="util" id="kb-clear">limpiar campo</button>
+    </div>
+
+    <div id="sim-tabla" class="simbox">
+      <h3>Generador de tablas de verdad</h3>
+      <p class="hint">Escribí una fórmula usando variables p, q, r, s, t. El simulador construye la tabla completa y clasifica la fórmula.</p>
+      <label class="field-lbl">Fórmula</label>
+      <input class="formula-input" id="tabla-input" data-fieldname="fórmula" value="(p ∧ (q → ¬r))">
+      <button class="go" id="tabla-btn" style="margin-top:14px;">Generar tabla</button>
+      <div id="tabla-error"></div>
+      <div id="tabla-result" class="result"></div>
+    </div>
+
+    <div id="sim-consecuencia" class="simbox" style="display:none;">
+      <h3>Comprobador de consecuencia lógica</h3>
+      <p class="hint">Cargá un conjunto de premisas (una por línea) y una conclusión. El simulador arma la tabla combinada y dice si S ⊨ φ.</p>
+      <label class="field-lbl">Premisas (una por línea)</label>
+      <textarea class="formula-input" id="premisas-input" data-fieldname="premisas">p → q
+q → r</textarea>
+      <label class="field-lbl" style="margin-top:14px; display:block;">Conclusión</label>
+      <input class="formula-input" id="conclusion-input" data-fieldname="conclusión" value="p → r">
+      <button class="go" id="consecuencia-btn" style="margin-top:14px;">Verificar</button>
+      <div id="consecuencia-error"></div>
+      <div id="consecuencia-result" class="result"></div>
+    </div>
+
+    <div id="sim-circuito" class="simbox" style="display:none;">
+      <h3>Constructor de redes de conmutación</h3>
+      <p class="hint">Escribí cualquier fórmula (¬, ∧, ∨, → o ↔). El sistema muestra, paso a paso, qué equivalencias aplicó para reescribirla usando solo ¬, ∧ y ∨, y arma la red de interruptores entre T₁ y T₂. Después podés tocar cada interruptor para abrirlo o cerrarlo y ver en vivo por dónde conduce la corriente.</p>
+      <label class="field-lbl">Fórmula</label>
+      <input class="formula-input" id="circuito-input" data-fieldname="fórmula" value="(p ∨ q) → r">
+      <button class="go" id="circuito-btn" style="margin-top:14px;">Construir red</button>
+      <div id="circuito-error"></div>
+      <div id="circuito-result" class="result"></div>
+    </div>
+
+  </section>
+
+  <!-- ======================= QUIZ ======================= -->
+  <section id="panel-quiz" class="panel">
+    <div class="quiz-top">
+      <span class="quiz-progress" id="quiz-progress">Pregunta 1 de 18</span>
+      <span class="quiz-progress" id="quiz-score">Aciertos: 0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:5.5%"></div></div>
+    <div id="quiz-area"></div>
+  </section>
+
+  <footer>Lógica Proposicional · Arquitectura y Organización de Computadoras (FaCENA-UNNE) — material de apoyo para el estudio autónomo y para uso en clase</footer>
+</div>
+
+<script>
+/* ============================================================
+   MOTOR DE LÓGICA PROPOSICIONAL
+   ============================================================ */
+function tokenize(str) {
+  const tokens = [];
+  let i = 0;
+  const s = str.replace(/\s+/g, '');
+  if (!s) throw new Error('Ingresá una fórmula.');
+  while (i < s.length) {
+    const c = s[i];
+    if (s.substr(i, 3) === '<->') { tokens.push({t:'IFF'}); i += 3; continue; }
+    if (s.substr(i, 2) === '->') { tokens.push({t:'IMP'}); i += 2; continue; }
+    if ('~!¬'.includes(c)) { tokens.push({t:'NOT'}); i++; continue; }
+    if ('&^∧'.includes(c)) { tokens.push({t:'AND'}); i++; continue; }
+    if (c === '|' || c === '∨' || c === 'v' || c === 'V') { tokens.push({t:'OR'}); i++; continue; }
+    if (c === '→') { tokens.push({t:'IMP'}); i++; continue; }
+    if (c === '↔') { tokens.push({t:'IFF'}); i++; continue; }
+    if (c === '(') { tokens.push({t:'LP'}); i++; continue; }
+    if (c === ')') { tokens.push({t:'RP'}); i++; continue; }
+    if ('pqrstPQRST'.includes(c)) { tokens.push({t:'VAR', name: c.toLowerCase()}); i++; continue; }
+    throw new Error('Símbolo no reconocido: "' + c + '". Usá variables p,q,r,s,t y los conectivos del teclado.');
+  }
+  return tokens;
+}
+
+function parseTokens(tokens) {
+  let pos = 0;
+  function peek() { return tokens[pos]; }
+  function eat(type) {
+    if (!peek() || peek().t !== type) throw new Error('Fórmula mal formada: revisá los paréntesis.');
+    return tokens[pos++];
+  }
+  function parseAtom() {
+    const tk = peek();
+    if (!tk) throw new Error('La fórmula está incompleta.');
+    if (tk.t === 'VAR') { pos++; return {type:'VAR', name: tk.name}; }
+    if (tk.t === 'LP') { pos++; const e = parseIff(); eat('RP'); return e; }
+    throw new Error('Se esperaba una variable o "(" en la fórmula.');
+  }
+  function parseNot() {
+    if (peek() && peek().t === 'NOT') { pos++; return {type:'NOT', arg: parseNot()}; }
+    return parseAtom();
+  }
+  function parseAnd() {
+    let left = parseNot();
+    while (peek() && peek().t === 'AND') { pos++; left = {type:'AND', left, right: parseNot()}; }
+    return left;
+  }
+  function parseOr() {
+    let left = parseAnd();
+    while (peek() && peek().t === 'OR') { pos++; left = {type:'OR', left, right: parseAnd()}; }
+    return left;
+  }
+  function parseImp() {
+    let left = parseOr();
+    while (peek() && peek().t === 'IMP') { pos++; left = {type:'IMP', left, right: parseOr()}; }
+    return left;
+  }
+  function parseIff() {
+    let left = parseImp();
+    while (peek() && peek().t === 'IFF') { pos++; left = {type:'IFF', left, right: parseImp()}; }
+    return left;
+  }
+  const result = parseIff();
+  if (pos !== tokens.length) throw new Error('Sobran símbolos al final de la fórmula.');
+  return result;
+}
+
+function getVars(ast, set) {
+  set = set || new Set();
+  if (ast.type === 'VAR') set.add(ast.name);
+  else if (ast.type === 'NOT') getVars(ast.arg, set);
+  else { getVars(ast.left, set); getVars(ast.right, set); }
+  return set;
+}
+
+function evalAst(ast, assign) {
+  switch (ast.type) {
+    case 'VAR': return assign[ast.name];
+    case 'NOT': return evalAst(ast.arg, assign) ? 0 : 1;
+    case 'AND': return (evalAst(ast.left, assign) && evalAst(ast.right, assign)) ? 1 : 0;
+    case 'OR': return (evalAst(ast.left, assign) || evalAst(ast.right, assign)) ? 1 : 0;
+    case 'IMP': return (evalAst(ast.left, assign) === 1 && evalAst(ast.right, assign) === 0) ? 0 : 1;
+    case 'IFF': return (evalAst(ast.left, assign) === evalAst(ast.right, assign)) ? 1 : 0;
+  }
+}
+
+function parseFormula(str) { return parseTokens(tokenize(str)); }
+
+function allVarsUnion(asts) {
+  const set = new Set();
+  asts.forEach(a => getVars(a, set));
+  return [...set].sort();
+}
+
+function assignFor(vars, i) {
+  const n = vars.length, assign = {};
+  vars.forEach((v, idx) => { assign[v] = (i >> (n - idx - 1)) & 1; });
+  return assign;
+}
+
+/* ============================================================
+   UI: TABS PRINCIPALES
+   ============================================================ */
+document.querySelectorAll('nav.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.sim-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sim-tabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('sim-tabla').style.display = btn.dataset.sim === 'tabla' ? 'block' : 'none';
+    document.getElementById('sim-consecuencia').style.display = btn.dataset.sim === 'consecuencia' ? 'block' : 'none';
+    document.getElementById('sim-circuito').style.display = btn.dataset.sim === 'circuito' ? 'block' : 'none';
+  });
+});
+
+/* ============================================================
+   TECLADO VIRTUAL DE SÍMBOLOS
+   ============================================================ */
+let lastFocused = document.getElementById('tabla-input');
+document.querySelectorAll('.formula-input').forEach(el => {
+  el.addEventListener('focus', () => { lastFocused = el; });
+});
+
+function insertAtCursor(el, text) {
+  const start = el.selectionStart != null ? el.selectionStart : el.value.length;
+  const end = el.selectionEnd != null ? el.selectionEnd : el.value.length;
+  el.value = el.value.slice(0, start) + text + el.value.slice(end);
+  const newPos = start + text.length;
+  el.focus();
+  if (el.setSelectionRange) el.setSelectionRange(newPos, newPos);
+}
+
+document.querySelectorAll('.keyboard button[data-ins]').forEach(btn => {
+  btn.addEventListener('click', () => { insertAtCursor(lastFocused, btn.dataset.ins); });
+});
+document.getElementById('kb-back').addEventListener('click', () => {
+  const el = lastFocused;
+  const start = el.selectionStart != null ? el.selectionStart : el.value.length;
+  const end = el.selectionEnd != null ? el.selectionEnd : el.value.length;
+  if (start === end && start > 0) {
+    el.value = el.value.slice(0, start - 1) + el.value.slice(end);
+    el.focus(); if (el.setSelectionRange) el.setSelectionRange(start - 1, start - 1);
+  } else {
+    el.value = el.value.slice(0, start) + el.value.slice(end);
+    el.focus(); if (el.setSelectionRange) el.setSelectionRange(start, start);
+  }
+});
+document.getElementById('kb-clear').addEventListener('click', () => {
+  lastFocused.value = '';
+  lastFocused.focus();
+});
+
+/* ============================================================
+   SIMULADOR: TABLA DE VERDAD
+   ============================================================ */
+/* Recorre el árbol en post-orden (subfórmulas primero, la fórmula completa
+   al final) y junta cada subfórmula compuesta una sola vez, en el orden en
+   que "se arma" la fórmula final — el mismo criterio con el que se
+   construyen las tablas de verdad completas en el libro. Las variables
+   sueltas no se agregan acá porque ya tienen su propia columna. */
+function collectSubformulas(ast, list, seen) {
+  if (ast.type === 'VAR') return;
+  if (ast.type === 'NOT') collectSubformulas(ast.arg, list, seen);
+  else { collectSubformulas(ast.left, list, seen); collectSubformulas(ast.right, list, seen); }
+  const str = astToStr(ast);
+  if (!seen.has(str)) { seen.add(str); list.push({str, ast}); }
+}
+
+function renderTablaVerdad() {
+  const input = document.getElementById('tabla-input').value;
+  const errBox = document.getElementById('tabla-error');
+  const out = document.getElementById('tabla-result');
+  errBox.innerHTML = ''; out.innerHTML = '';
+  let ast;
+  try { ast = parseFormula(input); }
+  catch (e) { errBox.innerHTML = '<div class="error-box">' + e.message + '</div>'; return; }
+
+  const vars = [...getVars(ast)].sort();
+  if (vars.length === 0) { errBox.innerHTML = '<div class="error-box">La fórmula no contiene variables.</div>'; return; }
+  if (vars.length > 6) { errBox.innerHTML = '<div class="error-box">Usá como máximo 6 variables distintas para mantener la tabla legible.</div>'; return; }
+
+  const subforms = [];
+  const formulaIsBareVar = ast.type === 'VAR';
+  if (!formulaIsBareVar) collectSubformulas(ast, subforms, new Set());
+
+  const n = vars.length, rows = [];
+  for (let i = 0; i < (1 << n); i++) {
+    const assign = assignFor(vars, i);
+    const subVals = subforms.map(sf => evalAst(sf.ast, assign));
+    const value = formulaIsBareVar ? assign[ast.name] : subVals[subVals.length - 1];
+    rows.push({assign, subVals, value});
+  }
+  const allTrue = rows.every(r => r.value === 1);
+  const allFalse = rows.every(r => r.value === 0);
+  const clasif = allTrue ? {label:'TAUTOLOGÍA (T₀)', cls:'taut'} : allFalse ? {label:'CONTRADICCIÓN (F₀)', cls:'contra'} : {label:'CONTINGENCIA', cls:'conting'};
+
+  let html = '<span class="badge ' + clasif.cls + '">' + clasif.label + '</span>';
+  html += '<table class="result-table"><tr>';
+  vars.forEach(v => {
+    const isFinal = formulaIsBareVar && v === ast.name;
+    html += '<th' + (isFinal ? ' class="concl"' : '') + '>' + v + '</th>';
+  });
+  subforms.forEach((sf, idx) => {
+    const isFinal = idx === subforms.length - 1;
+    html += '<th' + (isFinal ? ' class="concl"' : '') + '>' + sf.str + '</th>';
+  });
+  html += '</tr>';
+  rows.forEach(r => {
+    html += '<tr>';
+    vars.forEach(v => html += '<td class="v' + r.assign[v] + '">' + r.assign[v] + '</td>');
+    r.subVals.forEach((val, idx) => {
+      const isFinal = idx === r.subVals.length - 1;
+      html += '<td class="v' + val + '">' + (isFinal ? '<b>' + val + '</b>' : val) + '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</table>';
+  out.innerHTML = html;
+}
+document.getElementById('tabla-btn').addEventListener('click', renderTablaVerdad);
+document.getElementById('tabla-input').addEventListener('keydown', e => { if (e.key === 'Enter') renderTablaVerdad(); });
+
+/* ============================================================
+   SIMULADOR: CONSECUENCIA LÓGICA
+   ============================================================ */
+function renderConsecuencia() {
+  const premisasRaw = document.getElementById('premisas-input').value.split('\n').map(s => s.trim()).filter(Boolean);
+  const conclusionRaw = document.getElementById('conclusion-input').value.trim();
+  const errBox = document.getElementById('consecuencia-error');
+  const out = document.getElementById('consecuencia-result');
+  errBox.innerHTML = ''; out.innerHTML = '';
+
+  if (premisasRaw.length === 0) { errBox.innerHTML = '<div class="error-box">Ingresá al menos una premisa.</div>'; return; }
+  if (!conclusionRaw) { errBox.innerHTML = '<div class="error-box">Ingresá la conclusión a verificar.</div>'; return; }
+
+  let premisaAsts, conclusionAst;
+  try {
+    premisaAsts = premisasRaw.map(parseFormula);
+    conclusionAst = parseFormula(conclusionRaw);
+  } catch (e) { errBox.innerHTML = '<div class="error-box">' + e.message + '</div>'; return; }
+
+  const vars = allVarsUnion([...premisaAsts, conclusionAst]);
+  if (vars.length > 6) { errBox.innerHTML = '<div class="error-box">Usá como máximo 6 variables distintas en total.</div>'; return; }
+
+  const n = vars.length, rows = [];
+  let valid = true, counterExampleFound = false;
+  for (let i = 0; i < (1 << n); i++) {
+    const assign = assignFor(vars, i);
+    const pVals = premisaAsts.map(a => evalAst(a, assign));
+    const cVal = evalAst(conclusionAst, assign);
+    const allPremTrue = pVals.every(v => v === 1);
+    const isCounter = allPremTrue && cVal === 0;
+    if (isCounter) { valid = false; counterExampleFound = true; }
+    rows.push({assign, pVals, cVal, isCounter});
+  }
+
+  let html = '<span class="badge ' + (valid ? 'valid' : 'invalid') + '">' +
+    (valid ? 'S ⊨ φ  (la conclusión SÍ es consecuencia lógica)' : 'S ⊭ φ  (la conclusión NO es consecuencia lógica)') +
+    '</span>';
+  html += '<table class="result-table"><tr>';
+  vars.forEach(v => html += '<th>' + v + '</th>');
+  premisasRaw.forEach((p, idx) => html += '<th>P' + (idx+1) + '</th>');
+  html += '<th class="concl">φ</th></tr>';
+  rows.forEach(r => {
+    html += '<tr' + (r.isCounter ? ' class="counter"' : '') + '>';
+    vars.forEach(v => html += '<td class="v' + r.assign[v] + '">' + r.assign[v] + '</td>');
+    r.pVals.forEach(v => html += '<td class="v' + v + '">' + v + '</td>');
+    html += '<td class="v' + r.cVal + '"><b>' + r.cVal + '</b></td></tr>';
+  });
+  html += '</table>';
+  if (counterExampleFound) {
+    html += '<p style="color:var(--red); font-size:13.5px; margin-top:12px;">La fila resaltada muestra un contraejemplo: todas las premisas son verdaderas y, sin embargo, la conclusión es falsa.</p>';
+  }
+  out.innerHTML = html;
+}
+document.getElementById('consecuencia-btn').addEventListener('click', renderConsecuencia);
+
+/* ============================================================
+   SIMULADOR: CONSTRUCTOR DE REDES DE CONMUTACIÓN
+   ============================================================ */
+/* Convierte la fórmula a Forma Normal Negativa: elimina → y ↔ (usando sus
+   equivalencias) y aplica De Morgan recursivamente hasta que cada ¬ quede
+   pegado a una variable. Una red de interruptores solo puede negar literales
+   (p, ¬p), nunca un bloque entero como (p∨q); por eso la negación de una
+   fórmula compuesta debe "entrar" y repartirse: ¬(θ∧φ) ⇔ ¬θ∨¬φ y
+   ¬(θ∨φ) ⇔ ¬θ∧¬φ (ver sección 1.7). El arreglo `steps` va acumulando cada
+   equivalencia aplicada, en orden, para mostrarla explícitamente. */
+function astToStr(ast) {
+  switch (ast.type) {
+    case 'VAR': return ast.name;
+    case 'NOT': return '¬' + astToStr(ast.arg);
+    case 'AND': return '(' + astToStr(ast.left) + ' ∧ ' + astToStr(ast.right) + ')';
+    case 'OR': return '(' + astToStr(ast.left) + ' ∨ ' + astToStr(ast.right) + ')';
+    case 'IMP': return '(' + astToStr(ast.left) + ' → ' + astToStr(ast.right) + ')';
+    case 'IFF': return '(' + astToStr(ast.left) + ' ↔ ' + astToStr(ast.right) + ')';
+  }
+}
+
+function transformForCircuit(ast, negate, steps) {
+  negate = !!negate;
+  steps = steps || [];
+  if (ast.type === 'VAR') return negate ? {type:'NOT', arg: ast} : ast;
+  if (ast.type === 'NOT') {
+    if (ast.arg.type === 'NOT') {
+      steps.push({law:'Doble negación', rule:'¬¬θ ⇔ θ', before: astToStr(ast), after: astToStr(ast.arg.arg)});
+      return transformForCircuit(ast.arg.arg, negate, steps);
+    }
+    return transformForCircuit(ast.arg, !negate, steps);
+  }
+  if (ast.type === 'AND') {
+    if (negate) {
+      const equiv = {type:'OR', left:{type:'NOT', arg:ast.left}, right:{type:'NOT', arg:ast.right}};
+      steps.push({law:'De Morgan', rule:'¬(θ∧φ) ⇔ ¬θ∨¬φ', before: '¬' + astToStr(ast), after: astToStr(equiv)});
+      return transformForCircuit(equiv, false, steps);
+    }
+    return {type:'AND', left: transformForCircuit(ast.left, false, steps), right: transformForCircuit(ast.right, false, steps)};
+  }
+  if (ast.type === 'OR') {
+    if (negate) {
+      const equiv = {type:'AND', left:{type:'NOT', arg:ast.left}, right:{type:'NOT', arg:ast.right}};
+      steps.push({law:'De Morgan', rule:'¬(θ∨φ) ⇔ ¬θ∧¬φ', before: '¬' + astToStr(ast), after: astToStr(equiv)});
+      return transformForCircuit(equiv, false, steps);
+    }
+    return {type:'OR', left: transformForCircuit(ast.left, false, steps), right: transformForCircuit(ast.right, false, steps)};
+  }
+  if (ast.type === 'IMP') {
+    const equiv = {type:'OR', left:{type:'NOT', arg: ast.left}, right: ast.right};
+    steps.push({law:'Implicación', rule:'θ→φ ⇔ ¬θ∨φ', before: astToStr(ast), after: astToStr(equiv)});
+    return transformForCircuit(equiv, negate, steps);
+  }
+  if (ast.type === 'IFF') {
+    const l = ast.left, r = ast.right;
+    const equiv = {type:'OR', left:{type:'AND', left:l, right:r}, right:{type:'AND', left:{type:'NOT', arg:l}, right:{type:'NOT', arg:r}}};
+    steps.push({law:'Doble implicación', rule:'θ↔φ ⇔ (θ∧φ)∨(¬θ∧¬φ)', before: astToStr(ast), after: astToStr(equiv)});
+    return transformForCircuit(equiv, negate, steps);
+  }
+}
+
+function layoutCircuit(ast) {
+  /* Gracias a transformForCircuit, en este punto ¬ solo puede envolver
+     una variable (p, ¬p, q, ¬q, ...): nunca una fórmula compuesta.
+     Cada nodo guarda su propio astNode para poder evaluar, más tarde,
+     si conduce corriente bajo el estado actual de los interruptores. */
+  if (ast.type === 'VAR') return {kind:'leaf', label: ast.name, negated:false, w: 78, h: 34, astNode: ast};
+  if (ast.type === 'NOT') return {kind:'leaf', label: ast.arg.name, negated:true, w: 78, h: 34, astNode: ast};
+  if (ast.type === 'AND') {
+    const l = layoutCircuit(ast.left), r = layoutCircuit(ast.right);
+    return {kind:'series', children:[l, r], w: l.w + r.w + 26, h: Math.max(l.h, r.h), astNode: ast};
+  }
+  if (ast.type === 'OR') {
+    const l = layoutCircuit(ast.left), r = layoutCircuit(ast.right);
+    return {kind:'parallel', children:[l, r], w: Math.max(l.w, r.w) + 44, h: l.h + r.h + 26, astNode: ast};
+  }
+}
+
+/* Dibuja la red. `assign` es el estado actual de los interruptores
+   (0 = abierto, 1 = cerrado). El estado de cada interruptor es, ni más
+   ni menos, el valor de verdad de su literal — por eso alcanza con
+   reusar evalAst sobre el astNode guardado en cada nodo del layout para
+   saber si ese tramo conduce corriente y así resaltarlo. */
+function drawCircuit(node, x, ymid, assign) {
+  const on = evalAst(node.astNode, assign) === 1;
+  const wireCls = 'wire' + (on ? ' on' : '');
+  if (node.kind === 'leaf') {
+    const y = ymid, midx = x + node.w / 2;
+    const label = (node.negated ? '¬' : '') + node.label;
+    let svg = '<g class="leaf-switch" data-var="' + node.label + '">';
+    svg += '<rect x="' + x + '" y="' + (y - 26) + '" width="' + node.w + '" height="46" fill="transparent"/>';
+    svg += '<line x1="' + x + '" y1="' + y + '" x2="' + (midx - 15) + '" y2="' + y + '" class="' + wireCls + '"/>';
+    svg += '<circle cx="' + (midx - 15) + '" cy="' + y + '" r="2.8" class="node' + (on ? ' on' : '') + '"/>';
+    if (on) {
+      svg += '<line x1="' + (midx - 15) + '" y1="' + y + '" x2="' + (midx + 15) + '" y2="' + y + '" class="switch closed"/>';
+    } else {
+      svg += '<line x1="' + (midx - 15) + '" y1="' + y + '" x2="' + (midx + 12) + '" y2="' + (y - 16) + '" class="switch open"/>';
+    }
+    svg += '<circle cx="' + (midx + 15) + '" cy="' + y + '" r="2.8" class="node' + (on ? ' on' : '') + '"/>';
+    svg += '<line x1="' + (midx + 15) + '" y1="' + y + '" x2="' + (x + node.w) + '" y2="' + y + '" class="' + wireCls + '"/>';
+    svg += '<text x="' + midx + '" y="' + (y - 22) + '" class="switch-label' + (on ? ' on' : '') + '" text-anchor="middle">' + label + '</text>';
+    svg += '</g>';
+    return svg;
+  }
+  if (node.kind === 'series') {
+    const l = node.children[0], r = node.children[1];
+    let svg = '';
+    svg += drawCircuit(l, x, ymid, assign);
+    svg += drawCircuit(r, x + l.w + 26, ymid, assign);
+    svg += '<line x1="' + (x + l.w) + '" y1="' + ymid + '" x2="' + (x + l.w + 26) + '" y2="' + ymid + '" class="' + wireCls + '"/>';
+    return svg;
+  }
+  if (node.kind === 'parallel') {
+    const top = node.children[0], bot = node.children[1];
+    const totalH = node.h;
+    const topY = ymid - totalH / 2 + top.h / 2;
+    const botY = ymid + totalH / 2 - bot.h / 2;
+    const stub = 22;
+    let svg = '';
+    svg += '<line x1="' + (x + stub) + '" y1="' + topY + '" x2="' + (x + stub) + '" y2="' + botY + '" class="' + wireCls + '"/>';
+    svg += '<line x1="' + (x + node.w - stub) + '" y1="' + topY + '" x2="' + (x + node.w - stub) + '" y2="' + botY + '" class="' + wireCls + '"/>';
+    svg += '<line x1="' + x + '" y1="' + ymid + '" x2="' + (x + stub) + '" y2="' + ymid + '" class="' + wireCls + '"/>';
+    svg += '<line x1="' + (x + node.w - stub) + '" y1="' + ymid + '" x2="' + (x + node.w) + '" y2="' + ymid + '" class="' + wireCls + '"/>';
+    const branchAreaW = node.w - 2 * stub;
+    function drawBranch(child, y) {
+      const childOn = evalAst(child.astNode, assign) === 1;
+      const pad = (branchAreaW - child.w) / 2;
+      return drawCircuit(child, x + stub + pad, y, assign) +
+        '<line x1="' + (x + stub) + '" y1="' + y + '" x2="' + (x + stub + pad) + '" y2="' + y + '" class="wire' + (childOn ? ' on' : '') + '"/>' +
+        '<line x1="' + (x + stub + pad + child.w) + '" y1="' + y + '" x2="' + (x + node.w - stub) + '" y2="' + y + '" class="wire' + (childOn ? ' on' : '') + '"/>';
+    }
+    svg += drawBranch(top, topY);
+    svg += drawBranch(bot, botY);
+    return svg;
+  }
+  return '';
+}
+
+let CIRCUIT = null; // { layout, vars, assign, totalW, totalH, padX, startX, ymid }
+
+function circuitSvgString() {
+  const { layout, assign, totalW, totalH, padX, startX, ymid } = CIRCUIT;
+  const overallOn = evalAst(layout.astNode, assign) === 1;
+  const body = drawCircuit(layout, startX, ymid, assign);
+  return '<svg viewBox="0 0 ' + totalW + ' ' + totalH + '" width="100%" style="max-width:' + Math.min(totalW * 1.4, 720) + 'px">' +
+    '<style>' +
+    '.wire{stroke:#B7C2D1;stroke-width:2;fill:none;transition:stroke .2s;}' +
+    '.wire.on{stroke:#1B5FA6;stroke-width:3;stroke-dasharray:6 7;animation:flow 0.9s linear infinite;}' +
+    '.switch{stroke-width:2.6;fill:none;transition:all .2s;}' +
+    '.switch.open{stroke:#8698AC;}' +
+    '.switch.closed{stroke:#2F8F5B;stroke-width:3;}' +
+    '.node{fill:#8698AC;transition:fill .2s;}' +
+    '.node.on{fill:#1B5FA6;}' +
+    '.switch-label{font-family:\'IBM Plex Mono\',monospace;font-size:14px;fill:#51637A;font-weight:600;transition:fill .2s;}' +
+    '.switch-label.on{fill:#16212B;}' +
+    '.term{font-family:\'IBM Plex Mono\',monospace;font-size:13px;fill:#51637A;font-weight:600;}' +
+    '.leaf-switch{cursor:pointer;}' +
+    '@keyframes flow{ to{ stroke-dashoffset:-26; } }' +
+    '</style>' +
+    '<line x1="' + padX + '" y1="' + ymid + '" x2="' + startX + '" y2="' + ymid + '" class="wire' + (overallOn ? ' on' : '') + '"/>' +
+    '<circle cx="' + padX + '" cy="' + ymid + '" r="3.6" class="node' + (overallOn ? ' on' : '') + '"/>' +
+    '<text x="' + padX + '" y="' + (ymid - 14) + '" class="term" text-anchor="middle">T₁</text>' +
+    body +
+    '<line x1="' + (startX + layout.w) + '" y1="' + ymid + '" x2="' + (totalW - padX) + '" y2="' + ymid + '" class="wire' + (overallOn ? ' on' : '') + '"/>' +
+    '<circle cx="' + (totalW - padX) + '" cy="' + ymid + '" r="3.6" class="node' + (overallOn ? ' on' : '') + '"/>' +
+    '<text x="' + (totalW - padX) + '" y="' + (ymid - 14) + '" class="term" text-anchor="middle">T₂</text>' +
+    '</svg>';
+}
+
+function redrawCircuitOnly() {
+  if (!CIRCUIT) return;
+  const holder = document.getElementById('circuit-svg-holder');
+  const overallOn = evalAst(CIRCUIT.layout.astNode, CIRCUIT.assign) === 1;
+  const closedVars = CIRCUIT.vars.filter(v => CIRCUIT.assign[v] === 1);
+  holder.innerHTML =
+    '<span class="badge ' + (overallOn ? 'valid' : 'invalid') + '">' +
+      (overallOn ? 'CONDUCE — pasa corriente de T₁ a T₂' : 'ABIERTO — no pasa corriente') +
+    '</span>' +
+    '<span class="assign-badge">I = {' + (closedVars.length ? closedVars.join(', ') : '∅') + '}</span>' +
+    '<div class="circuit-frame">' + circuitSvgString() + '</div>';
+  holder.querySelectorAll('.leaf-switch').forEach(g => {
+    g.addEventListener('click', () => {
+      const v = g.getAttribute('data-var');
+      CIRCUIT.assign[v] = CIRCUIT.assign[v] ? 0 : 1;
+      redrawCircuitOnly();
+    });
+  });
+}
+
+function renderCircuito() {
+  const input = document.getElementById('circuito-input').value;
+  const errBox = document.getElementById('circuito-error');
+  const out = document.getElementById('circuito-result');
+  errBox.innerHTML = ''; out.innerHTML = ''; CIRCUIT = null;
+
+  let ast;
+  try { ast = parseFormula(input); }
+  catch (e) { errBox.innerHTML = '<div class="error-box">' + e.message + '</div>'; return; }
+
+  const vars = [...getVars(ast)].sort();
+  if (vars.length === 0) { errBox.innerHTML = '<div class="error-box">La fórmula no contiene variables.</div>'; return; }
+
+  const steps = [];
+  const circAst = transformForCircuit(ast, false, steps);
+  const layout = layoutCircuit(circAst);
+  const padX = 36, padY = 34, stubLen = 34;
+  CIRCUIT = {
+    layout,
+    vars,
+    assign: Object.fromEntries(vars.map(v => [v, 0])),
+    totalW: layout.w + padX * 2 + stubLen * 2,
+    totalH: layout.h + padY * 2,
+    padX, startX: padX + stubLen
+  };
+  CIRCUIT.ymid = CIRCUIT.totalH / 2;
+
+  let derivHtml = '';
+  if (steps.length > 0) {
+    derivHtml += '<div class="deriv">';
+    derivHtml += '<span class="field-lbl" style="margin-bottom:10px;">Equivalencias aplicadas para poder dibujar la red</span>';
+    steps.forEach((s, i) => {
+      derivHtml += '<div class="deriv-step" style="animation-delay:' + (i * 110) + 'ms">' +
+        '<span class="deriv-n">' + (i + 1) + '</span>' +
+        '<span class="deriv-law">' + s.law + '<span class="deriv-rule">' + s.rule + '</span></span>' +
+        '<span class="deriv-formula">' + s.before + '<span class="deriv-arrow">⇔</span>' + s.after + '</span>' +
+        '</div>';
+    });
+    derivHtml += '<div class="deriv-final">Fórmula lista para la red (solo ¬, ∧, ∨): <b>' + astToStr(circAst) + '</b></div>';
+    derivHtml += '</div>';
+  } else {
+    derivHtml = '<p class="circuit-note">La fórmula ya estaba expresada únicamente con ¬, ∧ y ∨: no hizo falta aplicar ninguna equivalencia.</p>';
+  }
+
+  out.innerHTML = derivHtml +
+    '<p class="circuit-note" style="margin-bottom:10px;">Tocá cualquier interruptor para abrirlo o cerrarlo, y mirá cómo cambia el camino que conduce corriente entre T₁ y T₂.</p>' +
+    '<div id="circuit-svg-holder"></div>';
+  redrawCircuitOnly();
+}
+document.getElementById('circuito-btn').addEventListener('click', renderCircuito);
+document.getElementById('circuito-input').addEventListener('keydown', e => { if (e.key === 'Enter') renderCircuito(); });
+
+/* ============================================================
+   AUTOEVALUACIÓN (con opciones aleatorizadas en cada carga)
+   ============================================================ */
+const QUIZ_BASE = [
+  { topic:'Sintaxis', q:'¿Cuál de las siguientes cadenas NO es una fórmula bien formada (Var={p,q,r})?',
+    options:['((p∧q)→r)', 'p∨q', '(p↔(q∧r))', '¬(p∨q)'], correct:1,
+    explain:'La regla iii) de formación exige encerrar toda fórmula compuesta entre paréntesis. "p∨q" debería escribirse "(p∨q)".' },
+  { topic:'Semántica', q:'Si v(p)=1 y v(q)=0, ¿cuál es el valor de v(p→q)?',
+    options:['1', '0', 'Depende de r', 'No puede determinarse'], correct:1,
+    explain:'La implicación es falsa únicamente cuando el antecedente es verdadero y el consecuente es falso; es exactamente este caso.' },
+  { topic:'Semántica', q:'"Mi mascota está viva o muerta" es un ejemplo de disyunción:',
+    options:['Incluyente', 'Excluyente', 'Conjunción disfrazada', 'Bicondicional'], correct:1,
+    explain:'La verdad de una alternativa excluye necesariamente la verdad de la otra: es el "o exclusivo" o diferencia simétrica.' },
+  { topic:'Interpretación', q:'Con Var={p,q,r} e interpretación I={p,r}, ¿qué valor toma q bajo I?',
+    options:['1', '0', 'Indeterminado', 'Depende de p'], correct:1,
+    explain:'Una interpretación se identifica con el subconjunto de átomos que reciben imagen 1. Como q no figura en I, su imagen es 0.' },
+  { topic:'Tautologías', q:'¿Cuál de las siguientes fórmulas es una tautología?',
+    options:['p∧¬p', 'p∨¬p', 'p→q', 'p↔q'], correct:1,
+    explain:'p∨¬p es verdadera bajo cualquier interpretación (ley del tercero excluido): es tautología.' },
+  { topic:'Contradicciones', q:'La fórmula (p∨q)∧(¬p∧¬q) es:',
+    options:['Tautología', 'Contradicción', 'Contingencia', 'No es una fbf'], correct:1,
+    explain:'Es falsa para las cuatro interpretaciones posibles: pedirle a la vez p∨q y ¬p∧¬q es inconsistente.' },
+  { topic:'Consecuencia lógica', q:'Si S={(p→q),(q→r)} y φ=(p→r), ¿qué relación existe entre S y φ?',
+    options:['S no implica lógicamente a φ', 'S ⊨ φ: φ es consecuencia lógica de S', 'φ ⊨ S', 'No existe ninguna relación'], correct:1,
+    explain:'Es el esquema del silogismo hipotético: toda interpretación que satisface ambas premisas también satisface la conclusión.' },
+  { topic:'Teorema de la deducción', q:'El teorema de la deducción establece que S∪{θ} ⊨ φ si y solo si:',
+    options:['S ⊨ θ', 'S ⊨ (θ→φ)', 'S ⊨ ¬θ', 'θ ⊨ S'], correct:1,
+    explain:'El teorema permite trasladar una premisa θ hacia el antecedente de una implicación en el consecuente.' },
+  { topic:'Equivalencia lógica', q:'¬(p∧q) es lógicamente equivalente a:',
+    options:['¬p∧¬q', '¬p∨¬q', 'p∨q', 'p∧q'], correct:1,
+    explain:'Es una de las leyes de De Morgan: la negación de una conjunción equivale a la disyunción de las negaciones.' },
+  { topic:'Conectivos adecuados', q:'¿Cuál de los siguientes conjuntos de conectivos NO es adecuado?',
+    options:['{¬,∧}', '{¬,∨}', '{∧,∨}', '{¬,→}'], correct:2,
+    explain:'Sin negación no puede definirse la negación misma a partir de ∧ y ∨: el conjunto {∧,∨} no alcanza para expresar todos los conectivos.' },
+  { topic:'Reglas de prioridad', q:'Según el orden de prioridad (¬ > ∧ > ∨ > → > ↔), la fórmula p→q∧t equivale a:',
+    options:['(p→q)∧t', 'p→(q∧t)', 'Es ambigua, faltan paréntesis', 'Ninguna de las anteriores'], correct:1,
+    explain:'∧ liga más fuerte que →, por lo tanto q∧t se agrupa primero.' },
+  { topic:'Reglas de inferencia', q:'"Si aprobé el examen, te presto los apuntes. Aprobé el examen. Luego, te presto los apuntes." es un ejemplo de:',
+    options:['Modus Tollens', 'Modus Ponens', 'Silogismo hipotético', 'Silogismo disyuntivo'], correct:1,
+    explain:'Se afirma el antecedente de la implicación y se concluye el consecuente: esquema p∧(p→q) ⊨ q.' },
+  { topic:'Reglas de inferencia', q:'"Si el programa es eficaz, no tiene error. El programa tiene error. Luego, no es eficaz." corresponde a:',
+    options:['Modus Ponens', 'Modus Tollens', 'Dilema constructivo', 'Dilema destructivo'], correct:1,
+    explain:'Se niega el consecuente de la implicación y se concluye la negación del antecedente: esquema (p→q)∧¬q ⊨ ¬p.' },
+  { topic:'Reglas de inferencia', q:'A partir de (p→q)∧(q→r), ¿cuál es la conclusión válida por silogismo hipotético?',
+    options:['p∧r', 'p→r', 'q→p', 'r→p'], correct:1,
+    explain:'El silogismo hipotético encadena dos implicaciones: (p→q)∧(q→r) ⊨ (p→r).' },
+  { topic:'Reglas de inferencia', q:'A partir de (p∨q)∧¬p, ¿cuál es la conclusión válida por silogismo disyuntivo?',
+    options:['p', 'q', '¬q', 'p∧q'], correct:1,
+    explain:'Si se descarta una de las opciones de la disyunción, queda afirmada la otra: (p∨q)∧¬p ⊨ q.' },
+  { topic:'Circuitos de conmutación', q:'En una red de conmutación, dos interruptores en serie representan la operación:',
+    options:['Disyunción (∨)', 'Conjunción (∧)', 'Negación (¬)', 'Implicación (→)'], correct:1,
+    explain:'En serie, ambos interruptores deben estar cerrados para que circule la corriente: se comporta como una conjunción.' },
+  { topic:'Circuitos de conmutación', q:'Dos interruptores en paralelo representan la operación:',
+    options:['Conjunción (∧)', 'Disyunción (∨)', 'Bicondicional (↔)', 'Negación (¬)'], correct:1,
+    explain:'En paralelo, basta con que uno de los dos esté cerrado para que circule la corriente: se comporta como una disyunción.' },
+  { topic:'Satisfacibilidad', q:'Un conjunto de fórmulas es insatisfacible cuando:',
+    options:['Existe alguna interpretación que las hace verdaderas a todas', 'No existe ninguna interpretación que las haga verdaderas a todas simultáneamente', 'Todas sus fórmulas son tautologías', 'El conjunto está vacío'], correct:1,
+    explain:'La insatisfacibilidad significa que ninguna valuación logra satisfacer al conjunto completo de manera simultánea.' }
+];
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function buildQuizSession() {
+  const questionOrder = shuffle(QUIZ_BASE.map((_, i) => i));
+  return questionOrder.map(qi => {
+    const item = QUIZ_BASE[qi];
+    const idxOrder = shuffle([0, 1, 2, 3]);
+    const options = idxOrder.map(i => item.options[i]);
+    const correct = idxOrder.indexOf(item.correct);
+    return {topic: item.topic, q: item.q, options, correct, explain: item.explain};
+  });
+}
+
+let QUIZ = buildQuizSession();
+let quizIndex = 0, quizScore = 0, answered = false;
+
+function renderQuiz() {
+  const area = document.getElementById('quiz-area');
+  document.getElementById('quiz-progress').textContent = 'Pregunta ' + (quizIndex + 1) + ' de ' + QUIZ.length;
+  document.getElementById('quiz-score').textContent = 'Aciertos: ' + quizScore;
+  document.getElementById('progress-fill').style.width = ((quizIndex) / QUIZ.length * 100) + '%';
+
+  if (quizIndex >= QUIZ.length) {
+    document.getElementById('progress-fill').style.width = '100%';
+    const pct = Math.round((quizScore / QUIZ.length) * 100);
+    area.innerHTML = '<div class="q-card score-card">' +
+      '<div class="score-num">' + quizScore + ' / ' + QUIZ.length + '</div>' +
+      '<div class="score-label">' + pct + '% de respuestas correctas</div>' +
+      '<button class="go" id="restart-btn">Volver a empezar (orden y opciones nuevas)</button>' +
+      '</div>';
+    document.getElementById('restart-btn').addEventListener('click', () => {
+      QUIZ = buildQuizSession(); quizIndex = 0; quizScore = 0; answered = false; renderQuiz();
+    });
+    return;
+  }
+
+  answered = false;
+  const item = QUIZ[quizIndex];
+  let html = '<div class="q-card">';
+  html += '<div class="q-topic">' + item.topic + '</div>';
+  html += '<div class="q-text">' + item.q + '</div>';
+  html += '<div class="q-options">';
+  item.options.forEach((opt, i) => { html += '<button class="q-opt" data-i="' + i + '">' + opt + '</button>'; });
+  html += '</div>';
+  html += '<div class="q-explain" id="q-explain">' + item.explain + '</div>';
+  html += '<div class="q-actions"><button class="next" id="next-btn" disabled>' + (quizIndex === QUIZ.length - 1 ? 'Ver resultado' : 'Siguiente') + '</button></div>';
+  html += '</div>';
+  area.innerHTML = html;
+
+  document.querySelectorAll('.q-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (answered) return;
+      answered = true;
+      const chosen = parseInt(btn.dataset.i);
+      document.querySelectorAll('.q-opt').forEach(b => {
+        b.disabled = true;
+        const bi = parseInt(b.dataset.i);
+        if (bi === item.correct) b.classList.add('correct');
+        else if (bi === chosen) b.classList.add('wrong');
+      });
+      if (chosen === item.correct) quizScore++;
+      document.getElementById('q-explain').classList.add('show');
+      document.getElementById('next-btn').disabled = false;
+      document.getElementById('quiz-score').textContent = 'Aciertos: ' + quizScore;
+    });
+  });
+  document.getElementById('next-btn').addEventListener('click', () => { quizIndex++; renderQuiz(); });
+}
+renderQuiz();
+
+/* Vistas iniciales de ejemplo al cargar */
+renderTablaVerdad();
+renderCircuito();
+</script>
+</body>
+</html>
