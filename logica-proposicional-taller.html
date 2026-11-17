@@ -1,267 +1,413 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lógica Proposicional · Taller interactivo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Material interactivo AYOC · Arquitectura y Organización de Computadoras</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
 <style>
-  :root{
-    --bg: #E9EEF3;
-    --bg-panel: #FFFFFF;
-    --bg-panel-2: #F2F5F9;
-    --bg-raised: #E1E8EF;
-    --line: #C7D3DE;
-    --line-strong: #9FB0C1;
-    --text: #16212B;
-    --text-dim: #51637A;
-    --text-faint: #8698AC;
-    --blue: #1B5FA6;
-    --blue-soft: rgba(27,95,166,0.10);
-    --orange: #D9662B;
-    --orange-soft: rgba(217,102,43,0.12);
-    --green: #2F8F5B;
-    --green-soft: rgba(47,143,91,0.12);
-    --red: #C1443A;
-    --red-soft: rgba(193,68,58,0.12);
-    --font-display: 'IBM Plex Serif', Georgia, serif;
-    --font-body: 'IBM Plex Sans', -apple-system, sans-serif;
-    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
-  }
-  *{ box-sizing: border-box; }
-  html,body{ margin:0; padding:0; }
-  body{
-    background:
-      repeating-linear-gradient(0deg, rgba(159,176,193,0.16) 0 1px, transparent 1px 28px),
-      repeating-linear-gradient(90deg, rgba(159,176,193,0.16) 0 1px, transparent 1px 28px),
-      var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
-  ::selection{ background: var(--orange-soft); color: var(--orange); }
+:root{
+  --bg:#f6f5f1;--surface:#ffffff;--fg:#1b2430;--muted:#5b6675;--line:#dcd9d0;
+  --accent:#0b6e6e;--accent-soft:#dff0ee;--accent-fg:#ffffff;
+  --ok:#1f7a45;--ok-soft:#e1f3e8;--bad:#b3261e;--bad-soft:#fbe6e4;--warn:#b7791f;
+  --b1:#0b6e6e;--b0:#8a94a1;
+  --t1:#0b6e6e;--t2:#b7791f;--t3:#7b4bb7;--t4:#c2410c;--t5:#2563eb;--t6:#be185d;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --head:'Space Grotesk','IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12171d;--surface:#1a2129;--fg:#e7ebef;--muted:#9aa5b1;--line:#2b3540;
+  --accent:#4fc3b8;--accent-soft:#1b3a3a;--accent-fg:#0d1417;
+  --ok:#5dd28a;--ok-soft:#173225;--bad:#ff8a80;--bad-soft:#3a1c1a;--warn:#e0b04f;
+  --b1:#4fc3b8;--b0:#6c7783;
+  --t1:#4fc3b8;--t2:#e0b04f;--t3:#b794f4;--t4:#fb923c;--t5:#7ab0ff;--t6:#f472b6;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d;--surface:#1a2129;--fg:#e7ebef;--muted:#9aa5b1;--line:#2b3540;
+  --accent:#4fc3b8;--accent-soft:#1b3a3a;--accent-fg:#0d1417;
+  --ok:#5dd28a;--ok-soft:#173225;--bad:#ff8a80;--bad-soft:#3a1c1a;--warn:#e0b04f;
+  --b1:#4fc3b8;--b0:#6c7783;
+  --t1:#4fc3b8;--t2:#e0b04f;--t3:#b794f4;--t4:#fb923c;--t5:#7ab0ff;--t6:#f472b6;
+  color-scheme:dark}
 
-  .wrap{ max-width: 1000px; margin: 0 auto; padding: 28px 20px 80px; }
-
-  header.top{ margin-bottom: 20px; }
-  .eyebrow{
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.55;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 56px}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--head);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.6rem,4.5vw,2.3rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.5rem;font-weight:600}
+h3{font-size:1.08rem;font-weight:600}
+p{margin:.4em 0}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+header .sub{color:var(--muted);max-width:62ch;margin-top:8px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:18px 0 6px;scrollbar-width:thin}
+nav a{flex:0 0 auto;text-decoration:none;color:var(--fg);border:1px solid var(--line);background:var(--surface);
+  border-radius:10px;padding:8px 14px;font-size:.9rem;display:flex;gap:8px;align-items:baseline;white-space:nowrap}
+nav a b{font-family:var(--mono);font-weight:500;color:var(--accent)}
+nav a[aria-current="page"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+nav a[aria-current="page"] b{color:var(--accent-fg)}
+.unit-head{margin:26px 0 14px}
+.unit-head p{color:var(--muted);max-width:68ch}
+details.prog{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;margin:14px 0}
+details.prog summary{cursor:pointer;font-weight:600;font-size:.95rem}
+details.prog ul{margin:10px 0 4px;padding-left:20px;color:var(--muted);font-size:.93rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0}
+.card>h3{margin-bottom:2px}
+.card .lede{color:var(--muted);font-size:.92rem;margin:0 0 14px;max-width:66ch}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.row>*{min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted)}
+input[type=text],input[type=number],select{font:inherit;font-family:var(--mono);font-size:.95rem;color:var(--fg);background:var(--bg);
+  border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;max-width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;font-size:.9rem;cursor:pointer;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+button.chip{border-radius:999px;padding:5px 12px;font-size:.84rem}
+button.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
+.mono{font-family:var(--mono)}
+.out{font-family:var(--mono);font-size:.95rem;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:12px 0;align-items:center}
+.kv dt{color:var(--muted);font-size:.84rem}.kv dd{margin:0;min-width:0}
+.note{font-size:.9rem;color:var(--muted);border-left:3px solid var(--accent);padding:2px 0 2px 12px;margin:12px 0}
+.msg-ok{color:var(--ok)}.msg-bad{color:var(--bad)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;font-size:.92rem;min-width:100%}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:center}
+th{background:var(--bg);font-weight:600;color:var(--muted);font-size:.82rem}
+td.l,th.l{text-align:left}
+.bit{display:inline-block;font-family:var(--mono);min-width:1.2ch}
+.b1{color:var(--b1);font-weight:600}.b0{color:var(--b0)}
+.bits-sign{color:var(--bad)}.bits-exp{color:var(--warn)}.bits-man{color:var(--accent)}
+.bitbtn{font-family:var(--mono);width:30px;height:38px;padding:0;border-radius:6px}
+.bitgroup{display:inline-flex;gap:2px;margin:0 6px 6px 0;flex-wrap:nowrap}
+.bitgroup.s button{border-color:var(--bad)}.bitgroup.e button{border-color:var(--warn)}.bitgroup.m button{border-color:var(--accent)}
+.bitbtn[data-v="1"]{background:var(--accent-soft);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted);margin:6px 0 10px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:baseline}
+/* diagrama */
+svg.diag{width:100%;height:auto;display:block}
+svg.diag .blk rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5;transition:fill .15s,stroke .15s}
+svg.diag .blk text{fill:var(--fg);font-family:var(--sans);font-size:13px;pointer-events:none}
+svg.diag .blk.big text{font-weight:600}
+svg.diag .blk{cursor:pointer}
+svg.diag .blk.on rect{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.5}
+svg.diag .blk.sel rect{stroke:var(--warn);stroke-width:2.5}
+svg.diag .frame{fill:none;stroke:var(--line);stroke-dasharray:5 4;stroke-width:1.5}
+svg.diag .frametxt{fill:var(--muted);font-size:12px;font-family:var(--mono)}
+svg.diag .busbar{fill:var(--bg);stroke:var(--line);stroke-width:1.5}
+svg.diag .busbar.on{fill:var(--accent-soft);stroke:var(--accent)}
+svg.diag line{stroke:var(--line);stroke-width:2}
+svg.diag line.on{stroke:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pill{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:3px 12px;color:var(--muted);transition:all .15s}
+.pill.on{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
+.steps{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.stepbox{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:10px}
+.stepbox b{font-family:var(--mono);font-size:.9rem}
+/* niveles */
+.levels{display:grid;gap:6px}
+.level{display:flex;gap:12px;align-items:baseline;text-align:left;width:100%;padding:10px 14px}
+.level .n{font-family:var(--mono);color:var(--accent);font-size:.8rem;flex:0 0 auto}
+.level[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.lvl-detail{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px}
+.code{font-family:var(--mono);font-size:.9rem;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;overflow-x:auto;white-space:pre}
+/* tiempos */
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.timeline button{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px}
+.timeline button small{color:var(--muted);font-family:var(--mono);font-size:.74rem}
+.timeline button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+/* karnaugh */
+.kmap{border-collapse:separate;border-spacing:3px;margin:6px 0}
+.kmap th{border:0;background:none;font-family:var(--mono);font-size:.78rem;padding:2px 6px}
+.kmap td{border:0;padding:0}
+.kmap .corner{font-size:.72rem;color:var(--muted)}
+.kcell{width:62px;height:56px;padding:0;border-radius:8px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;overflow:hidden;font-family:var(--mono);font-size:1.05rem}
+.kcell .v{padding-top:8px;font-weight:600}
+.kcell[data-s="0"] .v{color:var(--b0);font-weight:400}
+.kcell[data-s="1"]{background:var(--accent-soft);border-color:var(--accent)}
+.kcell[data-s="x"]{background:var(--bg);border-style:dashed}
+.kcell .bars{display:flex;width:100%;height:7px}
+.kcell .bars i{flex:1}
+.kcell.ring{box-shadow:0 0 0 3px var(--warn)}
+.terms{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.term{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:1rem;padding:6px 12px}
+.term[aria-pressed="true"]{border-color:var(--warn);box-shadow:0 0 0 2px var(--warn)}
+.term .sw{width:12px;height:12px;border-radius:3px}
+.ov{text-decoration:overline;text-decoration-thickness:1.5px}
+.expr{font-family:var(--mono);font-size:1.15rem;margin:8px 0;overflow-x:auto;white-space:nowrap}
+.tt td.f{padding:0}
+.tt button{width:100%;border:0;border-radius:0;font-family:var(--mono);background:transparent;padding:6px 10px}
+.tt button[data-s="1"]{background:var(--accent-soft);font-weight:600}
+.tt button[data-s="0"]{color:var(--b0)}
+.tt button[data-s="x"]{font-style:italic}
+.togg{font-family:var(--mono);min-width:64px}
+.togg[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.led{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;border:2px solid var(--line);font-family:var(--mono);font-weight:600;font-size:1.2rem;color:var(--b0)}
+.led.on{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.hl td.hit,.hl th.hit{background:var(--accent-soft)}
+/* hamming */
+.ham{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:10px 0;max-width:560px}
+.ham button{display:flex;flex-direction:column;align-items:center;padding:6px 0;gap:2px;font-family:var(--mono)}
+.ham button small{font-size:.68rem;color:var(--muted)}
+.ham button .v{font-size:1.15rem;font-weight:600}
+.ham button.par{border-style:dashed}
+.ham button.err{background:var(--bad-soft);border-color:var(--bad)}
+/* quiz */
+.q{border-top:1px solid var(--line);padding:16px 0}
+.q:first-of-type{border-top:0}
+.q .qt{font-weight:600;margin-bottom:8px}
+.q .qn{font-family:var(--mono);color:var(--accent);margin-right:8px;font-size:.85rem}
+.opts{display:grid;gap:6px}
+.opts button{text-align:left;padding:10px 14px;line-height:1.4}
+.opts button.right{background:var(--ok-soft);border-color:var(--ok)}
+.opts button.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opts button[disabled]{cursor:default;opacity:1;color:var(--fg)}
+.expl{font-size:.9rem;color:var(--muted);margin-top:8px;padding-left:12px;border-left:3px solid var(--line)}
+.score{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.bar{height:8px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--line);flex:1 1 160px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+footer{margin-top:40px;color:var(--muted);font-size:.84rem;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:480px){.kcell{width:52px;height:50px}.bitbtn{width:26px}}
+#lmc{
+ --bg-panel:var(--surface);--bg-panel-2:color-mix(in srgb,var(--fg) 4%,var(--surface));--bg-raised:color-mix(in srgb,var(--fg) 10%,var(--surface));
+--line-strong:color-mix(in srgb,var(--fg) 30%,var(--surface));
+ --text:var(--fg);--text-dim:var(--muted);--text-faint:var(--muted);
+ --blue:var(--accent);--blue-soft:color-mix(in srgb,var(--accent) 14%,transparent);
+ --orange:var(--warn);--orange-soft:color-mix(in srgb,var(--warn) 16%,transparent);
+ --green:var(--ok);--green-soft:color-mix(in srgb,var(--ok) 16%,transparent);
+ --red:var(--bad);--red-soft:color-mix(in srgb,var(--bad) 14%,transparent);
+ --font-display:var(--head);--font-body:var(--sans);--font-mono:var(--mono);
+ color:var(--fg);font-family:var(--sans);line-height:1.55}
+#lmc header.top{ margin-bottom: 20px; }
+#lmc .eyebrow{
     font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--blue); margin: 0 0 10px; font-weight: 600;
   }
-  h1.title{ font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4.4vw, 42px); margin: 0 0 8px; letter-spacing: -0.01em; }
-  h1.title em{ font-style: italic; color: var(--orange); }
-  .subtitle{ color: var(--text-dim); font-size: 15.5px; max-width: 660px; margin: 0; }
-  .affiliation{ color: var(--text-faint); font-family: var(--font-mono); font-size: 12.5px; margin: 10px 0 0; }
-
-  .signal{ position: relative; height: 30px; margin: 20px 0 24px; }
-  .signal svg{ width: 100%; height: 100%; display:block; }
-  .signal .rail{ fill:none; stroke: var(--line-strong); stroke-width: 1.5; }
-  .signal .plate{ fill:none; stroke: var(--blue); stroke-width: 3; stroke-dasharray: 5 9; animation: dash 3.6s linear infinite; }
-  @keyframes dash{ to{ stroke-dashoffset: -168; } }
-  @media (prefers-reduced-motion: reduce){ .signal .plate{ animation:none; } }
-
-  nav.tabs{ display:flex; gap: 6px; margin-bottom: 24px; border-bottom: 2px solid var(--line); }
-  nav.tabs button{
+#lmc h1.title{ font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4.4vw, 42px); margin: 0 0 8px; letter-spacing: -0.01em; }
+#lmc h1.title em{ font-style: italic; color: var(--orange); }
+#lmc .subtitle{ color: var(--text-dim); font-size: 15.5px; max-width: 660px; margin: 0; }
+#lmc .affiliation{ color: var(--text-faint); font-family: var(--font-mono); font-size: 12.5px; margin: 10px 0 0; }
+#lmc .signal{ position: relative; height: 30px; margin: 20px 0 24px; }
+#lmc .signal svg{ width: 100%; height: 100%; display:block; }
+#lmc .signal .rail{ fill:none; stroke: var(--line-strong); stroke-width: 1.5; }
+#lmc .signal .plate{ fill:none; stroke: var(--blue); stroke-width: 3; stroke-dasharray: 5 9; animation: dash 3.6s linear infinite; }
+@keyframes dash{ to{ stroke-dashoffset: -168; } }
+@media (prefers-reduced-motion: reduce){#lmc .signal .plate{ animation:none; }}
+#lmc div.tabs{ display:flex; gap: 6px; margin-bottom: 24px; border-bottom: 2px solid var(--line); }
+#lmc div.tabs button{
     font-family: var(--font-body); font-weight: 700; font-size: 14.5px; color: var(--text-dim);
     background: transparent; border: none; border-bottom: 3px solid transparent;
     padding: 11px 6px 12px; margin-right: 20px; margin-bottom: -2px; cursor: pointer;
   }
-  nav.tabs button .n{ font-family: var(--font-mono); color: var(--text-faint); margin-right: 8px; font-size: 12px; font-weight: 500;}
-  nav.tabs button:hover{ color: var(--text); }
-  nav.tabs button.active{ color: var(--blue); border-bottom-color: var(--blue); }
-  nav.tabs button.active .n{ color: var(--blue); }
-
-  .panel{ display: none; }
-  .panel.active{ display: block; animation: fade .22s ease; }
-  @keyframes fade{ from{ opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
-
-  /* ---------- tutorial ---------- */
-  details.topic{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
-  details.topic[open]{ border-color: var(--line-strong); }
-  details.topic summary{
+#lmc div.tabs button .n{ font-family: var(--font-mono); color: var(--text-faint); margin-right: 8px; font-size: 12px; font-weight: 500;}
+#lmc div.tabs button:hover{ color: var(--text); }
+#lmc div.tabs button.active{ color: var(--blue); border-bottom-color: var(--blue); }
+#lmc div.tabs button.active .n{ color: var(--blue); }
+#lmc .panel{ display: none; }
+#lmc .panel.active{ display: block; animation: fade .22s ease; }
+@keyframes fade{ from{ opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+#lmc details.topic{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+#lmc details.topic[open]{ border-color: var(--line-strong); }
+#lmc details.topic summary{
     list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: baseline; gap: 12px;
     font-family: var(--font-display); font-size: 18px; font-weight: 600;
   }
-  details.topic summary::-webkit-details-marker{ display:none; }
-  details.topic summary .idx{ font-family: var(--font-mono); font-size: 13px; color: var(--orange); font-weight: 600; flex-shrink: 0; }
-  details.topic summary::after{ content: '+'; margin-left: auto; font-family: var(--font-mono); color: var(--text-faint); font-size: 18px; }
-  details.topic[open] summary::after{ content: '–'; color: var(--blue); }
-  .topic-body{ padding: 0 20px 22px; font-size: 15px; border-top: 1px solid var(--line); }
-  .topic-body p{ color: var(--text); margin: 14px 0 12px; }
-  .topic-body h4{ font-family: var(--font-body); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--blue); margin: 20px 0 8px; font-weight:700;}
-
-  .formula{ font-family: var(--font-mono); color: var(--blue); background: var(--bg-panel-2); border:1px solid var(--line); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
-
-  .example{ background: var(--bg-panel-2); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
-  .example .lbl{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--orange); display:block; margin-bottom: 6px; font-weight:600; }
-
-  table.tv{ border-collapse: collapse; font-family: var(--font-mono); font-size: 13.5px; margin: 10px 0 16px; }
-  table.tv th, table.tv td{ border: 1px solid var(--line); padding: 6px 14px; text-align: center; }
-  table.tv th{ background: var(--bg-raised); color: var(--blue); font-weight: 700; }
-  table.tv td.one{ color: var(--blue); font-weight:600; }
-  table.tv td.zero{ color: var(--text-faint); }
-
-  ul.laws{ margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
-  ul.laws li{ font-size: 13.8px; border-bottom: 1px dashed var(--line); padding: 7px 0; }
-  ul.laws li b{ display:block; color: var(--text-dim); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px;}
-  @media (max-width: 620px){ ul.laws{ grid-template-columns: 1fr; } }
-
-  .rule-card{ display: grid; grid-template-columns: 1fr 1.3fr; gap: 18px; background: var(--bg-panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; align-items: center; }
-  .rule-card .scheme{ font-family: var(--font-mono); font-size: 14px; }
-  .rule-card .scheme .name{ color: var(--orange); font-weight: 700; display:block; margin-bottom: 6px; font-family: var(--font-body); font-size: 13px;}
-  .rule-card .story{ font-size: 13.5px; color: var(--text-dim); }
-  @media (max-width: 620px){ .rule-card{ grid-template-columns: 1fr; } }
-
-  /* ---------- simulator ---------- */
-  .sim-tabs{ display:flex; gap:8px; margin-bottom:16px; flex-wrap: wrap; }
-  .sim-tabs button{
+#lmc details.topic summary::-webkit-details-marker{ display:none; }
+#lmc details.topic summary .idx{ font-family: var(--font-mono); font-size: 13px; color: var(--orange); font-weight: 600; flex-shrink: 0; }
+#lmc details.topic summary::after{ content: '+'; margin-left: auto; font-family: var(--font-mono); color: var(--text-faint); font-size: 18px; }
+#lmc details.topic[open] summary::after{ content: '–'; color: var(--blue); }
+#lmc .topic-body{ padding: 0 20px 22px; font-size: 15px; border-top: 1px solid var(--line); }
+#lmc .topic-body p{ color: var(--text); margin: 14px 0 12px; }
+#lmc .topic-body h4{ font-family: var(--font-body); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--blue); margin: 20px 0 8px; font-weight:700;}
+#lmc .formula{ font-family: var(--font-mono); color: var(--blue); background: var(--bg-panel-2); border:1px solid var(--line); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+#lmc .example{ background: var(--bg-panel-2); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+#lmc .example .lbl{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--orange); display:block; margin-bottom: 6px; font-weight:600; }
+#lmc table.tv{ border-collapse: collapse; font-family: var(--font-mono); font-size: 13.5px; margin: 10px 0 16px; }
+#lmc table.tv th, #lmc table.tv td{ border: 1px solid var(--line); padding: 6px 14px; text-align: center; }
+#lmc table.tv th{ background: var(--bg-raised); color: var(--blue); font-weight: 700; }
+#lmc table.tv td.one{ color: var(--blue); font-weight:600; }
+#lmc table.tv td.zero{ color: var(--text-faint); }
+#lmc ul.laws{ margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+#lmc ul.laws li{ font-size: 13.8px; border-bottom: 1px dashed var(--line); padding: 7px 0; }
+#lmc ul.laws li b{ display:block; color: var(--text-dim); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px;}
+@media (max-width: 620px){#lmc ul.laws{ grid-template-columns: 1fr; }}
+#lmc .rule-card{ display: grid; grid-template-columns: 1fr 1.3fr; gap: 18px; background: var(--bg-panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; align-items: center; }
+#lmc .rule-card .scheme{ font-family: var(--font-mono); font-size: 14px; }
+#lmc .rule-card .scheme .name{ color: var(--orange); font-weight: 700; display:block; margin-bottom: 6px; font-family: var(--font-body); font-size: 13px;}
+#lmc .rule-card .story{ font-size: 13.5px; color: var(--text-dim); }
+@media (max-width: 620px){#lmc .rule-card{ grid-template-columns: 1fr; }}
+#lmc .sim-tabs{ display:flex; gap:8px; margin-bottom:16px; flex-wrap: wrap; }
+#lmc .sim-tabs button{
     font-family: var(--font-mono); font-size: 12.5px; letter-spacing:.02em; font-weight:600;
     background: var(--bg-panel); color: var(--text-dim); border: 1px solid var(--line);
     border-radius: 999px; padding: 7px 14px; cursor:pointer;
   }
-  .sim-tabs button.active{ background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
-
-  .simbox{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
-  .simbox h3{ font-family: var(--font-display); font-size: 20px; margin: 0 0 6px; font-weight: 700;}
-  .simbox p.hint{ color: var(--text-dim); font-size: 13.8px; margin: 0 0 14px; }
-
-  /* virtual keyboard */
-  .keyboard{
+#lmc .sim-tabs button.active{ background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
+#lmc .simbox{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
+#lmc .simbox h3{ font-family: var(--font-display); font-size: 20px; margin: 0 0 6px; font-weight: 700;}
+#lmc .simbox p.hint{ color: var(--text-dim); font-size: 13.8px; margin: 0 0 14px; }
+#lmc .keyboard{
     display:flex; flex-wrap:wrap; gap:6px; background: var(--bg-panel-2); border:1px solid var(--line);
     border-radius: 8px; padding: 10px; margin: 12px 0 16px;
   }
-  .keyboard .kb-label{ font-family: var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color: var(--text-faint); width:100%; margin-bottom:2px; }
-  .keyboard button{
+#lmc .keyboard .kb-label{ font-family: var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color: var(--text-faint); width:100%; margin-bottom:2px; }
+#lmc .keyboard button{
     font-family: var(--font-mono); font-size: 15px; font-weight:600; min-width: 38px;
     background: var(--bg-panel); border:1px solid var(--line); color: var(--text);
     border-radius: 6px; padding: 7px 4px; cursor:pointer;
   }
-  .keyboard button:hover{ border-color: var(--blue); color: var(--blue); }
-  .keyboard button.op{ color: var(--blue); }
-  .keyboard button.var-key{ color: var(--orange); }
-  .keyboard button.util{ color: var(--text-dim); font-family: var(--font-body); font-size: 12px; padding: 7px 10px; }
-  .keyboard .spacer{ flex: 1 1 100%; height: 0; }
-
-  input.formula-input, textarea.formula-input{
+#lmc .keyboard button:hover{ border-color: var(--blue); color: var(--blue); }
+#lmc .keyboard button.op{ color: var(--blue); }
+#lmc .keyboard button.var-key{ color: var(--orange); }
+#lmc .keyboard button.util{ color: var(--text-dim); font-family: var(--font-body); font-size: 12px; padding: 7px 10px; }
+#lmc .keyboard .spacer{ flex: 1 1 100%; height: 0; }
+#lmc input.formula-input, #lmc textarea.formula-input{
     width: 100%; font-family: var(--font-mono); font-size: 16px; background: var(--bg-panel-2);
     border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 12px 14px; outline: none;
   }
-  input.formula-input:focus, textarea.formula-input:focus{ border-color: var(--blue); background: var(--bg-panel); }
-  textarea.formula-input{ resize: vertical; min-height: 74px; }
-
-  button.go{
-    font-family: var(--font-body); font-weight: 700; font-size: 14px; background: var(--blue); color: #fff;
+#lmc input.formula-input:focus, #lmc textarea.formula-input:focus{ border-color: var(--blue); background: var(--bg-panel); }
+#lmc textarea.formula-input{ resize: vertical; min-height: 74px; }
+#lmc button.go{
+    font-family: var(--font-body); font-weight: 700; font-size: 14px; background: var(--blue); color: var(--accent-fg);
     border: none; border-radius: 6px; padding: 12px 20px; cursor: pointer; margin-top: 4px;
   }
-  button.go:hover{ background: #17518F; }
-  button.go:active{ transform: translateY(1px); }
-
-  .field-lbl{ font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin-bottom: 6px; display:block; }
-
-  .error-box{ background: var(--red-soft); border: 1px solid var(--red); color: #8C2E26; border-radius: 6px; padding: 10px 14px; font-size: 13.5px; margin-top: 14px; font-family: var(--font-mono); }
-
-  .result{ margin-top: 22px; }
-  .badge{ display:inline-block; font-family: var(--font-mono); font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 999px; letter-spacing: .03em; margin-bottom: 14px; }
-  .badge.taut{ background: var(--blue-soft); color: var(--blue); }
-  .badge.contra{ background: var(--red-soft); color: var(--red); }
-  .badge.conting{ background: var(--orange-soft); color: var(--orange); }
-  .badge.valid{ background: var(--green-soft); color: var(--green); }
-  .badge.invalid{ background: var(--red-soft); color: var(--red); }
-
-  table.result-table{ border-collapse: collapse; font-family: var(--font-mono); font-size: 13.5px; width: 100%; overflow-x:auto; display:block; }
-  table.result-table th, table.result-table td{ border:1px solid var(--line); padding: 8px 12px; text-align:center; white-space:nowrap; }
-  table.result-table th{ background: var(--bg-raised); color: var(--text-dim); font-size: 12px; }
-  table.result-table th.concl{ color: var(--orange); }
-  table.result-table td.v1{ color: var(--blue); font-weight:700; }
-  table.result-table td.v0{ color: var(--text-faint); }
-  table.result-table tr.counter{ background: var(--red-soft); }
-
-  .circuit-frame{ background: var(--bg-panel-2); border:1px solid var(--line); border-radius: 8px; padding: 18px; overflow-x:auto; }
-  .circuit-frame svg{ display:block; margin:0 auto; }
-  .circuit-note{ font-size: 13px; color: var(--text-dim); margin-top: 12px; }
-
-  .deriv{ margin-bottom: 16px; }
-  .deriv-step{
+#lmc button.go:hover{ background: color-mix(in srgb,var(--accent) 80%,black); }
+#lmc button.go:active{ transform: translateY(1px); }
+#lmc .field-lbl{ font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin-bottom: 6px; display:block; }
+#lmc .error-box{ background: var(--red-soft); border: 1px solid var(--red); color: var(--bad); border-radius: 6px; padding: 10px 14px; font-size: 13.5px; margin-top: 14px; font-family: var(--font-mono); }
+#lmc .result{ margin-top: 22px; }
+#lmc .badge{ display:inline-block; font-family: var(--font-mono); font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 999px; letter-spacing: .03em; margin-bottom: 14px; }
+#lmc .badge.taut{ background: var(--blue-soft); color: var(--blue); }
+#lmc .badge.contra{ background: var(--red-soft); color: var(--red); }
+#lmc .badge.conting{ background: var(--orange-soft); color: var(--orange); }
+#lmc .badge.valid{ background: var(--green-soft); color: var(--green); }
+#lmc .badge.invalid{ background: var(--red-soft); color: var(--red); }
+#lmc table.result-table{ border-collapse: collapse; font-family: var(--font-mono); font-size: 13.5px; width: 100%; overflow-x:auto; display:block; }
+#lmc table.result-table th, #lmc table.result-table td{ border:1px solid var(--line); padding: 8px 12px; text-align:center; white-space:nowrap; }
+#lmc table.result-table th{ background: var(--bg-raised); color: var(--text-dim); font-size: 12px; }
+#lmc table.result-table th.concl{ color: var(--orange); }
+#lmc table.result-table td.v1{ color: var(--blue); font-weight:700; }
+#lmc table.result-table td.v0{ color: var(--text-faint); }
+#lmc table.result-table tr.counter{ background: var(--red-soft); }
+#lmc .circuit-frame{ background: var(--bg-panel-2); border:1px solid var(--line); border-radius: 8px; padding: 18px; overflow-x:auto; }
+#lmc .circuit-frame svg{ display:block; margin:0 auto; }
+#lmc .circuit-note{ font-size: 13px; color: var(--text-dim); margin-top: 12px; }
+#lmc .deriv{ margin-bottom: 16px; }
+#lmc .deriv-step{
     display:grid; grid-template-columns: 22px auto 1fr; gap: 12px; align-items:center;
     padding: 9px 0; border-bottom: 1px dashed var(--line);
     opacity: 0; animation: derivIn .35s ease forwards;
   }
-  @keyframes derivIn{ from{ opacity:0; transform: translateX(-6px); } to{ opacity:1; transform:none; } }
-  @media (prefers-reduced-motion: reduce){ .deriv-step{ animation: none; opacity:1; } }
-  .deriv-n{
-    font-family: var(--font-mono); font-size: 11px; font-weight:700; color: #fff;
+@keyframes derivIn{ from{ opacity:0; transform: translateX(-6px); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce){#lmc .deriv-step{ animation: none; opacity:1; }}
+#lmc .deriv-n{
+    font-family: var(--font-mono); font-size: 11px; font-weight:700; color: var(--accent-fg);
     background: var(--blue); border-radius: 50%; width:22px; height:22px; display:flex;
     align-items:center; justify-content:center;
   }
-  .deriv-law{ font-family: var(--font-body); font-size: 12.5px; font-weight:700; color: var(--orange); white-space:nowrap; }
-  .deriv-rule{ display:block; font-family: var(--font-mono); font-size: 11px; font-weight:400; color: var(--text-faint); }
-  .deriv-formula{ font-family: var(--font-mono); font-size: 14px; color: var(--text); }
-  .deriv-arrow{ color: var(--blue); margin: 0 10px; }
-  .deriv-final{ font-family: var(--font-mono); font-size: 14px; color: var(--text); background: var(--bg-raised); border-radius: 6px; padding: 10px 14px; margin-top: 10px; }
-  .deriv-final b{ color: var(--blue); }
-
-  .assign-badge{
+#lmc .deriv-law{ font-family: var(--font-body); font-size: 12.5px; font-weight:700; color: var(--orange); white-space:nowrap; }
+#lmc .deriv-rule{ display:block; font-family: var(--font-mono); font-size: 11px; font-weight:400; color: var(--text-faint); }
+#lmc .deriv-formula{ font-family: var(--font-mono); font-size: 14px; color: var(--text); }
+#lmc .deriv-arrow{ color: var(--blue); margin: 0 10px; }
+#lmc .deriv-final{ font-family: var(--font-mono); font-size: 14px; color: var(--text); background: var(--bg-raised); border-radius: 6px; padding: 10px 14px; margin-top: 10px; }
+#lmc .deriv-final b{ color: var(--blue); }
+#lmc .assign-badge{
     display:inline-block; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim);
     background: var(--bg-raised); border:1px solid var(--line); border-radius: 999px; padding: 5px 12px;
     margin-left: 8px; margin-bottom: 14px;
   }
+#lmc .quiz-top{ display:flex; justify-content: space-between; align-items:center; margin-bottom: 16px; }
+#lmc .quiz-progress{ font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim); }
+#lmc .progress-bar{ height: 4px; background: var(--line); border-radius: 4px; overflow:hidden; margin-bottom: 22px; }
+#lmc .progress-fill{ height: 100%; background: var(--blue); transition: width .3s ease; }
+#lmc .q-card{ background: var(--bg-panel); border:1px solid var(--line); border-radius: 10px; padding: 24px; }
+#lmc .q-topic{ font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing:.08em; color: var(--blue); margin-bottom: 10px; font-weight:600;}
+#lmc .q-text{ font-family: var(--font-display); font-size: 19px; font-weight: 600; margin-bottom: 18px; line-height:1.4; }
+#lmc .q-options{ display:flex; flex-direction:column; gap: 9px; margin-bottom: 18px; }
+#lmc .q-opt{ text-align:left; font-family: var(--font-body); font-size: 14.5px; background: var(--bg-panel-2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 11px 14px; cursor:pointer; }
+#lmc .q-opt:hover{ border-color: var(--blue); }
+#lmc .q-opt.selected{ border-color: var(--orange); background: var(--orange-soft); }
+#lmc .q-opt.correct{ border-color: var(--green); background: var(--green-soft); }
+#lmc .q-opt.wrong{ border-color: var(--red); background: var(--red-soft); }
+#lmc .q-opt:disabled{ cursor: default; }
+#lmc .q-explain{ font-size: 13.5px; color: var(--text-dim); background: var(--bg-panel-2); border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; display:none; }
+#lmc .q-explain.show{ display:block; }
+#lmc .q-actions{ display:flex; justify-content:flex-end; gap:10px; }
+#lmc button.next{ font-family: var(--font-body); font-weight:700; font-size: 13.5px; background: var(--bg-raised); color: var(--text); border:1px solid var(--line); border-radius: 6px; padding: 10px 18px; cursor:pointer; }
+#lmc button.next:disabled{ opacity: .35; cursor: default; }
+#lmc .score-card{ text-align:center; padding: 40px 20px; }
+#lmc .score-num{ font-family: var(--font-display); font-size: 56px; font-weight:700; color: var(--blue); }
+#lmc .score-label{ color: var(--text-dim); margin-bottom: 24px; }
+#lmc div.tabs{overflow-x:auto}#lmc div.tabs button{white-space:nowrap}#lmc .circuit-frame,#lmc .scroll{max-width:100%}
 
-  /* ---------- quiz ---------- */
-  .quiz-top{ display:flex; justify-content: space-between; align-items:center; margin-bottom: 16px; }
-  .quiz-progress{ font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim); }
-  .progress-bar{ height: 4px; background: var(--line); border-radius: 4px; overflow:hidden; margin-bottom: 22px; }
-  .progress-fill{ height: 100%; background: var(--blue); transition: width .3s ease; }
-
-  .q-card{ background: var(--bg-panel); border:1px solid var(--line); border-radius: 10px; padding: 24px; }
-  .q-topic{ font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing:.08em; color: var(--blue); margin-bottom: 10px; font-weight:600;}
-  .q-text{ font-family: var(--font-display); font-size: 19px; font-weight: 600; margin-bottom: 18px; line-height:1.4; }
-  .q-options{ display:flex; flex-direction:column; gap: 9px; margin-bottom: 18px; }
-  .q-opt{ text-align:left; font-family: var(--font-body); font-size: 14.5px; background: var(--bg-panel-2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 11px 14px; cursor:pointer; }
-  .q-opt:hover{ border-color: var(--blue); }
-  .q-opt.selected{ border-color: var(--orange); background: var(--orange-soft); }
-  .q-opt.correct{ border-color: var(--green); background: var(--green-soft); }
-  .q-opt.wrong{ border-color: var(--red); background: var(--red-soft); }
-  .q-opt:disabled{ cursor: default; }
-
-  .q-explain{ font-size: 13.5px; color: var(--text-dim); background: var(--bg-panel-2); border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; display:none; }
-  .q-explain.show{ display:block; }
-  .q-actions{ display:flex; justify-content:flex-end; gap:10px; }
-  button.next{ font-family: var(--font-body); font-weight:700; font-size: 13.5px; background: var(--bg-raised); color: var(--text); border:1px solid var(--line); border-radius: 6px; padding: 10px 18px; cursor:pointer; }
-  button.next:disabled{ opacity: .35; cursor: default; }
-
-  .score-card{ text-align:center; padding: 40px 20px; }
-  .score-num{ font-family: var(--font-display); font-size: 56px; font-weight:700; color: var(--blue); }
-  .score-label{ color: var(--text-dim); margin-bottom: 24px; }
-
-  footer{ margin-top: 50px; color: var(--text-faint); font-size: 12.5px; font-family: var(--font-mono); text-align:center; }
+.xw{--bg-panel:var(--surface);--bg-panel-2:color-mix(in srgb,var(--fg) 4%,var(--surface));--bg-raised:color-mix(in srgb,var(--fg) 10%,var(--surface));--line-strong:color-mix(in srgb,var(--fg) 30%,var(--surface));--text:var(--fg);--text-dim:var(--muted);--text-faint:var(--muted);--blue:var(--accent);--blue-soft:color-mix(in srgb,var(--accent) 14%,transparent);--orange:var(--warn);--orange-soft:color-mix(in srgb,var(--warn) 16%,transparent);--green:var(--ok);--green-soft:color-mix(in srgb,var(--ok) 16%,transparent);--red:var(--bad);--red-soft:color-mix(in srgb,var(--bad) 14%,transparent);--font-mono:var(--mono);font-size:.95rem}
+.xw.dev p{margin:.7em 0;max-width:78ch}
+.xw .eq{font-family:var(--mono);font-size:.88rem;background:var(--bg-panel-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:8px 12px;margin:10px 0;color:var(--accent);overflow-x:auto;white-space:pre-wrap}
+.xw .widget{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:10px;padding:0;margin:0;border:0;background:none}
+.xw .wrow,.xw .btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.xw .wrow label{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.xw input.num,.xw select.sel{font-family:var(--mono);font-size:.95rem;background:var(--bg);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:7px 9px;width:auto}
+.xw input.num{width:100px}
+.xw .toggle{font-family:var(--mono);font-weight:700;width:40px;height:40px;border-radius:8px;border:2px solid var(--line-strong);background:var(--surface);color:var(--muted);cursor:pointer;padding:0}
+.xw .toggle.on{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.xw .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.xw .chip{font-family:var(--mono);font-size:.78rem;font-weight:600;background:var(--surface);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:6px 12px}
+.xw .chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
+.xw .out{font-family:var(--mono);font-size:.86rem;background:var(--bg-raised);border:0;border-radius:8px;padding:10px 12px;margin-top:8px;line-height:1.7;white-space:normal;overflow-x:auto}
+.xw .out b{color:var(--accent)} .xw .out .o{color:var(--warn);font-weight:700} .xw .out .g{color:var(--ok);font-weight:700} .xw .out .r{color:var(--bad);font-weight:700}
+.xw .bit-s{background:var(--red-soft);color:var(--red);padding:1px 4px;border-radius:3px}
+.xw .bit-e{background:var(--orange-soft);color:var(--orange);padding:1px 4px;border-radius:3px}
+.xw .bit-m{background:var(--blue-soft);color:var(--blue);padding:1px 4px;border-radius:3px}
+.xw .bar{height:16px;border:0;border-radius:4px;background:var(--accent);margin:3px 0;min-width:2px;flex:none;overflow:visible}
+.xw .bar.o{background:var(--warn)} .xw .bar.g{background:var(--ok)}
+.xw .regs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
+.xw .reg{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-family:var(--mono)}
+.xw .reg .k{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block}
+.xw .reg .v{font-size:1.05rem;color:var(--accent);font-weight:700}
+.xw .reg.hl{border-color:var(--warn);background:var(--orange-soft)}
+.xw table.mem,.xw table.stage,.xw table.gantt{border-collapse:collapse;font-family:var(--mono);font-size:.82rem;min-width:0}
+.xw table.mem th,.xw table.mem td,.xw table.stage th,.xw table.stage td,.xw table.gantt th,.xw table.gantt td{border:1px solid var(--line);padding:5px 12px;text-align:left}
+.xw table.stage th,.xw table.stage td,.xw table.gantt th,.xw table.gantt td{text-align:center}
+.xw table.mem th,.xw table.stage th,.xw table.gantt th{background:var(--bg-raised);color:var(--muted);font-size:.72rem}
+.xw table.mem tr.cur{background:var(--orange-soft)}
+.xw table.gantt td{padding:3px 7px;font-size:.72rem} .xw table.gantt td.f{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.xw .phase{font-family:var(--mono);font-size:.84rem;background:var(--bg-raised);border-radius:8px;padding:10px 14px;margin:10px 0;min-height:42px}
+.xw .phase b{color:var(--warn)}
+.xw button.sec{font-weight:600;font-size:.84rem}
+.xw button.go{font-weight:700;font-size:.88rem;background:var(--accent);color:var(--accent-fg);border:1px solid var(--accent)}
+.xw .fields{font-family:var(--mono);font-size:.95rem;margin:10px 0}
+.xw .fields span{padding:3px 8px;border-radius:5px;margin-right:4px}
+.xw .fields .tg{background:var(--blue-soft);color:var(--blue)} .xw .fields .ix{background:var(--orange-soft);color:var(--orange)} .xw .fields .of{background:var(--green-soft);color:var(--green)}
+.xw details.ans{margin-top:6px;font-size:.9rem} .xw details.ans summary{cursor:pointer;color:var(--accent);font-weight:600}
+.xw .adder-wrap{overflow-x:auto}
+.xw .map-head{display:grid;grid-template-columns:1fr 36px 1fr;gap:10px;margin-bottom:8px;font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.xw .map-head .a{color:var(--accent)} .xw .map-head .b{color:var(--warn)}
+.xw .map-row{display:grid;grid-template-columns:1fr 36px 1fr;gap:10px;margin-bottom:10px}
+.xw .map-card{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:11px 14px;font-size:.9rem}
+.xw .map-card .tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;display:block;margin-bottom:4px}
+.xw .map-card.l{border-left:3px solid var(--accent)} .xw .map-card.l .tag{color:var(--accent)}
+.xw .map-card.r{border-left:3px solid var(--warn)} .xw .map-card.r .tag{color:var(--warn)}
+.xw .map-card .ex{display:block;margin-top:6px;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.xw .map-arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:1.2rem}
+@media(max-width:620px){.xw .map-row,.xw .map-head{grid-template-columns:1fr}.xw .map-arrow{transform:rotate(90deg);height:20px}.xw .map-head span:nth-child(2){display:none}}
+.aff{color:var(--muted);font-family:var(--mono);font-size:.8rem;margin:10px 0 0}
 </style>
-</head>
-<body>
+
 <div class="wrap">
-
-  <header class="top">
+  <header>
     <p class="eyebrow">Arquitectura y Organización de Computadoras · FaCENA-UNNE</p>
-    <h1 class="title">Lógica <em>Proposicional</em></h1>
-    <p class="subtitle">Taller interactivo con teoría, simulador de tablas de verdad, constructor de redes de conmutación y autoevaluación. Basado en sintaxis, semántica, satisfacibilidad, consecuencia lógica, equivalencia, reglas de inferencia y circuitos.</p>
-    <p class="affiliation">Lic. Walter Barrios — UNNE</p>
+    <h1>Material interactivo AYOC</h1>
+    <p class="sub">Simuladores y autoevaluaciones que siguen el Programa Analítico de la asignatura. Cada módulo propone una hipótesis, permite probarla y devuelve una explicación para contrastar el resultado.</p>
+    <p class="aff">Lic. Walter Barrios — UNNE</p>
   </header>
-
-  <div class="signal">
-    <svg viewBox="0 0 900 30" preserveAspectRatio="none">
-      <path class="rail" d="M0,15 L380,15 M420,15 L900,15" />
-      <path class="rail" d="M380,4 L380,26 M420,4 L420,26" />
-      <path class="plate" d="M0,15 L900,15" />
-    </svg>
-  </div>
-
-  <nav class="tabs">
+  <nav id="nav" aria-label="Unidades del programa"></nav>
+  <main id="main"></main>
+  <div id="lmc" hidden>
+<div class="tabs">
     <button class="active" data-tab="tutorial"><span class="n">01</span>Tutorial</button>
     <button data-tab="simulador"><span class="n">02</span>Simulador</button>
     <button data-tab="quiz"><span class="n">03</span>Autoevaluación</button>
-    <button data-tab="repaso"><span class="n">04</span>Repaso y vinculación LyMC → Arquitectura</button>
-  </nav>
+  </div>
 
   <!-- ======================= TUTORIAL ======================= -->
   <section id="panel-tutorial" class="panel active">
@@ -498,14 +644,205 @@ q → r</textarea>
     <div id="quiz-area"></div>
   </section>
 
-  <section id="panel-repaso" class="panel">
-    <iframe id="repasoFrame" title="Repaso y vinculación de conceptos" data-src="repaso-vinculacion-lymc.html?embed=1" style="width:100%;border:0;min-height:900px;display:block"></iframe>
-  </section>
+  
 
-  <footer>Lógica Proposicional · Arquitectura y Organización de Computadoras (FaCENA-UNNE) — material de apoyo para el estudio autónomo y para uso en clase</footer>
+  </div>
+  <footer>Material de apoyo para el cursado de Arquitectura y Organización de Computadoras, Departamento de Informática, FaCENA-UNNE. Las unidades 1 a 8 incluyen desarrollo, componentes interactivos y autoevaluación; el repaso vincula los contenidos de Lógica y Matemática Computacional con las unidades del programa.</footer>
 </div>
 
 <script>
+const Core = (() => {
+  // ---------- Unidad 2: enteros ----------
+  const range = (bits) => ({ min: -(2 ** (bits - 1)), max: 2 ** (bits - 1) - 1 });
+
+  function toTwos(n, bits) {
+    const m = 1n << BigInt(bits);
+    let v = BigInt(n);
+    if (v < 0n) v += m;
+    return v.toString(2).padStart(bits, '0');
+  }
+  function fromTwos(s) {
+    const bits = s.length;
+    let v = BigInt('0b' + s);
+    if (s[0] === '1') v -= 1n << BigInt(bits);
+    return Number(v);
+  }
+  function signMag(n, bits) {
+    const lim = 2 ** (bits - 1) - 1;
+    if (Math.abs(n) > lim) return null;
+    return (n < 0 ? '1' : '0') + Math.abs(n).toString(2).padStart(bits - 1, '0');
+  }
+  function onesComp(n, bits) {
+    const lim = 2 ** (bits - 1) - 1;
+    if (Math.abs(n) > lim) return null;
+    if (n >= 0) return n.toString(2).padStart(bits, '0');
+    return Math.abs(n).toString(2).padStart(bits, '0').split('').map((b) => (b === '0' ? '1' : '0')).join('');
+  }
+  function addTwos(a, b, bits) {
+    const sa = toTwos(a, bits), sb = toTwos(b, bits);
+    let carry = 0, intoMsb = 0;
+    const out = new Array(bits);
+    for (let i = bits - 1; i >= 0; i--) {
+      if (i === 0) intoMsb = carry;
+      const s = +sa[i] + +sb[i] + carry;
+      out[i] = s & 1;
+      carry = s >> 1;
+    }
+    const sum = out.join('');
+    return { sa, sb, sum, value: fromTwos(sum), carryOut: carry, carryIntoMsb: intoMsb, overflow: intoMsb !== carry };
+  }
+  const group4 = (s) => s.replace(/(.{4})(?=.)/g, '$1 ');
+  const hex = (s) => {
+    let r = '';
+    for (let i = 0; i < s.length; i += 4) r += parseInt(s.slice(i, i + 4), 2).toString(16).toUpperCase();
+    return r;
+  };
+
+  // ---------- Unidad 2: punto flotante IEEE 754 simple ----------
+  const dv = new DataView(new ArrayBuffer(4));
+  function f32bits(x) {
+    dv.setFloat32(0, x);
+    let s = '';
+    for (let i = 0; i < 4; i++) s += dv.getUint8(i).toString(2).padStart(8, '0');
+    return s;
+  }
+  function f32value(bits) {
+    dv.setUint32(0, parseInt(bits, 2));
+    return dv.getFloat32(0);
+  }
+  function f32info(bits) {
+    const sign = bits[0], exp = bits.slice(1, 9), mant = bits.slice(9);
+    const e = parseInt(exp, 2);
+    const zeroMant = /^0+$/.test(mant);
+    let kind = 'normal';
+    if (e === 255) kind = zeroMant ? 'infinito' : 'NaN';
+    else if (e === 0) kind = zeroMant ? 'cero' : 'denormalizado';
+    let norm = null;
+    if (kind === 'normal') {
+      const frac = mant.replace(/0+$/, '');
+      norm = { lead: '1', frac, exp: e - 127 };
+    } else if (kind === 'denormalizado') {
+      const frac = mant.replace(/0+$/, '');
+      norm = { lead: '0', frac, exp: -126 };
+    }
+    return { sign, exp, mant, e, kind, norm };
+  }
+
+  // ---------- Unidad 2: Hamming (7,4), paridad par ----------
+  // posiciones 1..7 = [p1, p2, d1, p4, d2, d3, d4]
+  function hammingEncode(d) {
+    const [d1, d2, d3, d4] = d;
+    const p1 = d1 ^ d2 ^ d4, p2 = d1 ^ d3 ^ d4, p4 = d2 ^ d3 ^ d4;
+    return [p1, p2, d1, p4, d2, d3, d4];
+  }
+  const HAM_GROUPS = { 1: [1, 3, 5, 7], 2: [2, 3, 6, 7], 4: [4, 5, 6, 7] };
+  function hammingChecks(c) {
+    const chk = (g) => HAM_GROUPS[g].reduce((a, pos) => a ^ c[pos - 1], 0);
+    const s1 = chk(1), s2 = chk(2), s4 = chk(4);
+    return { s1, s2, s4, syndrome: s4 * 4 + s2 * 2 + s1 };
+  }
+
+  // ---------- Unidad 3: Quine-McCluskey ----------
+  const bitsOf = (i, n) => i.toString(2).padStart(n, '0');
+  function combine(a, b) {
+    let diff = -1;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) {
+        if (a[i] === '-' || b[i] === '-') return null;
+        if (diff >= 0) return null;
+        diff = i;
+      }
+    }
+    return diff < 0 ? null : a.slice(0, diff) + '-' + a.slice(diff + 1);
+  }
+  function covers(term, idx, n) {
+    const b = bitsOf(idx, n);
+    for (let i = 0; i < n; i++) if (term[i] !== '-' && term[i] !== b[i]) return false;
+    return true;
+  }
+  const lits = (t) => t.split('').filter((c) => c !== '-').length;
+
+  function simplify(n, ones, dcs) {
+    if (!ones.length) return { primes: [], cover: [], constant: 0 };
+    let current = [...new Set([...ones, ...dcs])].map((i) => bitsOf(i, n));
+    const primes = new Set();
+    while (current.length) {
+      const used = new Set(), next = new Set();
+      for (let i = 0; i < current.length; i++) {
+        for (let j = i + 1; j < current.length; j++) {
+          const c = combine(current[i], current[j]);
+          if (c) { next.add(c); used.add(i); used.add(j); }
+        }
+      }
+      current.forEach((t, i) => { if (!used.has(i)) primes.add(t); });
+      current = [...next];
+    }
+    const P = [...primes];
+    const cov = P.map((p) => ones.filter((m) => covers(p, m, n)));
+    const chosen = new Set();
+    for (const m of ones) {
+      const c = P.map((_, i) => i).filter((i) => cov[i].includes(m));
+      if (c.length === 1) chosen.add(c[0]);
+    }
+    const remaining = new Set(ones);
+    chosen.forEach((pi) => cov[pi].forEach((m) => remaining.delete(m)));
+    if (remaining.size) {
+      const cand = P.map((_, i) => i).filter((i) => !chosen.has(i) && cov[i].some((m) => remaining.has(m)));
+      if (cand.length <= 16) {
+        let best = null;
+        for (let mask = 1; mask < 1 << cand.length; mask++) {
+          const pick = cand.filter((_, k) => mask & (1 << k));
+          const got = new Set();
+          pick.forEach((pi) => cov[pi].forEach((m) => got.add(m)));
+          if ([...remaining].every((m) => got.has(m))) {
+            const cost = [pick.length, pick.reduce((s, pi) => s + lits(P[pi]), 0)];
+            if (!best || cost[0] < best.cost[0] || (cost[0] === best.cost[0] && cost[1] < best.cost[1])) best = { pick, cost };
+          }
+        }
+        best.pick.forEach((pi) => chosen.add(pi));
+      } else {
+        const rem = new Set(remaining);
+        while (rem.size) {
+          let bi = -1, bc = 0;
+          cand.forEach((i) => { const c = cov[i].filter((m) => rem.has(m)).length; if (c > bc) { bc = c; bi = i; } });
+          chosen.add(bi); cov[bi].forEach((m) => rem.delete(m));
+        }
+      }
+    }
+    const cover = [...chosen].sort((a, b) => a - b).map((i) => P[i]);
+    return { primes: P, cover, constant: cover.some((t) => /^-+$/.test(t)) ? 1 : null };
+  }
+  function evalCover(cover, idx, n) { return cover.some((t) => covers(t, idx, n)); }
+  function verify(n, state, cover) {
+    for (let i = 0; i < 1 << n; i++) {
+      const o = evalCover(cover, i, n);
+      if (state[i] === '1' && !o) return false;
+      if (state[i] === '0' && o) return false;
+    }
+    return true;
+  }
+  function cellsOf(term, n) {
+    const r = [];
+    for (let i = 0; i < 1 << n; i++) if (covers(term, i, n)) r.push(i);
+    return r;
+  }
+
+  // ---------- Unidad 1: parámetros de rendimiento ----------
+  function perf(icMillions, cpi, ghz) {
+    const seconds = (icMillions * 1e6 * cpi) / (ghz * 1e9);
+    const mips = (ghz * 1000) / cpi;
+    return { seconds, mips };
+  }
+
+  return { range, toTwos, fromTwos, signMag, onesComp, addTwos, group4, hex, f32bits, f32value, f32info,
+    hammingEncode, hammingChecks, HAM_GROUPS, simplify, evalCover, verify, cellsOf, lits, perf, covers };
+})();
+if (typeof module !== 'undefined') module.exports = Core;
+
+</script>
+<script>
+(function(){
+
 /* ============================================================
    MOTOR DE LÓGICA PROPOSICIONAL
    ============================================================ */
@@ -610,9 +947,9 @@ function assignFor(vars, i) {
 /* ============================================================
    UI: TABS PRINCIPALES
    ============================================================ */
-document.querySelectorAll('nav.tabs button').forEach(btn => {
+document.querySelectorAll('div.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('div.tabs button').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
@@ -937,17 +1274,17 @@ function circuitSvgString() {
   const body = drawCircuit(layout, startX, ymid, assign);
   return '<svg viewBox="0 0 ' + totalW + ' ' + totalH + '" width="100%" style="max-width:' + Math.min(totalW * 1.4, 720) + 'px">' +
     '<style>' +
-    '.wire{stroke:#B7C2D1;stroke-width:2;fill:none;transition:stroke .2s;}' +
-    '.wire.on{stroke:#1B5FA6;stroke-width:3;stroke-dasharray:6 7;animation:flow 0.9s linear infinite;}' +
-    '.switch{stroke-width:2.6;fill:none;transition:all .2s;}' +
-    '.switch.open{stroke:#8698AC;}' +
-    '.switch.closed{stroke:#2F8F5B;stroke-width:3;}' +
-    '.node{fill:#8698AC;transition:fill .2s;}' +
-    '.node.on{fill:#1B5FA6;}' +
-    '.switch-label{font-family:\'IBM Plex Mono\',monospace;font-size:14px;fill:#51637A;font-weight:600;transition:fill .2s;}' +
-    '.switch-label.on{fill:#16212B;}' +
-    '.term{font-family:\'IBM Plex Mono\',monospace;font-size:13px;fill:#51637A;font-weight:600;}' +
-    '.leaf-switch{cursor:pointer;}' +
+    '#lmc .wire{stroke:var(--line-strong);stroke-width:2;fill:none;transition:stroke .2s;}' +
+    '#lmc .wire.on{stroke:var(--accent);stroke-width:3;stroke-dasharray:6 7;animation:flow 0.9s linear infinite;}' +
+    '#lmc .switch{stroke-width:2.6;fill:none;transition:all .2s;}' +
+    '#lmc .switch.open{stroke:var(--muted);}' +
+    '#lmc .switch.closed{stroke:var(--ok);stroke-width:3;}' +
+    '#lmc .node{fill:var(--muted);transition:fill .2s;}' +
+    '#lmc .node.on{fill:var(--accent);}' +
+    '#lmc .switch-label{font-family:\'IBM Plex Mono\',monospace;font-size:14px;fill:var(--muted);font-weight:600;transition:fill .2s;}' +
+    '#lmc .switch-label.on{fill:var(--fg);}' +
+    '#lmc .term{font-family:\'IBM Plex Mono\',monospace;font-size:13px;fill:var(--muted);font-weight:600;}' +
+    '#lmc .leaf-switch{cursor:pointer;}' +
     '@keyframes flow{ to{ stroke-dashoffset:-26; } }' +
     '</style>' +
     '<line x1="' + padX + '" y1="' + ymid + '" x2="' + startX + '" y2="' + ymid + '" class="wire' + (overallOn ? ' on' : '') + '"/>' +
@@ -971,7 +1308,7 @@ function redrawCircuitOnly() {
     '</span>' +
     '<span class="assign-badge">I = {' + (closedVars.length ? closedVars.join(', ') : '∅') + '}</span>' +
     '<div class="circuit-frame">' + circuitSvgString() + '</div>';
-  holder.querySelectorAll('.leaf-switch').forEach(g => {
+  holder.querySelectorAll('#lmc .leaf-switch').forEach(g => {
     g.addEventListener('click', () => {
       const v = g.getAttribute('data-var');
       CIRCUIT.assign[v] = CIRCUIT.assign[v] ? 0 : 1;
@@ -1172,17 +1509,782 @@ renderQuiz();
 /* Vistas iniciales de ejemplo al cargar */
 renderTablaVerdad();
 renderCircuito();
-</script>
-<script>
-// Pestaña de repaso: se carga al abrirla y se ajusta a su alto
-(function(){
-  const f=document.getElementById('repasoFrame');
-  function fit(){try{f.style.height=(f.contentDocument.documentElement.scrollHeight+20)+'px';}catch(e){}}
-  f.addEventListener('load',function(){fit();try{new ResizeObserver(fit).observe(f.contentDocument.body);}catch(e){}});
-  document.querySelector('nav.tabs button[data-tab="repaso"]').addEventListener('click',function(){
-    if(!f.src)f.src=f.dataset.src;else fit();
-  });
+
 })();
 </script>
-</body>
-</html>
+<script>
+const C = Core;
+{const rc=Element.prototype.replaceChildren;Element.prototype.replaceChildren=function(...a){return rc.apply(this,a.filter(x=>x!=null&&x!==false));};}
+function h(tag, props, ...kids){
+  const el = document.createElement(tag);
+  if (props) for (const [k,v] of Object.entries(props)){
+    if (k==='class') el.className = v;
+    else if (k==='html') el.innerHTML = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (v===true) el.setAttribute(k,'');
+    else if (v!==false && v!=null) el.setAttribute(k,v);
+  }
+  kids.flat(Infinity).forEach(c => { if (c==null||c===false) return; el.append(c.nodeType ? c : document.createTextNode(c)); });
+  return el;
+}
+const card = (title, lede, ...body) => h('section',{class:'card'}, h('h3',null,title), lede?h('p',{class:'lede'},lede):null, ...body);
+const lab = (text, input) => h('label',{class:'f'}, text, input);
+const bitsHTML = s => s.split('').map(c=>`<span class="bit ${c==='1'?'b1':'b0'}">${c}</span>`).join('');
+const grouped = s => C.group4(s).split(' ').map(g=>bitsHTML(g)).join('<span class="bit"> </span>');
+const esc = s => String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const pow2 = n => (1n << BigInt(n));
+
+/* ============ UNIDAD 1 ============ */
+function vonNeumann(){
+  const info = {
+    pc:{n:'PC (contador de programa)',d:'Registro que guarda la dirección de la próxima instrucción a buscar. Tras cada búsqueda se incrementa, salvo que una instrucción de salto lo modifique.'},
+    ir:{n:'IR (registro de instrucción)',d:'Contiene la instrucción en curso mientras la unidad de control la decodifica y la ejecuta.'},
+    mar:{n:'MAR (registro de direcciones de memoria)',d:'Almacena la dirección de la posición de memoria a leer o escribir. Su contenido se presenta en el bus de direcciones.'},
+    mbr:{n:'MBR (registro de datos de memoria)',d:'Retiene el dato o la instrucción que se lee de memoria, o el dato que se va a escribir en ella. Se conecta al bus de datos.'},
+    acc:{n:'ACC (acumulador)',d:'Registro de propósito general que aporta un operando a la ALU y recibe el resultado en esta máquina didáctica.'},
+    uc:{n:'Unidad de control',d:'Interpreta el código de operación de la instrucción y genera, en cada ciclo, las señales de control que gobiernan registros, ALU, memoria y buses.'},
+    alu:{n:'ALU (unidad aritmético lógica)',d:'Realiza las operaciones aritméticas (suma, resta) y lógicas (AND, OR, desplazamientos) sobre los operandos.'},
+    mem:{n:'Memoria principal',d:'Almacena instrucciones y datos en el mismo espacio de direcciones. Esta es la característica distintiva del modelo de Von Neumann: programa almacenado.'},
+    io:{n:'Módulos de entrada/salida',d:'Conectan los periféricos con el sistema. Se tratan en la Unidad 7 (E/S programada, por interrupciones y DMA).'},
+    bus:{n:'Bus del sistema',d:'Conjunto de líneas compartidas entre CPU, memoria y E/S, organizado en bus de direcciones, bus de datos y bus de control.'}
+  };
+  const steps = [
+    {t:'1. Búsqueda: MAR ← PC', d:'La unidad de control transfiere la dirección contenida en el PC al MAR. La dirección se presenta en el bus de direcciones.', on:['pc','mar','busA','uc']},
+    {t:'2. Búsqueda: MBR ← M[MAR]; IR ← MBR; PC ← PC + 1', d:'Con la señal de lectura del bus de control, la memoria entrega la instrucción por el bus de datos hasta el MBR. Se copia al IR y el PC se incrementa.', on:['mem','mbr','ir','pc','busD','busC']},
+    {t:'3. Decodificación', d:'La unidad de control interpreta el código de operación de ADD X y prepara las señales de control del resto del ciclo.', on:['ir','uc']},
+    {t:'4. Operando: MAR ← X; MBR ← M[X]', d:'El campo de dirección X del IR pasa al MAR. Se lee el operando de memoria y queda en el MBR.', on:['ir','mar','mem','mbr','busA','busD','busC']},
+    {t:'5. Ejecución: ACC ← ACC + MBR', d:'La ALU suma el contenido del acumulador y del MBR; el resultado vuelve al acumulador. Con esto termina la instrucción y comienza un nuevo ciclo.', on:['uc','alu','acc','mbr']}
+  ];
+  let step = -1, sel = null;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const box = (id,x,y,w,hh,label,cls='') => `<g class="blk ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}"><rect x="${x}" y="${y}" width="${w}" height="${hh}" rx="8"/><text x="${x+w/2}" y="${y+hh/2+4}" text-anchor="middle">${label}</text></g>`;
+  const svg = h('div',{html:`<svg class="diag" viewBox="0 0 660 340" role="group" aria-label="Diagrama de la arquitectura de Von Neumann">
+    <rect class="frame" x="12" y="10" width="300" height="320" rx="12"/><text class="frametxt" x="26" y="30">CPU</text>
+    ${box('uc',28,44,128,52,'Unidad de control','big')}${box('alu',168,44,128,52,'ALU','big')}
+    <text class="frametxt" x="28" y="122">Registros</text>
+    ${box('pc',28,132,60,40,'PC')}${box('ir',96,132,60,40,'IR')}${box('mar',164,132,60,40,'MAR')}${box('mbr',232,132,60,40,'MBR')}
+    ${box('acc',28,182,60,40,'ACC')}
+    <text x="104" y="207" fill="currentColor" style="fill:var(--muted);font-size:12px;font-family:var(--sans)">Instrucción de ejemplo: ADD X</text>
+    <line x1="312" y1="170" x2="352" y2="170" data-l="bus"/>
+    <g class="blk" data-id="bus"><rect class="busbar" data-busbar x="352" y="20" width="28" height="300" rx="6"/><text transform="translate(371 170) rotate(-90)" text-anchor="middle" style="font-size:12px">Bus del sistema</text></g>
+    <line x1="380" y1="95" x2="410" y2="95" data-l="bus"/><line x1="380" y1="255" x2="410" y2="255" data-l="bus"/>
+    ${box('mem',410,30,240,130,'Memoria principal','big')}
+    ${box('io',410,200,240,110,'Entrada / Salida','big')}
+    </svg>`}).firstChild;
+  const nodes = Object.fromEntries([...svg.querySelectorAll('.blk')].map(g=>[g.dataset.id,g]));
+  const busbar = svg.querySelector('[data-busbar]');
+  const lines = [...svg.querySelectorAll('line')];
+  const pills = {busA:h('span',{class:'pill'},'Bus de direcciones'),busD:h('span',{class:'pill'},'Bus de datos'),busC:h('span',{class:'pill'},'Bus de control')};
+  const title = h('b',null,'Seleccione un bloque o recorra el ciclo');
+  const text = h('p',null,'Haga clic en cualquier componente para ver su función, o use los botones para seguir paso a paso una instrucción ADD X.');
+  function paint(){
+    const on = step>=0 ? steps[step].on : [];
+    Object.entries(nodes).forEach(([id,g])=>{
+      g.classList.toggle('on', on.includes(id));
+      g.classList.toggle('sel', sel===id && step<0);
+    });
+    const busOn = on.some(x=>x.startsWith('bus'));
+    busbar.classList.toggle('on', busOn);
+    lines.forEach(l=>l.classList.toggle('on', busOn));
+    Object.entries(pills).forEach(([k,p])=>p.classList.toggle('on', on.includes(k)));
+    if (step>=0){ title.textContent = steps[step].t; text.textContent = steps[step].d; }
+    else if (sel){ title.textContent = info[sel].n; text.textContent = info[sel].d; }
+    prev.disabled = step<0; next.textContent = step>=steps.length-1 ? 'Reiniciar' : (step<0?'Iniciar ciclo':'Siguiente paso');
+  }
+  Object.entries(nodes).forEach(([id,g])=>{
+    const pick = ()=>{ sel=id; step=-1; paint(); };
+    g.addEventListener('click',pick);
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();} });
+  });
+  const prev = h('button',{onclick:()=>{ step = Math.max(-1,step-1); paint(); }},'Anterior');
+  const next = h('button',{class:'primary',onclick:()=>{ step = step>=steps.length-1 ? -1 : step+1; paint(); }},'Iniciar ciclo');
+  const c = card('Modelo de Von Neumann y ciclo de instrucción','Programa y datos comparten la memoria principal. Siga la búsqueda y ejecución de una instrucción de suma con acumulador.',
+    svg, h('div',{class:'pills'},Object.values(pills)),
+    h('div',{class:'steps'},prev,next),
+    h('div',{class:'stepbox'},title,text));
+  paint(); return c;
+}
+
+function niveles(){
+  const L = [
+    {n:'Aplicaciones',d:'Programas que utiliza la persona usuaria: planillas, navegadores, editores. Ocultan por completo la máquina.'},
+    {n:'Lenguaje de alto nivel',d:'C, Python, Java. Expresan algoritmos con independencia de la máquina. Un compilador o intérprete los traduce hacia niveles inferiores.',ex:'x = a + b;'},
+    {n:'Sistema operativo',d:'Administra los recursos (procesador, memoria, E/S) y ofrece servicios a los programas mediante llamadas al sistema.'},
+    {n:'Lenguaje ensamblador',d:'Representación simbólica del lenguaje de máquina: un mnemónico por instrucción. Lo traduce el ensamblador.',ex:'add t0, t1, t2'},
+    {n:'Arquitectura del conjunto de instrucciones (ISA)',d:'Interfaz entre hardware y software: instrucciones, formatos, registros visibles y modos de direccionamiento. Es la visión del programador de lenguaje de máquina.',ex:'0000000 00111 00110 000 00101 0110011  (0x007302B3)'},
+    {n:'Microarquitectura (organización)',d:'Cómo se implementa la ISA: unidad de control cableada o microprogramada, camino de datos, segmentación, memoria caché.'},
+    {n:'Lógica digital',d:'Compuertas, circuitos combinacionales y secuenciales, registros. Aquí vive el sumador que ejecuta la instrucción.',ex:'S = A ⊕ B ⊕ Cin     Cout = AB + Cin(A ⊕ B)'},
+    {n:'Dispositivos',d:'Transistores y tecnología de integración que materializan las compuertas.'}
+  ];
+  let cur = 1;
+  const list = h('div',{class:'levels'});
+  const det = h('div',{class:'lvl-detail',role:'status'});
+  function paint(){
+    list.replaceChildren(...L.map((l,i)=>h('button',{class:'level','aria-pressed':String(i===cur),onclick:()=>{cur=i;paint();}},h('span',{class:'n'},'N'+(L.length-i)),l.n)));
+    const l = L[cur];
+    det.replaceChildren(h('b',null,l.n),h('p',null,l.d), l.ex?h('div',{class:'code'},l.ex):null, h('p',{class:'lede',style:'margin:8px 0 0'},'Ejemplo para la sentencia x = a + b, vista en este nivel.'.replace(/.*/, l.ex?'Misma sentencia x = a + b, vista en este nivel.':'')));
+  }
+  paint();
+  return card('Niveles de abstracción','Una misma operación se describe de forma distinta en cada nivel. Recorra la pila desde las aplicaciones hasta los dispositivos.',list,det);
+}
+
+function rendimiento(){
+  const ic = h('input',{type:'number',value:'2000',min:'1',step:'any'});
+  const cpi = h('input',{type:'number',value:'1.5',min:'0.1',step:'any'});
+  const f = h('input',{type:'number',value:'3',min:'0.1',step:'any'});
+  const out = h('div');
+  function upd(){
+    const a=+ic.value,b=+cpi.value,g=+f.value;
+    if(!(a>0&&b>0&&g>0)){ out.replaceChildren(h('p',{class:'msg-bad'},'Ingrese valores positivos.')); return; }
+    const r = C.perf(a,b,g);
+    const t = r.seconds<1 ? (r.seconds*1000).toPrecision(4)+' ms' : r.seconds.toPrecision(4)+' s';
+    out.replaceChildren(h('dl',{class:'kv'},
+      h('dt',null,'Tiempo de CPU'),h('dd',{class:'out'},t),
+      h('dt',null,'Velocidad'),h('dd',{class:'out'},r.mips.toFixed(0)+' MIPS')),
+      h('p',{class:'note'},`T = IC × CPI / f = ${a}·10⁶ × ${b} / ${g}·10⁹ Hz.  MIPS = f(MHz) / CPI = ${g*1000} / ${b}.`));
+  }
+  [ic,cpi,f].forEach(i=>i.addEventListener('input',upd)); upd();
+  return card('Parámetros de rendimiento','Modifique el número de instrucciones, los ciclos por instrucción y la frecuencia. Anticipe el resultado antes de leerlo.',
+    h('div',{class:'row'},lab('Instrucciones (millones)',ic),lab('CPI (ciclos por instrucción)',cpi),lab('Frecuencia (GHz)',f)),out);
+}
+
+function generaciones(){
+  const G = [
+    {n:'1ª generación',y:'≈ 1946 a 1956',d:'Válvulas de vacío. Programación en lenguaje de máquina. Grandes dimensiones y alto consumo (ENIAC, UNIVAC).'},
+    {n:'2ª generación',y:'≈ 1956 a 1964',d:'Transistores. Aparecen el ensamblador y los primeros lenguajes de alto nivel (FORTRAN, COBOL).'},
+    {n:'3ª generación',y:'≈ 1964 a 1971',d:'Circuitos integrados. Multiprogramación y familias de computadoras compatibles (IBM System/360).'},
+    {n:'4ª generación',y:'desde ≈ 1971',d:'Microprocesadores e integración a gran escala (VLSI). Computadoras personales. El Intel 4004 data de 1971.'},
+    {n:'Tendencia actual',y:'hoy',d:'Procesadores multinúcleo, sistemas en un chip y aceleradores especializados. Se vincula con la Unidad 8.'}
+  ];
+  let cur=0; const box=h('div',{class:'lvl-detail',role:'status'}); const tl=h('div',{class:'timeline'});
+  function paint(){
+    tl.replaceChildren(...G.map((g,i)=>h('button',{'aria-pressed':String(i===cur),onclick:()=>{cur=i;paint();}},h('b',null,g.n),h('small',null,g.y))));
+    box.replaceChildren(h('b',null,G[cur].n+' · '+G[cur].y),h('p',null,G[cur].d));
+  }
+  paint();
+  return card('Generaciones de computadoras','Los límites entre generaciones son aproximados; lo relevante es la tecnología que las caracteriza.',tl,box);
+}
+
+/* ============ UNIDAD 2 ============ */
+function tamanios(){
+  const sel = h('select',null,...[8,16,32,64].map(n=>h('option',{value:n,selected:n===32},n+' bits')));
+  const out = h('div',{class:'scroll'});
+  function upd(){
+    const w=+sel.value;
+    const rows=[['Bit',1],['Byte',8],['Palabra',w],['Doble palabra',2*w]];
+    const t = h('table',null,h('thead',null,h('tr',null,h('th',{class:'l'},'Unidad'),h('th',null,'Bits'),h('th',null,'Bytes'),h('th',null,'Sin signo'),h('th',null,'Con signo (C2)'))),
+      h('tbody',null,...rows.map(([n,b])=>{
+        const un = b===1 ? '0 a 1' : '0 a '+(pow2(b)-1n).toLocaleString('es-AR');
+        const sg = b===1 ? 'no aplica' : (-(pow2(b-1))).toLocaleString('es-AR')+' a '+(pow2(b-1)-1n).toLocaleString('es-AR');
+        return h('tr',null,h('td',{class:'l'},n),h('td',null,b),h('td',null,b/8<1?'1/8':b/8),h('td',{class:'mono'},un),h('td',{class:'mono'},sg));
+      })));
+    out.replaceChildren(t);
+  }
+  sel.addEventListener('change',upd); upd();
+  return card('Bit, byte, palabra y doble palabra','La palabra es la unidad natural de trabajo del procesador. Cambie su tamaño y observe cómo se modifican los rangos representables.',
+    h('div',{class:'row'},lab('Tamaño de palabra',sel)),out);
+}
+
+function enteros(){
+  const num = h('input',{type:'text',value:'-37',inputmode:'numeric',size:8,'aria-label':'Número decimal'});
+  const bits = h('select',null,...[4,8,16].map(n=>h('option',{value:n,selected:n===8},n+' bits')));
+  const out = h('div');
+  function upd(){
+    const n = Number(num.value.trim()), b=+bits.value;
+    if (num.value.trim()==='' || !Number.isInteger(n)){ out.replaceChildren(h('p',{class:'msg-bad'},'Ingrese un número entero.')); return; }
+    const r = C.range(b);
+    const inC2 = n>=r.min && n<=r.max;
+    const rows=[];
+    if (!inC2){
+      out.replaceChildren(h('p',{class:'msg-bad'},`El valor ${n} no entra en ${b} bits con signo. Rango en complemento a 2: ${r.min} a ${r.max}.`),
+        h('p',{class:'note'},'Con n bits, el complemento a 2 representa de −2ⁿ⁻¹ a 2ⁿ⁻¹ − 1. Pruebe con más bits.')); return;
+    }
+    const c2 = C.toTwos(n,b);
+    const sm = C.signMag(n,b), c1=C.onesComp(n,b);
+    const kv = h('dl',{class:'kv'},
+      h('dt',null,'Signo y magnitud'),h('dd',{class:'out',html: sm? grouped(sm) : 'no representable'}),
+      h('dt',null,'Complemento a 1'),h('dd',{class:'out',html: c1? grouped(c1) : 'no representable'}),
+      h('dt',null,'Complemento a 2'),h('dd',{class:'out',html: grouped(c2)}),
+      h('dt',null,'Hexadecimal'),h('dd',{class:'out'},'0x'+C.hex(c2)),
+      h('dt',null,'Octal / decimal sin signo'),h('dd',{class:'out'},BigInt('0b'+c2).toString(8)+'₈  /  '+BigInt('0b'+c2).toString(10)));
+    const steps = n<0
+      ? `Para −${-n}: ${(-n)} en binario con ${b} bits = ${C.group4((-n).toString(2).padStart(b,'0'))}; se invierten los bits = ${C.group4(c1)}; se suma 1 = ${C.group4(c2)}.`
+      : 'Un número positivo se representa igual en las tres notaciones: su binario natural con ceros a la izquierda.';
+    out.replaceChildren(kv,h('p',{class:'note'},steps),h('p',{class:'lede',style:'margin:0'},`Rango en C2 con ${b} bits: ${r.min} a ${r.max}.`));
+  }
+  [num].forEach(i=>i.addEventListener('input',upd)); bits.addEventListener('change',upd); upd();
+  return card('Punto fijo: representación de enteros','Compare signo y magnitud, complemento a 1 y complemento a 2. Pruebe con valores negativos y con el límite del rango.',
+    h('div',{class:'row'},lab('Número decimal',num),lab('Ancho',bits)),out);
+}
+
+function sumaC2(){
+  const a = h('input',{type:'text',value:'100',size:6,inputmode:'numeric'});
+  const b = h('input',{type:'text',value:'50',size:6,inputmode:'numeric'});
+  const w = h('select',null,...[4,8,16].map(n=>h('option',{value:n,selected:n===8},n+' bits')));
+  const out = h('div');
+  function upd(){
+    const x=Number(a.value),y=Number(b.value),n=+w.value, r=C.range(n);
+    if(!Number.isInteger(x)||!Number.isInteger(y)||x<r.min||x>r.max||y<r.min||y>r.max){
+      out.replaceChildren(h('p',{class:'msg-bad'},`Ingrese dos enteros entre ${r.min} y ${r.max}.`)); return; }
+    const s=C.addTwos(x,y,n), real=x+y;
+    out.replaceChildren(
+      h('div',{class:'out',html:`<div>&nbsp;&nbsp;${grouped(s.sa)}  <span class="b0">(${x})</span></div><div>+ ${grouped(s.sb)}  <span class="b0">(${y})</span></div><div>= ${grouped(s.sum)}  <span class="b0">(${s.value})</span></div>`,style:'white-space:pre;line-height:1.7'}),
+      h('dl',{class:'kv'},
+        h('dt',null,'Acarreo hacia el bit de signo'),h('dd',{class:'mono'},s.carryIntoMsb),
+        h('dt',null,'Acarreo de salida'),h('dd',{class:'mono'},s.carryOut),
+        h('dt',null,'Desborde (overflow)'),h('dd',{class:s.overflow?'msg-bad':'msg-ok'},s.overflow?'Sí: el resultado no es válido':'No')),
+      h('p',{class:'note'}, s.overflow
+        ? `La suma real es ${real}, fuera del rango ${r.min} a ${r.max}. Hay desborde porque los dos acarreos finales (hacia el bit de signo y de salida) difieren; equivale a sumar dos operandos del mismo signo y obtener un resultado de signo contrario.`
+        : 'Los acarreos hacia el bit de signo y de salida coinciden, por lo que el resultado es correcto aunque haya acarreo de salida.'));
+  }
+  [a,b].forEach(i=>i.addEventListener('input',upd)); w.addEventListener('change',upd); upd();
+  return card('Suma en complemento a 2 y desborde','Sume dos enteros con signo y detecte el desborde. Pruebe 100 + 50 con 8 bits y compare con −5 + 3.',
+    h('div',{class:'row'},lab('Sumando A',a),lab('Sumando B',b),lab('Ancho',w)),out);
+}
+
+function flotante(){
+  let bits = C.f32bits(6.25);
+  const inp = h('input',{type:'text',value:'6.25',size:14,inputmode:'decimal','aria-label':'Número decimal'});
+  const edit = h('div'), out = h('div'), msg = h('div');
+  const presets=[['1',1],['6,25',6.25],['−0,1',-0.1],['255,75',255.75],['0',0],['1e−40',1e-40],['∞',Infinity]];
+  function paintBits(){
+    const sg=[bits[0]],ex=bits.slice(1,9).split(''),ma=bits.slice(9).split('');
+    const grp=(arr,off,cls)=>h('span',{class:'bitgroup '+cls},...arr.map((v,i)=>h('button',{class:'bitbtn','data-v':v,'aria-label':'bit '+(off+i),onclick:()=>{ const a=bits.split(''); a[off+i]=a[off+i]==='1'?'0':'1'; bits=a.join(''); inp.value=fmt(C.f32value(bits)); paintAll(); }},v)));
+    const chunks=[]; for(let i=0;i<ma.length;i+=8) chunks.push(ma.slice(i,i+8));
+    edit.replaceChildren(
+      h('div',{class:'legend'},h('span',null,h('i',{class:'dot',style:'background:var(--bad)'}),'Signo (1 bit)'),h('span',null,h('i',{class:'dot',style:'background:var(--warn)'}),'Exponente sesgado (8 bits)'),h('span',null,h('i',{class:'dot',style:'background:var(--accent)'}),'Mantisa (23 bits)')),
+      h('div',{style:'overflow-x:auto;white-space:nowrap;padding-bottom:4px'},grp(sg,0,'s'),grp(ex,1,'e'),...chunks.map((c,k)=>grp(c,9+k*8,'m'))));
+  }
+  const fmt = v => Number.isNaN(v) ? 'NaN' : (Object.is(v,-0)?'-0':String(v));
+  function paintInfo(){
+    const i=C.f32info(bits), v=C.f32value(bits), sign=i.sign==='1'?'−':'+';
+    const rows=[h('dt',null,'Tipo'),h('dd',null,i.kind),h('dt',null,'Signo'),h('dd',{class:'mono'},`${i.sign}  →  ${sign}`),h('dt',null,'Exponente'),h('dd',{class:'mono'},(i.kind==='denormalizado' ? `${i.exp}₂ = 0  →  exponente efectivo fijo = −126` : `${i.exp}₂ = ${i.e}  →  e = ${i.e} − 127 = ${String(i.e-127).replace('-','−')}`))];
+    if(i.norm){
+      rows.push(h('dt',null,'Normalizado'),h('dd',{class:'mono'},`${sign}${i.norm.lead}.${i.norm.frac||'0'}₂ × 2^${String(i.norm.exp).replace('-','−')}`));
+      rows.push(h('dt',null,'Valor almacenado'),h('dd',{class:'mono'},fmt(v)));
+    } else rows.push(h('dt',null,'Valor'),h('dd',{class:'mono'},i.kind==='infinito'?sign+'∞':i.kind==='NaN'?'NaN (no es un número)':sign+'0'));
+    const typed = Number(inp.value.replace(',','.'));
+    const err = (i.norm && Number.isFinite(typed) && typed!==v && Math.abs(typed-v)>0 && Math.abs(Math.fround(typed)-v)<1e-300) ? Math.abs(typed-v) : null;
+    out.replaceChildren(h('dl',{class:'kv'},...rows),
+      err!==null?h('p',{class:'note'},`El valor ingresado no tiene representación exacta en 24 bits significativos; se almacena el más cercano. Error de representación: ${err.toExponential(2)}.`):null,
+      i.kind==='normal'?h('p',{class:'note'},'En un número normalizado el bit entero 1 es implícito: solo se almacenan los 23 bits que siguen a la coma.'):null,
+      i.kind==='denormalizado'?h('p',{class:'note'},'Con exponente 0 y mantisa distinta de cero el número es denormalizado: el bit implícito es 0 y el exponente efectivo es −126. Permite acercarse a cero de forma gradual.'):null);
+  }
+  function paintAll(){ paintBits(); paintInfo(); }
+  inp.addEventListener('input',()=>{
+    const s=inp.value.trim().replace(',','.').toLowerCase();
+    const v = s==='inf'||s==='∞'||s==='infinito' ? Infinity : s==='-inf' ? -Infinity : (s===''?NaN:Number(s));
+    if(Number.isNaN(v)&&s!=='nan'){ msg.replaceChildren(h('span',{class:'msg-bad'},'Ingrese un número decimal (por ejemplo 6,25 o 1e-3).')); return; }
+    msg.replaceChildren(); bits=C.f32bits(v); paintAll();
+  });
+  const pre = h('div',{class:'row'},...presets.map(([t,v])=>h('button',{class:'chip',onclick:()=>{inp.value=fmt(v);bits=C.f32bits(v);msg.replaceChildren();paintAll();}},t)));
+  paintAll();
+  return card('Punto flotante y normalización (IEEE 754, simple precisión)','Escriba un decimal para ver cómo se almacena, o invierta bits con un clic y observe el valor resultante. Pruebe con 0,1: no tiene representación exacta.',
+    h('div',{class:'row'},lab('Número decimal',inp),pre),msg,edit,out);
+}
+
+function hamming(){
+  let data=[1,0,1,1], errPos=0;
+  const names=['p1','p2','d1','p4','d2','d3','d4'];
+  const root=h('div');
+  function paint(){
+    const cw=C.hammingEncode(data); const rx=cw.slice(); if(errPos) rx[errPos-1]^=1;
+    const ck=C.hammingChecks(rx);
+    const row=h('div',{class:'ham',role:'group','aria-label':'Palabra recibida'},...rx.map((v,i)=>h('button',{class:(names[i][0]==='p'?'par ':'')+(errPos===i+1?'err':''),title:'Clic para inyectar o quitar un error en esta posición',onclick:()=>{errPos=errPos===i+1?0:i+1;paint();}},h('small',null,'pos '+(i+1)),h('span',{class:'v'},v),h('small',null,names[i]))));
+    const drow=h('div',{class:'row'},...data.map((v,i)=>h('button',{class:'togg','aria-pressed':String(!!v),onclick:()=>{data[i]^=1;paint();}},'d'+(i+1)+' = '+v)));
+    const fixed = rx.slice(); if(ck.syndrome) fixed[ck.syndrome-1]^=1;
+    const okAfter = fixed.every((v,i)=>v===cw[i]);
+    root.replaceChildren(
+      h('p',{class:'lede',style:'margin:0 0 6px'},'1. Elija los 4 bits de datos.'),drow,
+      h('p',{class:'lede',style:'margin:12px 0 0'},'2. Palabra de 7 bits transmitida. Haga clic en un bit para provocar un error.'),row,
+      h('dl',{class:'kv'},
+        h('dt',null,'Control de p1 (pos. 1,3,5,7)'),h('dd',{class:'mono'},`paridad = ${ck.s1}`),
+        h('dt',null,'Control de p2 (pos. 2,3,6,7)'),h('dd',{class:'mono'},`paridad = ${ck.s2}`),
+        h('dt',null,'Control de p4 (pos. 4,5,6,7)'),h('dd',{class:'mono'},`paridad = ${ck.s4}`),
+        h('dt',null,'Síndrome (s4 s2 s1)'),h('dd',{class:'mono'},`${ck.s4}${ck.s2}${ck.s1}₂ = ${ck.syndrome}`)),
+      ck.syndrome===0
+        ? h('p',{class:'note'},'Síndrome 0: todas las paridades son pares, no se detecta error.')
+        : h('p',{class:'note'},`El síndrome vale ${ck.syndrome}: indica que el bit erróneo está en la posición ${ck.syndrome} (${names[ck.syndrome-1]}). Al invertirlo, la palabra se corrige${okAfter?' y coincide con la transmitida.':'.'}`),
+      h('p',{class:'note'},'Con dos errores simultáneos el síndrome apunta a una posición equivocada: Hamming (7,4) corrige un error simple, no varios.'));
+  }
+  paint();
+  return card('Códigos redundantes: Hamming (7,4)','Los bits de paridad ocupan las posiciones 1, 2 y 4. Cada uno controla un subconjunto de posiciones con paridad par; el síndrome señala dónde está el error.',root);
+}
+
+function ascii(){
+  const inp=h('input',{type:'text',value:'Hola, UNNE',maxlength:16,size:18,'aria-label':'Texto'});
+  const out=h('div',{class:'scroll'});
+  function upd(){
+    const chars=[...inp.value];
+    out.replaceChildren(h('table',null,h('thead',null,h('tr',null,h('th',null,'Carácter'),h('th',null,'Decimal'),h('th',null,'Hex'),h('th',null,'Binario'))),
+      h('tbody',null,...chars.map(ch=>{
+        const c=ch.codePointAt(0);
+        return c<128
+          ? h('tr',null,h('td',{class:'mono'},ch===' '?'␣':ch),h('td',{class:'mono'},c),h('td',{class:'mono'},c.toString(16).toUpperCase().padStart(2,'0')),h('td',{class:'mono',html:grouped(c.toString(2).padStart(8,'0'))}))
+          : h('tr',null,h('td',{class:'mono'},ch),h('td',{colspan:3,class:'l'},`Fuera de ASCII (7 bits): es Unicode U+${c.toString(16).toUpperCase().padStart(4,'0')}`));
+      }))));
+  }
+  inp.addEventListener('input',upd); upd();
+  return card('Codificación alfanumérica: ASCII','ASCII usa 7 bits (128 símbolos). Escriba letras mayúsculas y minúsculas, y compare los códigos. La ñ y las vocales con tilde quedan fuera.',
+    h('div',{class:'row'},lab('Texto (hasta 16 caracteres)',inp)),out);
+}
+
+/* ============ UNIDAD 3 ============ */
+function compuertas(){
+  const G={AND:{f:(a,b)=>a&b,e:'F = A · B'},OR:{f:(a,b)=>a|b,e:'F = A + B'},NOT:{f:(a)=>a^1,e:'F = A̅',one:true},
+    NAND:{f:(a,b)=>(a&b)^1,e:'F = (A · B)̅'},NOR:{f:(a,b)=>(a|b)^1,e:'F = (A + B)̅'},XOR:{f:(a,b)=>a^b,e:'F = A ⊕ B'},XNOR:{f:(a,b)=>(a^b)^1,e:'F = (A ⊕ B)̅'}};
+  let g='AND',A=0,B=0;
+  const root=h('div');
+  function paint(){
+    const d=G[g]; const F=d.f(A,B);
+    const tbl=d.one
+      ? h('table',null,h('thead',null,h('tr',null,h('th',null,'A'),h('th',null,'F'))),h('tbody',null,...[0,1].map(a=>h('tr',{class:a===A?'hit':''},h('td',{class:'mono'},a),h('td',{class:'mono'},d.f(a))))))
+      : h('table',null,h('thead',null,h('tr',null,h('th',null,'A'),h('th',null,'B'),h('th',null,'F'))),h('tbody',null,...[[0,0],[0,1],[1,0],[1,1]].map(([a,b])=>h('tr',{class:(a===A&&b===B)?'hit':''},h('td',{class:'mono'},a),h('td',{class:'mono'},b),h('td',{class:'mono'},d.f(a,b))))));
+    const hl=h('div',{class:'hl scroll'},tbl);
+    hl.querySelectorAll('tr.hit td').forEach(td=>td.classList.add('hit'));
+    root.replaceChildren(
+      h('div',{class:'row'},...Object.keys(G).map(k=>h('button',{class:'chip','aria-pressed':String(k===g),onclick:()=>{g=k;paint();}},k))),
+      h('div',{class:'row',style:'margin-top:14px'},
+        h('button',{class:'togg','aria-pressed':String(!!A),onclick:()=>{A^=1;paint();}},'A = '+A),
+        G[g].one?null:h('button',{class:'togg','aria-pressed':String(!!B),onclick:()=>{B^=1;paint();}},'B = '+B),
+        h('span',{class:'led'+(F?' on':''),role:'status','aria-label':'Salida F = '+F},F),
+        h('span',{class:'mono'},d.e)),
+      h('div',{style:'margin-top:14px;max-width:320px'},hl),
+      h('p',{class:'note'},g==='NAND'||g==='NOR'?`${g} es una compuerta universal: con ella sola se puede construir cualquier función booleana.`:g==='XOR'?'La salida vale 1 cuando las entradas son distintas. Es la suma módulo 2 y la base del sumador.':'Cambie las entradas y verifique la fila resaltada de la tabla de verdad.'));
+  }
+  paint();
+  return card('Compuertas y tablas de verdad','Elija una compuerta, accione las entradas y ubique la fila activa en la tabla de verdad.',root);
+}
+
+function simplificador(){
+  let n=3, state=Array(8).fill('0'), focus=-1;
+  const V=['A','B','C','D'];
+  const presets={
+    'Mayoría de 3':()=>{n=3;state=Array(8).fill('0');[3,5,6,7].forEach(i=>state[i]='1');},
+    'Ejemplo con indiferentes (4 variables)':()=>{n=4;state=Array(16).fill('0');[4,8,10,11,12,15].forEach(i=>state[i]='1');[9,14].forEach(i=>state[i]='x');},
+    'Paridad impar de 3':()=>{n=3;state=Array(8).fill('0');[1,2,4,7].forEach(i=>state[i]='1');},
+    'Limpiar':()=>{state=Array(1<<n).fill('0');}
+  };
+  const root=h('div');
+  const cyc=i=>{state[i]=state[i]==='0'?'1':state[i]==='1'?'x':'0';focus=-1;paint();};
+  const termHTML=t=>{let s='';for(let i=0;i<t.length;i++){if(t[i]==='1')s+=V[i];else if(t[i]==='0')s+=`<span class="ov">${V[i]}</span>`;}return s||'1';};
+  const termTxt=t=>{let s='';for(let i=0;i<t.length;i++){if(t[i]==='1')s+=V[i];else if(t[i]==='0')s+=V[i]+"'";}return s||'1';};
+  function layout(){
+    if(n===4){const g=[0,1,3,2];return{rows:g,cols:g,idx:(r,c)=>(r<<2)|c,corner:'AB \\ CD',w:2};}
+    if(n===3){return{rows:[0,1],cols:[0,1,3,2],idx:(r,c)=>(r<<2)|c,corner:'A \\ BC',w:2,rw:1};}
+    return{rows:[0,1],cols:[0,1],idx:(r,c)=>(r<<1)|c,corner:'A \\ B',w:1,rw:1};
+  }
+  function paint(){
+    const size=1<<n;
+    const ones=[],dcs=[];state.forEach((v,i)=>{if(v==='1')ones.push(i);else if(v==='x')dcs.push(i);});
+    const res=C.simplify(n,ones,dcs);
+    const colors=['var(--t1)','var(--t2)','var(--t3)','var(--t4)','var(--t5)','var(--t6)'];
+    const L=layout(); const rw=L.rw||L.w;
+    const focusCells = focus>=0 ? new Set(C.cellsOf(res.cover[focus],n)) : null;
+    const cell=i=>{
+      const bars=res.cover.map((t,k)=>C.covers(t,i,n)&&state[i]!=='0'||C.covers(t,i,n)?h('i',{style:'background:'+colors[k%6]}):null).filter(Boolean);
+      return h('button',{class:'kcell'+(focusCells&&focusCells.has(i)?' ring':''),'data-s':state[i],'aria-label':`m${i}, valor ${state[i]==='x'?'indiferente':state[i]}`,onclick:()=>cyc(i)},h('span',{class:'v'},state[i]==='x'?'X':state[i]),h('span',{class:'bars'},...bars));
+    };
+    const kmap=h('table',{class:'kmap'},
+      h('thead',null,h('tr',null,h('th',{class:'corner'},L.corner),...L.cols.map(c=>h('th',null,c.toString(2).padStart(L.w,'0'))))),
+      h('tbody',null,...L.rows.map(r=>h('tr',null,h('th',null,r.toString(2).padStart(rw,'0')),...L.cols.map(c=>h('td',null,cell(L.idx(r,c))))))));
+    const tt=h('table',{class:'tt'},
+      h('thead',null,h('tr',null,h('th',null,'#'),...V.slice(0,n).map(v=>h('th',null,v)),h('th',null,'F'))),
+      h('tbody',null,...Array.from({length:size},(_,i)=>h('tr',null,h('td',{class:'mono'},i),...C.group4?i.toString(2).padStart(n,'0').split('').map(b=>h('td',{class:'mono'},b)):[],h('td',{class:'f'},h('button',{'data-s':state[i],'aria-label':`Salida de la fila ${i}`,onclick:()=>cyc(i)},state[i]==='x'?'X':state[i]))))));
+    let exprNode, chips;
+    if(!ones.length){exprNode=h('div',{class:'expr'},'F = 0');chips=null;}
+    else if(res.cover.some(t=>/^-+$/.test(t))){exprNode=h('div',{class:'expr'},'F = 1');chips=null;}
+    else{
+      exprNode=h('div',{class:'expr',html:'F = '+res.cover.map(t=>termHTML(t)).join(' + ')});
+      chips=h('div',{class:'terms'},...res.cover.map((t,k)=>h('button',{class:'term','aria-pressed':String(focus===k),title:'Resaltar el grupo en el mapa',onclick:()=>{focus=focus===k?-1:k;paint();}},h('i',{class:'sw',style:'background:'+colors[k%6]}),h('span',{html:termHTML(t)}),h('small',{class:'lede',style:'margin:0'},`${C.cellsOf(t,n).length} celdas`))));
+    }
+    const ok=!ones.length||C.verify(n,state,res.cover);
+    const sel=h('select',{'aria-label':'Cantidad de variables',onchange:e=>{n=+e.target.value;state=Array(1<<n).fill('0');focus=-1;paint();}},...[2,3,4].map(k=>h('option',{value:k,selected:k===n},k+' variables')));
+    root.replaceChildren(
+      h('div',{class:'row'},lab('Variables',sel),...Object.keys(presets).map(k=>h('button',{class:'chip',onclick:()=>{presets[k]();focus=-1;paint();}},k))),
+      h('p',{class:'lede',style:'margin:10px 0 0'},'Haga clic en una celda del mapa o de la tabla para alternar 0 → 1 → X (indiferente).'),
+      h('div',{class:'grid2',style:'margin-top:10px;align-items:start'},
+        h('div',null,h('div',{class:'scroll'},kmap),
+          h('div',{class:'legend'},'Cada barra de color inferior indica un grupo (implicante) que cubre la celda.')),
+        h('div',{class:'scroll'},tt)),
+      exprNode,chips,
+      h('p',{class:'note'},ok?'Verificación: la expresión reproduce todos los 1 y ningún 0 de la tabla (las X se aprovechan solo si agrandan un grupo).':'Atención: la expresión no coincide con la tabla.'),
+      h('p',{class:'note'},'Los grupos son potencias de 2 (1, 2, 4, 8, 16 celdas) y las celdas de los bordes son adyacentes entre sí por el código Gray de las cabeceras. Un grupo mayor elimina más variables.'));
+    root.querySelectorAll('.kmap .corner').forEach(e=>e.setAttribute('scope','col'));
+  }
+  paint();
+  return card('Simplificación con mapas de Karnaugh','Defina una función en la tabla de verdad, observe los grupos sobre el mapa y compare con la expresión mínima como suma de productos.',root);
+}
+
+function sumador(){
+  let a=0,b=0,c=0;
+  const root=h('div');
+  function paint(){
+    const s=a^b^c, co=(a&b)|(c&(a^b));
+    root.replaceChildren(
+      h('div',{class:'row'},...[['A',a,()=>a^=1],['B',b,()=>b^=1],['Cin',c,()=>c^=1]].map(([n,v,f])=>h('button',{class:'togg','aria-pressed':String(!!v),onclick:()=>{f();paint();}},n+' = '+v)),
+        h('span',{class:'led'+(s?' on':''),'aria-label':'Suma S = '+s},'S'),h('span',{class:'led'+(co?' on':''),'aria-label':'Acarreo Cout = '+co},'Co')),
+      h('p',{class:'out',style:'margin-top:12px'},`${a} + ${b} + ${c} = ${a+b+c} decimal = ${co}${s} binario  →  Cout = ${co}, S = ${s}`),
+      h('p',{class:'note'},'S = A ⊕ B ⊕ Cin     Cout = A·B + Cin·(A ⊕ B). Encadenando n sumadores completos se obtiene un sumador de n bits con propagación de acarreo.'));
+  }
+  paint();
+  return card('Circuito combinacional: sumador completo','La salida depende solo de las entradas actuales. Verifique las ocho combinaciones y relacione S y Cout con la suma binaria.',root);
+}
+
+function flipflop(){
+  let type='D',Q=0,D=0,T=0,J=0,K=0,hist=[0];
+  const root=h('div');
+  function next(){return type==='D'?D:type==='T'?Q^T:(J&&K?Q^1:J?1:K?0:Q);}
+  function paint(){
+    const nx=next();
+    const ins = type==='D'?[['D',D,()=>D^=1]]:type==='T'?[['T',T,()=>T^=1]]:[['J',J,()=>J^=1],['K',K,()=>K^=1]];
+    const tbl = type==='D'?[['D','Q⁺'],['0','0'],['1','1']]:type==='T'?[['T','Q⁺'],['0','Q'],['1','Q̅']]:[['J K','Q⁺'],['0 0','Q'],['0 1','0'],['1 0','1'],['1 1','Q̅']];
+    const cur = type==='D'?String(D):type==='T'?String(T):`${J} ${K}`;
+    root.replaceChildren(
+      h('div',{class:'row'},...['D','T','JK'].map(k=>h('button',{class:'chip','aria-pressed':String(k===type),onclick:()=>{type=k;paint();}},'Flip-flop '+k))),
+      h('div',{class:'row',style:'margin-top:14px'},...ins.map(([n,v,f])=>h('button',{class:'togg','aria-pressed':String(!!v),onclick:()=>{f();paint();}},n+' = '+v)),
+        h('button',{class:'primary',onclick:()=>{Q=nx;hist.push(Q);if(hist.length>16)hist.shift();paint();}},'Pulso de reloj ↑'),
+        h('span',{class:'led'+(Q?' on':''),role:'status','aria-label':'Estado Q = '+Q},'Q'),
+        h('span',{class:'mono'},`Q⁺ = ${nx}`)),
+      h('p',{class:'out',style:'margin-top:12px'},'Historia de Q: '+hist.join(' ')),
+      h('div',{class:'scroll',style:'max-width:260px;margin-top:10px'},h('table',null,h('tbody',null,...tbl.map((r,i)=>h('tr',{class:i>0&&r[0]===cur?'hit':''},...r.map((c,j)=>(i===0?h('th',null,c):h('td',{class:'mono'+(i>0&&r[0]===cur?' hit':'')},c)))))))),
+      h('p',{class:'note'},'La salida depende de las entradas y del estado almacenado: es un circuito secuencial. Solo cambia en el flanco de reloj. Combine dos modos (T = 1 o J = K = 1) para ver cómo conmuta.'));
+    root.querySelectorAll('tr.hit td').forEach(td=>td.classList.add('hit'));
+  }
+  paint();
+  return card('Circuito secuencial: flip-flops','Observe la diferencia con el circuito combinacional: el nuevo estado Q⁺ depende de las entradas y del estado actual Q.',root);
+}
+
+/* ============ AUTOEVALUACIONES ============ */
+// [enunciado, correcta, distractor, distractor, distractor, explicación]
+const QZ = {
+1:[
+ ['¿Qué característica distingue a la arquitectura de Von Neumann?','Instrucciones y datos se almacenan en la misma memoria.','Instrucciones y datos tienen memorias y buses separados.','La CPU carece de registros internos.','La ALU ejecuta instrucciones sin intervención de la unidad de control.','El concepto de programa almacenado permite tratar las instrucciones como datos. La separación de memorias corresponde a la arquitectura Harvard.'],
+ ['La visión estructural de un computador describe:','La forma en que se interconectan sus componentes.','La operación que realiza cada componente.','El costo de cada componente.','El lenguaje en que se programa.','La visión estructural indica cómo se relacionan los componentes (CPU, memoria, E/S, buses); la funcional indica qué hace cada uno.'],
+ ['Un ensamblador traduce:','Mnemónicos del lenguaje ensamblador a lenguaje de máquina.','Programas de alto nivel a ensamblador.','Lenguaje de máquina a señales de control.','Código fuente a código de otra ISA en tiempo de ejecución.','El ensamblador convierte cada mnemónico en su instrucción de máquina; la traducción de alto nivel es tarea del compilador.'],
+ ['Un programa ejecuta 2·10⁹ instrucciones con CPI = 2 en un procesador de 1 GHz. ¿Cuánto tarda?','4 s','2 s','1 s','0,5 s','T = IC × CPI / f = 2·10⁹ × 2 / 10⁹ Hz = 4 s.'],
+ ['¿Qué tecnología caracteriza a la tercera generación de computadoras?','Circuitos integrados.','Válvulas de vacío.','Transistores discretos.','Microprocesadores de un solo chip.','Las válvulas corresponden a la primera, los transistores a la segunda y los microprocesadores a la cuarta.']
+],
+2:[
+ ['¿Qué rango representa un entero de 8 bits en complemento a 2?','−128 a 127','−127 a 127','0 a 255','−256 a 255','Con n bits: de −2ⁿ⁻¹ a 2ⁿ⁻¹ − 1. Para n = 8 resulta −128 a 127.'],
+ ['¿Cómo se representa −5 en complemento a 2 con 8 bits?','11111011','10000101','11111010','00000101','Se escribe 5 = 00000101, se invierte (11111010) y se suma 1 (11111011). 10000101 es signo y magnitud; 11111010 es complemento a 1.'],
+ ['¿Cuál es el sesgo (bias) del exponente en IEEE 754 de simple precisión?','127','128','1023','255','El exponente de 8 bits se almacena como e + 127. El valor 1023 corresponde a doble precisión.'],
+ ['En una suma en complemento a 2 hay desborde cuando:','Dos operandos del mismo signo producen un resultado de signo contrario.','Existe acarreo de salida en el bit más significativo.','El resultado es cero.','Los operandos tienen signos distintos.','Con signos distintos no puede haber desborde. Un acarreo de salida, por sí solo, no lo indica.'],
+ ['Si una palabra tiene 16 bits, una doble palabra tiene:','4 bytes','2 bytes','8 bytes','16 bytes','Doble palabra = 2 × 16 = 32 bits = 4 bytes.'],
+ ['Un código de Hamming (7,4) permite:','Detectar y corregir un error simple.','Solo detectar errores, sin corregirlos.','Corregir cualquier cantidad de errores.','Comprimir 7 bits en 4.','Los 3 bits de paridad forman un síndrome que identifica la posición de un único bit erróneo.']
+],
+3:[
+ ['¿Qué compuerta, por sí sola, permite construir cualquier función booleana?','NAND','AND','OR','XOR','NAND (y también NOR) es universal. AND, OR y XOR no lo son por separado.'],
+ ['La salida de una compuerta XOR de dos entradas vale 1 cuando:','Las entradas son distintas.','Las dos entradas valen 1.','Alguna entrada vale 0.','Las entradas son iguales.','XOR es la suma módulo 2: 0⊕0 = 0, 0⊕1 = 1, 1⊕0 = 1, 1⊕1 = 0.'],
+ ['En un mapa de Karnaugh los grupos válidos:','Tienen 1, 2, 4, 8… celdas adyacentes.','Pueden tener cualquier cantidad de celdas.','Nunca incluyen celdas de los bordes.','Deben ser cuadrados perfectos.','Los tamaños son potencias de 2, y las celdas de bordes opuestos son adyacentes por el código Gray.'],
+ ['Un decodificador de 3 a 8 tiene:','3 entradas y 8 salidas, de las que se activa una.','8 entradas y 3 salidas.','3 entradas y 3 salidas.','8 entradas y 1 salida.','Cada combinación de las 3 entradas activa exactamente una de las 8 salidas.'],
+ ['La diferencia entre un circuito combinacional y uno secuencial es que en el secuencial:','La salida depende también del estado almacenado.','No existen compuertas.','La salida no depende de las entradas.','Solo se usan compuertas XOR.','Los secuenciales incorporan elementos de memoria (flip-flops). Los combinacionales dependen solo de las entradas actuales.'],
+ ['Un flip-flop D, en cada flanco activo de reloj:','Almacena el valor presente en D.','Conmuta siempre su salida.','Pone Q en cero.','Mantiene Q sin cambios.','Es la celda básica de memoria de un bit; Q⁺ = D.']
+],
+4:[
+ ['Durante la fase de búsqueda de un ciclo de instrucción, el PC:','Contiene la dirección de la próxima instrucción.','Almacena el resultado de la ALU.','Guarda el código de operación decodificado.','Contiene el último dato leído de memoria.','El PC apunta a la instrucción siguiente; su valor pasa al MAR y luego se incrementa.'],
+ ['Una microinstrucción es:','Un conjunto de señales de control activas durante un paso del ciclo.','Una instrucción de lenguaje de máquina de 8 bits.','Una instrucción de alto nivel.','Un tipo de interrupción.','Las instrucciones de máquina se ejecutan como secuencias de microinstrucciones en una unidad de control microprogramada.'],
+ ['En notación RTL, MAR ← PC significa:','Se transfiere el contenido de PC al registro MAR.','Se transfiere MAR a PC.','Se compara MAR con PC.','Se suma PC a MAR.','La flecha indica transferencia entre registros, de derecha a izquierda.'],
+ ['Cuando se atiende una interrupción, la CPU:','Guarda el estado (incluido el PC) y salta a la rutina de servicio.','Descarta el programa en curso.','Apaga el reloj.','Ejecuta la misma instrucción indefinidamente.','Al terminar la rutina se restaura el estado y el programa continúa donde se interrumpió.'],
+ ['Un bus de direcciones de 16 líneas permite direccionar:','64 K posiciones','16 posiciones','256 posiciones','16 K posiciones','2¹⁶ = 65 536 = 64 K posiciones.'],
+ ['La instrucción de llamada a una subrutina:','Guarda la dirección de retorno, habitualmente en la pila.','Borra el contador de programa.','Detiene la CPU.','Solo puede usarse una vez por programa.','La instrucción de retorno recupera esa dirección y devuelve el control al programa llamador.']
+],
+5:[
+ ['En el direccionamiento inmediato, el operando:','Está contenido en la propia instrucción.','Se encuentra en una dirección de memoria indicada.','Está en un registro.','Se obtiene tras dos accesos a memoria.','No requiere acceso adicional a memoria para obtener el operando.'],
+ ['¿Cuál es una característica típica de una arquitectura RISC?','Instrucciones de longitud fija y acceso a memoria solo con carga/almacenamiento.','Gran variedad de modos de direccionamiento.','Instrucciones de longitud muy variable.','Operaciones aritméticas directamente sobre memoria.','RISC simplifica el formato y el conjunto de instrucciones para facilitar la segmentación.'],
+ ['Una unidad de control microprogramada se caracteriza por:','Almacenar microprogramas en una memoria de control, con mayor flexibilidad.','Estar formada solo por compuertas fijas.','No poder modificarse nunca.','Ser siempre más rápida que la cableada.','La cableada suele ser más rápida; la microprogramada es más flexible y simple de diseñar o modificar.'],
+ ['En el direccionamiento indirecto por memoria, el campo de dirección contiene:','La dirección de una posición que a su vez contiene la dirección del operando.','El operando.','Un desplazamiento respecto del PC.','El número de un registro.','Requiere un acceso extra a memoria para llegar al operando.'],
+ ['El firmware es:','Software almacenado en memoria no volátil que controla el hardware.','Un tipo de compuerta.','Un lenguaje de alto nivel.','Un dispositivo de entrada.','Se aloja típicamente en ROM o memoria flash.']
+],
+6:[
+ ['Las memorias caché son efectivas gracias al principio de:','Localidad temporal y espacial.','Aleatoriedad de accesos.','Paridad.','Segmentación.','Es probable reutilizar datos recientes y acceder a datos cercanos a los usados.'],
+ ['Con tc = 2 ns, tm = 100 ns y tasa de aciertos h = 0,9, el tiempo medio de acceso (h·tc + (1−h)·tm) es:','11,8 ns','10,2 ns','2 ns','90 ns','0,9 × 2 + 0,1 × 100 = 1,8 + 10 = 11,8 ns.'],
+ ['La memoria virtual permite:','Ejecutar programas mayores que la memoria principal mediante traducción de direcciones.','Aumentar la frecuencia del reloj.','Eliminar la necesidad de memoria secundaria.','Duplicar el ancho del bus de datos.','Se apoya en paginación o segmentación y en la memoria secundaria.'],
+ ['En una caché de mapeo directo, cada bloque de memoria principal:','Puede ubicarse en una única línea de la caché.','Puede ubicarse en cualquier línea.','Nunca se almacena.','Se ubica en un conjunto de dos líneas.','El mapeo directo es simple pero puede producir conflictos entre bloques que comparten línea.'],
+ ['Respecto de la memoria principal, la memoria secundaria es:','Más lenta, de mayor capacidad y no volátil.','Más rápida y de menor capacidad.','Volátil y más rápida.','Idéntica en tiempo de acceso.','Subiendo en la jerarquía: más rápida, más cara por bit y de menor capacidad.'],
+ ['Con política de escritura write-through, una escritura:','Actualiza la caché y la memoria principal.','Solo actualiza la caché.','Solo actualiza la memoria principal.','Se descarta.','En write-back, en cambio, la memoria se actualiza al reemplazar el bloque.']
+],
+7:[
+ ['En la E/S programada la CPU:','Consulta repetidamente el estado del dispositivo hasta que está listo.','Es avisada por una interrupción.','Delega toda la transferencia en un DMA.','No participa en la transferencia.','Esta espera activa (polling) desperdicia tiempo de CPU.'],
+ ['El acceso directo a memoria (DMA) permite:','Transferir bloques entre dispositivo y memoria sin pasar cada dato por la CPU.','Ejecutar instrucciones aritméticas más rápido.','Aumentar la capacidad del disco.','Eliminar el bus del sistema.','La CPU solo inicia y finaliza la operación, y puede hacer otro trabajo mientras tanto.'],
+ ['En la E/S por interrupciones, el dispositivo:','Avisa a la CPU cuando está listo.','Es consultado cada pocos ciclos.','Escribe directamente en los registros de la ALU.','Reemplaza al contador de programa.','La CPU queda libre hasta que llega la señal de interrupción.'],
+ ['Una transmisión por puerto serie envía:','Un bit por vez por una línea de datos.','Varios bits simultáneos por varias líneas.','Solo bytes completos en paralelo.','Datos sin sincronización.','El puerto paralelo transfiere varios bits a la vez.'],
+ ['¿Cuál NO es función de un módulo de E/S?','Ejecutar las operaciones aritméticas del programa.','Almacenar datos temporalmente (buffer).','Comunicarse con la CPU.','Detectar errores del dispositivo.','Las operaciones aritméticas son responsabilidad de la ALU.']
+],
+8:[
+ ['En la taxonomía de Flynn, un procesador vectorial es típicamente:','SIMD','SISD','MISD','MIMD','SIMD: una instrucción opera sobre múltiples datos.'],
+ ['Un computador secuencial clásico (un procesador, un flujo de instrucciones) es:','SISD','SIMD','MIMD','MISD','Un flujo de instrucciones y un flujo de datos.'],
+ ['Los multiprocesadores y multicomputadores se clasifican como:','MIMD','SISD','SIMD','Ninguna de las anteriores','Múltiples instrucciones sobre múltiples datos, de manera independiente.'],
+ ['Un procesador superescalar:','Emite varias instrucciones por ciclo mediante múltiples unidades funcionales.','Ejecuta una sola instrucción por vez.','Solo tiene una ALU y no usa segmentación.','No necesita unidad de control.','Aprovecha el paralelismo a nivel de instrucción.'],
+ ['Según la ley de Amdahl, si el 80 % de un programa es paralelizable, la aceleración máxima con infinitos procesadores es:','5','1,25','8','Infinita','Speedup máximo = 1 / (1 − 0,8) = 5. La parte secuencial limita la mejora.']
+]};
+
+function quiz(unit){
+  const src = QZ[unit];
+  let items, done, ok;
+  const root = h('div');
+  const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+  function start(){
+    items = src.map(q=>({q:q[0],opts:shuffle([{t:q[1],c:true},...q.slice(2,5).map(t=>({t,c:false}))]),e:q[5],ans:-1}));
+    paint();
+  }
+  function paint(){
+    const answered = items.filter(i=>i.ans>=0).length, right = items.filter(i=>i.ans>=0&&items[0]&&i.opts[i.ans].c).length;
+    const finished = answered===items.length;
+    const head = h('div',{class:'score'},
+      h('span',{class:'mono',role:'status'},`Respondidas ${answered}/${items.length} · Correctas ${right}`),
+      h('span',{class:'bar'},h('i',{style:`width:${answered/items.length*100}%`})),
+      h('button',{onclick:start},'Reiniciar'));
+    const list = items.map((it,qi)=>h('div',{class:'q'},
+      h('div',{class:'qt'},h('span',{class:'qn'},'P'+(qi+1)),it.q),
+      h('div',{class:'opts'},...it.opts.map((o,oi)=>h('button',{
+        class: it.ans>=0 ? (o.c?'right':(oi===it.ans?'wrong':'')) : '',
+        disabled: it.ans>=0,
+        onclick:()=>{ it.ans=oi; paint(); }},o.t))),
+      it.ans>=0 ? h('p',{class:'expl'},(it.opts[it.ans].c?'Correcto. ':'Revise: ')+it.e) : null));
+    const fin = finished ? h('p',{class:'note'},`Calificación de la autoevaluación: ${right} de ${items.length}. ${right===items.length?'Dominio completo de la unidad.':right>=Math.ceil(items.length*0.7)?'Buen nivel: repase las explicaciones de las respuestas incorrectas.':'Conviene repasar la unidad y repetir el cuestionario.'}`) : null;
+    root.replaceChildren(head,...list,fin);
+  }
+  start();
+  return card('Autoevaluación','Responda sin consultar y lea la explicación de cada opción. Al reiniciar, el orden de las respuestas cambia.',root);
+}
+
+// ---------- ciclo de instrucción ----------
+const CY_PROG=[{op:'LOAD',a:6},{op:'ADD',a:7},{op:'STORE',a:8},{op:'HALT',a:0}];
+let cy;
+function cyInit(){cy={pc:0,ir:'—',mar:'—',mdr:'—',acc:0,mem:[CY_PROG[0],CY_PROG[1],CY_PROG[2],CY_PROG[3],null,null,5,3,0],stage:0,msg:'Listo para comenzar. Primer paso: la unidad de control copia el PC al MAR.',hl:'',halt:false};cyRender();}
+function cyMemStr(v){return v===null?'—':(typeof v==='object'?v.op+(v.op==='HALT'?'':' '+v.a):String(v));}
+function cyRender(){
+  const r=[['PC',cy.pc],['MAR',cy.mar],['MDR',typeof cy.mdr==='object'?cyMemStr(cy.mdr):cy.mdr],['IR',typeof cy.ir==='object'?cyMemStr(cy.ir):cy.ir],['ACC',cy.acc]];
+  document.getElementById('cyRegs').innerHTML=r.map(x=>'<div class="reg'+(cy.hl===x[0]?' hl':'')+'"><span class="k">'+x[0]+'</span><span class="v">'+x[1]+'</span></div>').join('');
+  document.getElementById('cyPhase').innerHTML=cy.msg;
+  let h='<table class="mem"><tr><th>Dir.</th><th>Contenido</th><th>Tipo</th></tr>';
+  cy.mem.forEach((v,i)=>{h+='<tr'+(i===cy.pc&&!cy.halt&&cy.stage===0?' class="cur"':'')+'><td>'+i+'</td><td>'+cyMemStr(v)+'</td><td>'+(i<4?'instrucción':i>=6?'dato':'')+'</td></tr>';});
+  document.getElementById('cyMem').innerHTML=h+'</table>';
+  document.getElementById('cyStep').disabled=cy.halt;
+}
+function cyStep(){
+  if(cy.halt)return;
+  switch(cy.stage){
+    case 0:cy.mar=cy.pc;cy.hl='MAR';cy.msg='<b>Búsqueda 1:</b> MAR ← PC ('+cy.pc+'). La dirección de la próxima instrucción sale por el bus de direcciones.';cy.stage=1;break;
+    case 1:cy.mdr=cy.mem[cy.mar];cy.hl='MDR';cy.msg='<b>Búsqueda 2:</b> MDR ← M[MAR]. La memoria entrega por el bus de datos el contenido de la posición '+cy.mar+'.';cy.stage=2;break;
+    case 2:cy.ir=cy.mdr;cy.pc++;cy.hl='IR';cy.msg='<b>Búsqueda 3:</b> IR ← MDR y PC ← PC + 1. La instrucción queda en el registro de instrucción.';cy.stage=3;break;
+    case 3:cy.hl='IR';cy.msg='<b>Decodificación:</b> la unidad de control interpreta el código de operación «'+cy.ir.op+'» (una función booleana del opcode activa las señales de control).';cy.stage=cy.ir.op==='HALT'?6:4;break;
+    case 4:if(cy.ir.op==='STORE'){cy.mar=cy.ir.a;cy.mdr=cy.acc;cy.hl='MAR';cy.msg='<b>Ejecución 1:</b> MAR ← '+cy.ir.a+' y MDR ← ACC ('+cy.acc+').';cy.stage=5;}else{cy.mar=cy.ir.a;cy.hl='MAR';cy.msg='<b>Ejecución 1:</b> MAR ← '+cy.ir.a+' (dirección del operando, tomada del IR).';cy.stage=5;}break;
+    case 5:if(cy.ir.op==='STORE'){cy.mem[cy.mar]=cy.mdr;cy.hl='MDR';cy.msg='<b>Ejecución 2:</b> M[MAR] ← MDR. Se escribió '+cy.mdr+' en la posición '+cy.mar+'. Fin de la instrucción.';}
+      else{cy.mdr=cy.mem[cy.mar];if(cy.ir.op==='LOAD'){cy.acc=cy.mdr;cy.msg='<b>Ejecución 2:</b> MDR ← M[MAR] y ACC ← MDR ('+cy.acc+'). Fin de la instrucción.';}else{cy.acc=cy.acc+cy.mdr;cy.msg='<b>Ejecución 2:</b> MDR ← M[MAR] y ACC ← ACC + MDR = '+cy.acc+' (la suma la hace la ALU: el sumador del laboratorio anterior).';}cy.hl='ACC';}
+      cy.stage=0;break;
+    case 6:cy.halt=true;cy.hl='';cy.msg='<b>HALT:</b> la CPU se detiene. M[8] = '+cy.mem[8]+' (5 + 3).';break;
+  }
+  cyRender();
+}
+
+// ---------- caché de mapeo directo ----------
+let ca;
+function caInit(){ca={lines:Array.from({length:8},()=>({v:0,tag:null})),hits:0,total:0};caRender(null);document.getElementById('caMsg').textContent='Todavía no hubo accesos.';document.getElementById('caFields').innerHTML='';}
+function caAccess(addr){
+  if(isNaN(addr)||addr<0||addr>255){document.getElementById('caMsg').textContent='Ingresá una dirección entre 0 y 255.';return;}
+  const b=addr.toString(2).padStart(8,'0'),tag=addr>>5,idx=(addr>>2)&7,off=addr&3,block=addr>>2;
+  const L=ca.lines[idx],hit=L.v&&L.tag===tag;ca.total++;
+  if(hit)ca.hits++;else{L.v=1;L.tag=tag;}
+  document.getElementById('caFields').innerHTML=addr+' = '+'<span class="tg">'+b.slice(0,3)+'</span><span class="ix">'+b.slice(3,6)+'</span><span class="of">'+b.slice(6)+'</span>  <small style="color:var(--text-dim)">etiqueta | índice | desplazamiento</small>';
+  document.getElementById('caMsg').innerHTML='Bloque '+block+' → línea '+idx+' (bloque mod 8). '+(hit?'<b style="color:var(--green)">ACIERTO</b>: la etiqueta '+tag+' coincide y el bit de validez es 1.':'<b style="color:var(--red)">FALLO</b>: se trae el bloque desde memoria principal y se guarda con etiqueta '+tag+'.');
+  caRender(idx);
+}
+function caRender(cur){
+  let h='<tr><th>Línea</th><th>Válida</th><th>Etiqueta</th></tr>';
+  ca.lines.forEach((l,i)=>{h+='<tr'+(i===cur?' style="background:var(--orange-soft)"':'')+'><td>'+i+'</td><td>'+l.v+'</td><td>'+(l.v?l.tag:'—')+'</td></tr>';});
+  document.getElementById('caTbl').innerHTML=h;
+  document.getElementById('caStats').textContent=ca.total?('Accesos: '+ca.total+' · aciertos: '+ca.hits+' · tasa de aciertos: '+(100*ca.hits/ca.total).toFixed(0)+' %'):'Sin accesos todavía.';
+}
+
+
+
+// ---------- Unidades: componentes interactivos ----------
+const $=id=>document.getElementById(id);
+function chips(id,items,outId,fmt){
+  const c=$(id);c.innerHTML='';
+  items.forEach((it,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=it[0];b.onclick=()=>{[...c.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');$(outId).innerHTML=fmt(it);};c.appendChild(b);});
+  c.firstChild.click();
+}
+
+function u2float(){
+  const v=parseFloat($('u2f').value.replace(',','.')),o=$('u2fOut');
+  if(isNaN(v)){o.textContent='Ingresá un número válido.';return;}
+  const dv=new DataView(new ArrayBuffer(4));dv.setFloat32(0,v);const u=dv.getUint32(0);
+  const b=u.toString(2).padStart(32,'0'),sg=b[0],ex=b.slice(1,9),mn=b.slice(9),e=parseInt(ex,2);
+  let t='<span class="bit-s">'+sg+'</span> <span class="bit-e">'+ex+'</span> <span class="bit-m">'+mn+'</span><br>Hexadecimal: <b>'+u.toString(16).toUpperCase().padStart(8,'0')+'</b><br>Signo = '+sg+' → '+(sg==='1'?'negativo':'positivo')+' · exponente sesgado = '+e;
+  if(e===255)t+=' (valor especial: '+(parseInt(mn,2)?'NaN':'infinito')+')';
+  else if(e===0)t+=' (cero o denormalizado)';
+  else t+=' → exponente real = '+(e-127)+'<br>Valor = (−1)^'+sg+' × 1,'+mn.replace(/0+$/,'')+'₂ × 2^'+(e-127);
+  o.innerHTML=t+'<br>Almacenado: <b>'+dv.getFloat32(0)+'</b>';
+}
+function u2ascii(){
+  const ch=$('u2c').value[0],o=$('u2cOut');if(!ch){o.textContent='Ingresá un carácter.';return;}
+  const c=ch.charCodeAt(0);if(c>127){o.textContent='Fuera de ASCII de 7 bits (código '+c+').';return;}
+  const b=c.toString(2).padStart(7,'0'),ones=b.split('').filter(x=>x==='1').length,p=ones%2;
+  o.innerHTML='«'+ch+'» = '+c+' = <b>'+b+'</b> (hex '+c.toString(16).toUpperCase()+')<br>Unos: '+ones+' → bit de paridad par = <span class="o">'+p+'</span> = XOR de todos los bits<br>Byte transmitido: <b>'+p+b+'</b>';
+}
+let u2d=[1,0,1,1],u2r=[];
+function u2code(d){const p1=d[0]^d[1]^d[3],p2=d[0]^d[2]^d[3],p3=d[1]^d[2]^d[3];return [p1,p2,d[0],p3,d[1],d[2],d[3]];}
+function u2hDraw(){
+  $('u2hd').innerHTML='';u2d.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.textContent=v;b.onclick=()=>{u2d[i]^=1;u2r=u2code(u2d);u2hDraw();};$('u2hd').appendChild(b);});
+  $('u2hr').innerHTML='';const lab=['p1','p2','d1','p3','d2','d3','d4'];
+  u2r.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.title=lab[i]+' (posición '+(i+1)+')';b.textContent=v;b.onclick=()=>{u2r[i]^=1;u2hDraw();};$('u2hr').appendChild(b);});
+  const r=u2r,s1=r[0]^r[2]^r[4]^r[6],s2=r[1]^r[2]^r[5]^r[6],s3=r[3]^r[4]^r[5]^r[6],pos=s3*4+s2*2+s1;
+  let t='Orden de bits: p1 p2 d1 p3 d2 d3 d4<br>Síndrome (s3 s2 s1) = '+s3+s2+s1+' = '+pos+'<br>';
+  if(pos===0)t+='<span class="g">Sin errores detectados.</span>';
+  else{const c=r.slice();c[pos-1]^=1;t+='<span class="r">Error en la posición '+pos+'.</span> Corrección: <b>'+c.join('')+'</b> (datos '+[c[2],c[4],c[5],c[6]].join('')+')';}
+  $('u2hOut').innerHTML=t;
+}
+u2r=u2code(u2d);
+
+let u3D=[0,1,0,1],u3S=[0,0],u3c=0;
+function u3draw(){
+  $('u3d').innerHTML='';u3D.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.textContent=v;b.onclick=()=>{u3D[i]^=1;u3draw();};$('u3d').appendChild(b);});
+  $('u3s').innerHTML='';u3S.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.textContent=v;b.onclick=()=>{u3S[i]^=1;u3draw();};$('u3s').appendChild(b);});
+  const sel=u3S[0]*2+u3S[1];
+  const dec=[0,1,2,3].map(i=>i===sel?1:0);
+  $('u3Out').innerHTML='Selección S1S0 = '+u3S.join('')+' → entrada D'+sel+'<br>Multiplexor: Y = D'+sel+' = <span class="o">'+u3D[sel]+'</span><br>Decodificador: Y0 Y1 Y2 Y3 = <b>'+dec.join(' ')+'</b> (solo se activa Y'+sel+', el minitérmino S1'+(u3S[0]?'':'′')+' S0'+(u3S[1]?'':'′')+')';
+}
+function u3show(){const b=u3c.toString(2).padStart(3,'0');$('u3cOut').innerHTML='Q2 Q1 Q0 = <b>'+b+'</b> = '+u3c+'<br>Cada pulso suma 1 módulo 8; tras 111 vuelve a 000.';}
+function u3tick(){u3c=(u3c+1)%8;u3show();}function u3reset(){u3c=0;u3show();}
+
+function u4calc(){
+  const n=parseInt($('u4n').value),m=parseInt($('u4m').value);if(!(n>0&&m>0)){return;}
+  const pos=Math.pow(2,n),bits=pos*m,bytes=bits/8;
+  const f=x=>{const u=['bytes','KiB','MiB','GiB','TiB'];let i=0;while(x>=1024&&i<u.length-1){x/=1024;i++;}return (Math.round(x*100)/100)+' '+u[i];};
+  $('u4Out').innerHTML='Posiciones direccionables: 2^'+n+' = <b>'+pos.toLocaleString('es-AR')+'</b><br>Capacidad: <b>'+f(bytes)+'</b> ('+bits.toLocaleString('es-AR')+' bits)';
+}
+const u4s={a:0,b:1,c:0};
+function u4tog(k){u4s[k]^=1;const b=$('u4'+k);b.textContent=u4s[k];b.classList.toggle('on',!!u4s[k]);u4i();}
+function u4i(){const r=u4s.a&u4s.b&(1-u4s.c);$('u4iOut').innerHTML='pedido ∧ habilitadas ∧ ¬máscara = '+u4s.a+' ∧ '+u4s.b+' ∧ '+(1-u4s.c)+' = <b>'+r+'</b><br>'+(r?'<span class="g">La CPU atiende la interrupción: guarda PC y estado, y salta a la rutina de servicio.</span>':'<span class="r">La CPU continúa con el programa actual.</span>');}
+
+function u5mode(){
+  const m=$('u5m').value,mem={20:30,23:99,30:11};let t='';
+  if(m==='imm')t='Operando = campo = <b>20</b>. No se accede a memoria.';
+  if(m==='dir')t='Dirección efectiva = 20 → M[20] = <b>30</b>. Un acceso a memoria.';
+  if(m==='ind')t='M[20] = 30 es la dirección del operando → M[30] = <b>11</b>. Dos accesos a memoria.';
+  if(m==='reg')t='Operando = R1 = <b>15</b>. No se accede a memoria (rápido, pero hay pocos registros).';
+  if(m==='idx')t='Dirección efectiva = 20 + X = 20 + 3 = 23 → M[23] = <b>99</b>. Útil para recorrer vectores.';
+  $('u5Out').innerHTML=t;
+}
+function u5mask(){
+  const x=parseInt($('u5x').value,16),k=parseInt($('u5k').value,16),op=$('u5o').value,o=$('u5mOut');
+  if(isNaN(x)||isNaN(k)){o.textContent='Ingresá bytes en hexadecimal (00 a FF).';return;}
+  const r=op==='AND'?x&k:op==='OR'?x|k:x^k,bin=v=>{const s=v.toString(2).padStart(8,'0');return s.slice(0,4)+' '+s.slice(4);};
+  const eff=op==='AND'?'los bits donde la máscara vale 0 pasan a 0':op==='OR'?'los bits donde la máscara vale 1 pasan a 1':'los bits donde la máscara vale 1 se invierten';
+  o.innerHTML='dato     = '+bin(x)+'<br>máscara  = '+bin(k)+'<br>'+op+'      = <b>'+bin(r)+'</b> (hex '+r.toString(16).toUpperCase().padStart(2,'0')+')<br>Efecto: '+eff+'.';
+}
+function u6calc(){
+  const h=parseFloat($('u6h').value)/100,c=parseFloat($('u6c').value),m=parseFloat($('u6m').value);if(isNaN(h)||isNaN(c)||isNaN(m))return;
+  const t=c+(1-h)*m;$('u6Out').innerHTML='T medio = '+c+' + (1 − '+h.toFixed(2)+') × '+m+' = <b>'+(Math.round(t*100)/100)+' ns</b><br>Sin caché cada acceso costaría '+m+' ns: aceleración ≈ <span class="o">'+(m/t).toFixed(1)+'×</span>';
+}
+function u6page(){
+  const v=parseInt($('u6v').value,16),o=$('u6pOut');if(isNaN(v)||v>0xFFFF){o.textContent='Ingresá hasta 4 dígitos hexadecimales.';return;}
+  const pg=v>>12,off=v&0xFFF,fr=(pg*3+5)%16;
+  o.innerHTML='Dirección virtual '+v.toString(2).padStart(16,'0').replace(/^(.{4})(.*)$/,'<span class="bit-e">$1</span> <span class="bit-m">$2</span>')+'<br>Página virtual = '+pg+' · desplazamiento = '+off+' (12 bits)<br>Tabla de páginas de ejemplo: página '+pg+' → marco <b>'+fr+'</b><br>Dirección física = marco ‖ desplazamiento = <b>'+((fr<<12)|off).toString(16).toUpperCase().padStart(4,'0')+'</b> (hex)';
+}
+function u7calc(){
+  const n=+$('u7n').value,p=+$('u7p').value,i=+$('u7i').value,d=+$('u7d').value;if(!(n>0&&p>0&&i>0&&d>0))return;
+  const a=n*p,b=n*i,c=d+i,mx=Math.max(a,b,c);
+  const row=(name,v,cl)=>'<div style="font-family:var(--font-mono);font-size:12.5px">'+name+': <b>'+v.toLocaleString('es-AR')+'</b> ciclos</div><div class="bar '+cl+'" style="width:'+Math.max(1,v/mx*100)+'%"></div>';
+  $('u7Out').innerHTML=row('E/S programada (N × consulta)',a,'')+row('Por interrupciones (N × atención)',b,'o')+row('DMA (preparación + 1 interrupción final)',c,'g')+'<div class="out">Menor costo para la CPU: <b>'+(c<=Math.min(a,b)?'DMA':b<a?'interrupciones':'E/S programada')+'</b>. Probá N = 1 para ver cuándo DMA deja de convenir.</div>';
+}
+function u8init(){chips('u8fl',[
+ ['SISD','Un flujo de instrucciones, un flujo de datos.','Procesador secuencial clásico.'],
+ ['SIMD','Una instrucción actúa sobre muchos datos a la vez.','Procesadores vectoriales, unidades SIMD y GPU.'],
+ ['MISD','Varias instrucciones sobre un mismo flujo de datos.','Poco frecuente; ejemplo: sistemas tolerantes a fallos con redundancia.'],
+ ['MIMD','Varias instrucciones sobre varios flujos de datos.','Multinúcleo y multiprocesadores.']
+],'u8flOut',it=>'<b>'+it[0]+'</b>: '+it[1]+'<br>Ejemplo: '+it[2]);}
+function u8calc(){
+  const f=parseFloat($('u8f').value)/100,p=parseFloat($('u8p').value);if(isNaN(f)||!(p>=1))return;
+  const s=1/(f+(1-f)/p);$('u8Out').innerHTML='Aceleración = 1 / ('+f.toFixed(2)+' + '+(1-f).toFixed(2)+' / '+p+') = <b>'+s.toFixed(2)+'×</b><br>Límite con infinitos procesadores: <span class="o">'+(f>0?(1/f).toFixed(2)+'×':'sin límite')+'</span>';
+}
+function u8pipe(){
+  const n=Math.max(1,Math.min(8,parseInt($('u8n').value)||1)),k=5,E=['IF','ID','EX','MEM','WB'],cy=k+n-1;
+  let h='<table class="gantt"><tr><th></th>'+Array.from({length:cy},(_,i)=>'<th>'+(i+1)+'</th>').join('')+'</tr>';
+  for(let i=0;i<n;i++){h+='<tr><th>I'+(i+1)+'</th>';for(let c=0;c<cy;c++){const e=c-i;h+=e>=0&&e<k?'<td class="f">'+E[e]+'</td>':'<td></td>';}h+='</tr>';}
+  $('u8g').innerHTML=h+'</table>';
+  $('u8pOut').innerHTML='Sin segmentación: '+k+' × '+n+' = <b>'+(k*n)+'</b> ciclos · Con segmentación: '+k+' + '+n+' − 1 = <b>'+cy+'</b> ciclos · Aceleración = <span class="o">'+(k*n/cy).toFixed(2)+'×</span> (tiende a 5 al crecer n)';
+}
+
+function caGo(){caAccess(parseInt($('caAddr').value,10));}
+function caSeq(){caInit();for(let a=0;a<12;a++)caAccess(a);$('caMsg').innerHTML+='<br>Con la secuencia 0 a 11, cada fallo trae un bloque de 4 palabras y los tres accesos siguientes son aciertos: es la <b>localidad espacial</b>.';}
+
+
+/* ============ Componentes interactivos (U3 a U8) ============ */
+const later=f=>setTimeout(f,0);
+const xw=(title,lede,html,init)=>{const c=card(title,lede,h('div',{class:'xw',html})); if(init) later(init); return c;};
+const devCard=html=>card('Desarrollo del tema',null,h('div',{class:'xw dev',html}));
+const thinkCard=(q,a)=>card('Para pensar',null,h('div',{class:'xw',html:'<p style="margin:0 0 6px">'+q+'</p><details class="ans"><summary>Ver respuesta</summary>'+a+'</details>'}));
+function u3extra(){return [
+  xw("Multiplexor 4:1 y decodificador 2:4",null,"\n<div class=\"wrow\"><label>D0 D1 D2 D3</label><span id=\"u3d\"></span></div>\n<div class=\"wrow\"><label>Selección S1 S0</label><span id=\"u3s\"></span></div>\n<div class=\"out\" id=\"u3Out\"></div>",()=>{u3draw();}),
+  xw("Contador binario de 3 bits (circuito secuencial)",null,"\n<div class=\"wrow\"><button class=\"go\" onclick=\"u3tick()\">Pulso de reloj</button><button class=\"sec\" onclick=\"u3reset()\">Reset</button></div>\n<div class=\"out\" id=\"u3cOut\"></div>",()=>{u3show();})
+];}
+function u4mods(){return [
+  devCard("<p>Una computadora se organiza en tres subsistemas: la <b>CPU</b> (unidad de control, ALU y registros), la <b>memoria principal</b> y los <b>módulos de entrada/salida</b>. Todos se comunican por un sistema de <b>buses</b>. El bus de <b>direcciones</b> lo maneja la CPU en un solo sentido y su ancho n define cuántas posiciones se direccionan (2ⁿ). El bus de <b>datos</b> es bidireccional y su ancho es el de la palabra. El bus de <b>control</b> transporta señales como lectura, escritura, reloj, pedido de interrupción y su reconocimiento.</p>\n<p>El comportamiento de la CPU se describe con <b>microoperaciones</b> en notación de transferencia entre registros (RTL). La flecha indica el sentido de la transferencia: <span class=\"mono\">MAR ← PC</span> copia el contador de programa al registro de direcciones. La búsqueda de una instrucción se escribe así:</p>\n<div class=\"eq\">T0: MAR ← PC      T1: MBR ← M[MAR], PC ← PC + 1      T2: IR ← MBR</div>\n<p>El <b>ciclo de instrucción</b> repite las etapas de búsqueda, decodificación, cálculo de la dirección del operando, búsqueda del operando, ejecución y escritura del resultado. Antes de comenzar la instrucción siguiente, la CPU consulta si hay una <b>interrupción</b> pendiente y habilitada. Si la hay, guarda el PC y el estado (habitualmente en la pila), carga en el PC la dirección de la rutina de servicio, la ejecuta y al retornar restaura el estado.</p>\n<p>Las <b>subrutinas</b> siguen una lógica parecida. La instrucción CALL guarda la dirección de retorno en la <b>pila</b> (estructura LIFO apuntada por SP) y salta a la subrutina; RET recupera esa dirección. La pila permite anidar llamadas e implementar recursión.</p>\n<p>La unidad de control que genera las señales de cada microoperación puede ser <b>cableada</b> (circuito combinacional y secuencial) o <b>programable</b> (PLA o memoria de control). Ambas se retoman en la Unidad 5.</p>"),
+  xw('Ciclo de búsqueda y ejecución','Máquina didáctica de un acumulador. Avance micro-paso a micro-paso y observe PC, MAR, MDR, IR y ACC. Programa: ACC ← M[6] + M[7]; M[8] ← ACC.',"<div class=\"regs\" id=\"cyRegs\"></div><div class=\"phase\" id=\"cyPhase\"></div>\n<div class=\"btn-row\"><button class=\"go\" id=\"cyStep\" onclick=\"cyStep()\">Siguiente micro-paso</button><button class=\"sec\" onclick=\"cyInit()\">Reiniciar</button></div><div id=\"cyMem\"></div>",()=>{cyInit();}),
+  xw("Calculadora de capacidad de memoria",null,"\n<div class=\"wrow\"><label>Líneas de dirección n</label><input class=\"num\" id=\"u4n\" type=\"number\" min=\"1\" max=\"40\" value=\"16\" oninput=\"u4calc()\"><label>Ancho de palabra m (bits)</label><input class=\"num\" id=\"u4m\" type=\"number\" min=\"1\" max=\"128\" value=\"8\" oninput=\"u4calc()\"></div>\n<div class=\"out\" id=\"u4Out\"></div>",()=>{u4calc();}),
+  xw("Interrupción habilitada",null,"\n<div class=\"wrow\"><label>Pedido</label><button class=\"toggle sm\" id=\"u4a\" onclick=\"u4tog('a')\">0</button><label>Habilitadas</label><button class=\"toggle sm on\" id=\"u4b\" onclick=\"u4tog('b')\">1</button><label>Máscara activa</label><button class=\"toggle sm\" id=\"u4c\" onclick=\"u4tog('c')\">0</button></div>\n<div class=\"out\" id=\"u4iOut\"></div>",()=>{u4i();}),
+  thinkCard("Un computador direcciona 1 MiB con palabras de 8 bits. ¿Cuántas líneas de dirección tiene?","<p>1 MiB = 2²⁰ bytes, por lo tanto n = 20.</p>")];}
+function u5mods(){return [
+  devCard("<p>Una <b>instrucción de máquina</b> se compone de un código de operación (opcode), información sobre modos de direccionamiento y uno o más operandos. El formato puede ser de longitud fija (frecuente en RISC) o variable (frecuente en CISC). Según el número de direcciones explícitas, se habla de máquinas de 3, 2, 1 o 0 direcciones (pila). Para calcular X = (A + B) × C:</p>\n<div class=\"eq\">3 direcciones:  ADD T,A,B ; MUL X,T,C<br>2 direcciones:  MOV T,A ; ADD T,B ; MUL T,C ; MOV X,T<br>1 dirección (acumulador):  LOAD A ; ADD B ; MUL C ; STORE X</div>\n<p>Los <b>modos de direccionamiento</b> indican cómo se obtiene el operando: <b>inmediato</b> (está en la instrucción), <b>directo</b> (la instrucción contiene su dirección), <b>indirecto</b> (la dirección contiene la dirección del operando), de <b>registro</b>, de <b>registro indirecto</b> y con <b>desplazamiento</b> (indexado, con base o relativo al PC). Cada modo cambia la cantidad de accesos a memoria y la flexibilidad para recorrer vectores o estructuras.</p>\n<p>El <b>lenguaje ensamblador</b> representa cada instrucción con un mnemónico y usa etiquetas y directivas. El ensamblador suele resolver las etiquetas en dos pasadas: la primera construye la tabla de símbolos y la segunda genera el código máquina.</p>\n<p>Las arquitecturas <b>CISC</b> ofrecen muchas instrucciones, formatos variables y modos complejos, con operaciones que acceden directamente a memoria. Las <b>RISC</b> usan pocas instrucciones simples, formato regular, muchos registros y acceden a memoria solo con carga y almacenamiento, lo que facilita la segmentación.</p>\n<p>La <b>unidad de control cableada</b> genera las señales con lógica combinacional y secuencial: es rápida, pero difícil de modificar. La <b>microprogramada</b> guarda microinstrucciones en una memoria de control: es más flexible y sencilla de diseñar. El software que reside en esa memoria no volátil se llama <b>firmware</b>.</p>"),
+  xw("Modos de direccionamiento",null,"\n<p style=\"margin:0 0 6px;font-size:13px;color:var(--text-dim)\">Instrucción LOAD con campo operando = 20. Registro R1 = 15, registro índice X = 3. Memoria: M[20] = 30, M[23] = 99, M[30] = 11.</p>\n<div class=\"wrow\"><label>Modo</label><select class=\"sel\" id=\"u5m\" onchange=\"u5mode()\"><option value=\"imm\">Inmediato</option><option value=\"dir\">Directo</option><option value=\"ind\">Indirecto</option><option value=\"reg\">De registro (R1)</option><option value=\"idx\">Indexado (campo + X)</option></select></div>\n<div class=\"out\" id=\"u5Out\"></div>",()=>{u5mode();}),
+  xw("Máscaras con operaciones lógicas (bytes en hexadecimal)",null,"\n<div class=\"wrow\"><label>Dato</label><input class=\"num\" id=\"u5x\" type=\"text\" value=\"B6\" maxlength=\"2\" oninput=\"u5mask()\" style=\"width:70px\"><label>Máscara</label><input class=\"num\" id=\"u5k\" type=\"text\" value=\"0F\" maxlength=\"2\" oninput=\"u5mask()\" style=\"width:70px\">\n<select class=\"sel\" id=\"u5o\" onchange=\"u5mask()\"><option>AND</option><option>OR</option><option>XOR</option></select></div>\n<div class=\"out\" id=\"u5mOut\"></div>",()=>{u5mask();}),
+  thinkCard("¿Qué máscara y operación invierten solamente el bit 7 de un byte?","<p>XOR con 1000 0000 (80 en hexadecimal): x Δ 1 = ¬x y x Δ 0 = x.</p>")];}
+function u6mods(){return [
+  devCard("<p>La <b>jerarquía de memoria</b> ordena los niveles de mayor a menor velocidad y de menor a mayor capacidad: registros, memoria caché (L1, L2, L3), memoria principal y memoria secundaria. Funciona porque los programas muestran <b>localidad</b>: temporal (lo usado recientemente se reutiliza) y espacial (se accede a posiciones cercanas).</p>\n<p>La <b>memoria principal</b> se construye con DRAM (celdas simples, más densas y baratas, con refresco) y la caché con SRAM (más rápida y costosa). En la <b>memoria secundaria</b>, el tiempo de acceso de un disco magnético suma el desplazamiento de la cabeza (seek), la latencia rotacional y el tiempo de transferencia. Las unidades de estado sólido (flash) eliminan las partes mecánicas.</p>\n<p>La <b>memoria caché</b> guarda bloques de la memoria principal. En el <b>mapeo directo</b>, cada bloque se ubica en una única línea (línea = bloque mod número de líneas); en el <b>asociativo</b>, en cualquiera; en el <b>asociativo por conjuntos</b>, en cualquier línea de un conjunto. Cuando falta lugar se aplica una política de reemplazo (LRU, FIFO o aleatoria). Para las escrituras, <b>write-through</b> actualiza caché y memoria, y <b>write-back</b> actualiza la memoria cuando el bloque se reemplaza. Los fallos pueden ser obligatorios, por capacidad o por conflicto.</p>\n<div class=\"eq\">Tiempo medio de acceso = h · tc + (1 − h) · tm      (h: tasa de aciertos)</div>\n<p>En la <b>memoria virtual</b>, el espacio de direcciones del programa se divide en páginas que se traducen a marcos de memoria física mediante una tabla de páginas (acelerada por un TLB). Si la página no está en memoria se produce un <b>fallo de página</b> y el sistema operativo la trae desde el disco.</p>"),
+  xw('Caché de mapeo directo','8 líneas, bloques de 4 palabras, direcciones de 8 bits: 3 bits de etiqueta, 3 de índice y 2 de desplazamiento. Ingrese una dirección decimal (0 a 255) y acceda.',"<div class=\"btn-row\"><input class=\"num\" id=\"caAddr\" type=\"number\" min=\"0\" max=\"255\" value=\"37\" style=\"width:110px\"><button class=\"go\" onclick=\"caGo()\">Acceder</button><button class=\"sec\" onclick=\"caSeq()\">Cargar secuencia 0 a 11</button><button class=\"sec\" onclick=\"caInit()\">Vaciar caché</button></div>\n<div class=\"fields\" id=\"caFields\"></div><div class=\"phase\" id=\"caMsg\">Todavía no hubo accesos.</div><div class=\"adder-wrap\"><table class=\"stage\" id=\"caTbl\"></table></div><div class=\"out\" id=\"caStats\"></div>",()=>{caInit();}),
+  xw("Tiempo medio de acceso",null,"\n<div class=\"wrow\"><label>Tasa de aciertos h (%)</label><input class=\"num\" id=\"u6h\" type=\"number\" min=\"0\" max=\"100\" value=\"95\" oninput=\"u6calc()\"><label>T caché (ns)</label><input class=\"num\" id=\"u6c\" type=\"number\" min=\"0\" value=\"2\" oninput=\"u6calc()\"><label>T memoria (ns)</label><input class=\"num\" id=\"u6m\" type=\"number\" min=\"0\" value=\"100\" oninput=\"u6calc()\"></div>\n<div class=\"out\" id=\"u6Out\"></div>",()=>{u6calc();}),
+  xw("Traducción de dirección virtual (páginas de 4 KiB)",null,"\n<div class=\"wrow\"><label>Dirección virtual (hex)</label><input class=\"num\" id=\"u6v\" type=\"text\" value=\"3A7F\" oninput=\"u6page()\" style=\"width:110px\"></div>\n<div class=\"out\" id=\"u6pOut\"></div>",()=>{u6page();}),
+  thinkCard("Con T caché = 2 ns, T memoria = 100 ns y h = 95 %, ¿cuál es el tiempo medio de acceso?","<p>T = 2 + 0,05 × 100 = 7 ns.</p>")];}
+function u7mods(){return [
+  devCard("<p>Un <b>módulo de E/S</b> actúa de intermediario entre la CPU y el periférico. Sus funciones son el control y la temporización, la comunicación con la CPU y con el dispositivo, el almacenamiento temporal (buffer) y la detección de errores. Los registros del módulo pueden direccionarse como memoria (E/S mapeada en memoria) o con un espacio de direcciones propio y instrucciones específicas (E/S aislada).</p>\n<p>Hay tres <b>técnicas de transferencia</b>. En la <b>E/S programada</b>, la CPU consulta el registro de estado hasta que el dispositivo está listo (espera activa o polling). En la <b>E/S por interrupciones</b>, el dispositivo avisa cuando está listo y la CPU atiende el pedido; la identificación del dispositivo puede ser por consulta, vectorizada o por cadena (daisy chain), con prioridades. En el <b>DMA</b>, un controlador transfiere bloques directamente entre el periférico y la memoria; la CPU solo programa la dirección inicial y el contador, y recibe una interrupción al terminar.</p>\n<p>El DMA puede actuar por <b>robo de ciclo</b> (intercala accesos con la CPU) o por <b>ráfagas</b> (retiene el bus durante el bloque). Los <b>canales de E/S</b> y los procesadores de E/S llevan esta idea más lejos: ejecutan sus propios programas de transferencia.</p>\n<p>Las <b>interfaces</b> pueden ser <b>serie</b> (un bit por vez, pocas líneas, adecuadas para distancias largas; por ejemplo UART y USB) o <b>paralelas</b> (varios bits simultáneos, más líneas). La transmisión puede ser síncrona (con reloj compartido) o asíncrona (con bits de inicio y parada).</p>"),
+  xw("Costo para la CPU de transferir un bloque (en ciclos)",null,"\n<div class=\"wrow\"><label>Palabras N</label><input class=\"num\" id=\"u7n\" type=\"number\" min=\"1\" value=\"1000\" oninput=\"u7calc()\"><label>Consulta por palabra</label><input class=\"num\" id=\"u7p\" type=\"number\" min=\"1\" value=\"20\" oninput=\"u7calc()\"><label>Atención de interrupción</label><input class=\"num\" id=\"u7i\" type=\"number\" min=\"1\" value=\"8\" oninput=\"u7calc()\"><label>Preparación DMA</label><input class=\"num\" id=\"u7d\" type=\"number\" min=\"1\" value=\"60\" oninput=\"u7calc()\"></div>\n<div id=\"u7Out\"></div>",()=>{u7calc();}),
+  thinkCard("¿Por qué DMA conviene para transferir un bloque grande y no para un solo byte?","<p>Porque DMA tiene un costo fijo de preparación. Con muchas palabras ese costo se reparte; con una sola, la interrupción o la consulta directa resulta más barata.</p>")];}
+function u8mods(){return [
+  devCard("<p>La <b>taxonomía de Flynn</b> clasifica las arquitecturas según los flujos de instrucciones y de datos: <b>SISD</b> (computador secuencial clásico), <b>SIMD</b> (una instrucción sobre muchos datos: procesadores vectoriales y unidades SIMD), <b>MISD</b> (poco frecuente) y <b>MIMD</b> (varios procesadores con sus propias instrucciones y datos).</p>\n<p>Dentro de MIMD, los sistemas de <b>memoria compartida</b> (multiprocesadores simétricos, acceso uniforme o no uniforme a memoria) comunican los procesadores mediante variables compartidas. Los de <b>memoria distribuida</b> (multicomputadores y clusters) usan paso de mensajes por una red.</p>\n<p>La <b>segmentación</b> (pipeline) divide la instrucción en etapas (por ejemplo IF, ID, EX, MEM, WB) que se solapan: en régimen, termina una instrucción por ciclo. Los <b>riesgos</b> limitan esa ganancia: estructurales (conflicto de recursos), de datos (una instrucción necesita un resultado que aún no está) y de control (saltos). Se atenúan con adelantamiento de datos, burbujas y predicción de saltos.</p>\n<p>Un procesador <b>superescalar</b> dispone de varias unidades funcionales y emite varias instrucciones por ciclo, apoyándose en el paralelismo a nivel de instrucción (incluso con ejecución fuera de orden). Un procesador <b>vectorial</b> opera sobre vectores completos con una sola instrucción.</p>\n<div class=\"eq\">Amdahl: aceleración = 1 / (f + (1 − f) / p)      (f: fracción secuencial; p: procesadores)</div>"),
+  xw("Clasificación de Flynn",null,"\n<div class=\"chips\" id=\"u8fl\"></div><div class=\"out\" id=\"u8flOut\"></div>",()=>{u8init();}),
+  xw("Ley de Amdahl",null,"\n<div class=\"wrow\"><label>Fracción secuencial f (%)</label><input class=\"num\" id=\"u8f\" type=\"number\" min=\"0\" max=\"100\" value=\"20\" oninput=\"u8calc()\"><label>Procesadores p</label><input class=\"num\" id=\"u8p\" type=\"number\" min=\"1\" value=\"8\" oninput=\"u8calc()\"></div>\n<div class=\"out\" id=\"u8Out\"></div>",()=>{u8calc();}),
+  xw("Segmentación de 5 etapas",null,"\n<div class=\"wrow\"><label>Instrucciones n (1 a 8)</label><input class=\"num\" id=\"u8n\" type=\"number\" min=\"1\" max=\"8\" value=\"5\" oninput=\"u8pipe()\"></div>\n<div class=\"out\" id=\"u8pOut\"></div><div class=\"adder-wrap\" id=\"u8g\"></div>",()=>{u8pipe();}),
+  thinkCard("Con f = 20 %, ¿cambia mucho la aceleración si pasamos de 100 a 1000 procesadores?","<p>Casi no cambia: tiende a 5. La parte secuencial limita la aceleración sin importar cuántos procesadores se agreguen.</p>")];}
+function mapaCard(){return card("¿Qué se retoma de LyMC y dónde reaparece?","Cada concepto de Lógica y Matemática Computacional (izquierda) es la base de un tema de la asignatura (derecha). Las unidades corresponden al programa de Arquitectura y Organización de Computadoras.",h("div",{class:"xw",html:"<div class=\"map-head\"><span class=\"a\">LyMC (repaso)</span><span></span><span class=\"b\">Arquitectura</span></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Lógica proposicional</span>Conectivos ¬, ∧, ∨, →, ↔ y Δ; valores de verdad V/F.<span class=\"ex\">V/F ⇔ 1/0</span></div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U3 · Álgebra de Boole</span>Variables y funciones lógicas; compuertas NOT, AND, OR, XOR.<span class=\"ex\">p ∧ q ⇔ AND(p,q) · Δ ⇔ XOR</span></div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Tablas de verdad</span>Evaluación de una fórmula para todas las interpretaciones.<span class=\"ex\">2ⁿ filas para n variables</span></div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U3 · Circuitos combinacionales</span>La tabla de verdad es la especificación del circuito; de ella se obtiene la función.<span class=\"ex\">salida = f(entradas), sin memoria</span></div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Equivalencia lógica y De Morgan</span>¬(p ∧ q) ⇔ ¬p ∨ ¬q; distributiva, absorción, idempotencia.<span class=\"ex\">transformar sin cambiar el significado</span></div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U3 · Simplificación</span>Reducir compuertas aplicando leyes (o mapas de Karnaugh) para un circuito más barato y rápido.</div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Conectivos adecuados</span>{¬,∧} o {¬,∨} bastan para expresar cualquier fórmula.<span class=\"ex\">p | q (NAND) es adecuado por sí solo</span></div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U3 · Compuertas universales</span>NAND y NOR permiten construir cualquier circuito con un único tipo de compuerta.</div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Circuitos de conmutación</span>Serie = ∧, paralelo = ∨, interruptor invertido = ¬.</div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U3 · Compuertas y redes</span>Mismo modelo, con transistores como llaves controladas.</div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Sistemas de numeración</span>Base 2, 8, 16; cambios de base; complemento.<span class=\"ex\">101101₂ = 2D₁₆ = 45₁₀</span></div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U2 · Representación de datos</span>Binario, hexadecimal, punto fijo, complemento a 2 y rango de representación.</div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Aritmética binaria + lógica</span>Suma bit a bit con acarreo, expresada como fórmulas booleanas.</div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U3 / U5 · Sumador y ALU</span>Semisumador, sumador completo y ALU como circuitos combinacionales dentro de la CPU.</div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Condicionales y consecuencia</span>p → q, razonamiento por casos, Modus Ponens.</div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U4 / U5 · Control de flujo</span>Banderas (cero, signo, acarreo) y condiciones de salto: «si Z = 1 entonces saltar».</div></div>\n\n      <div class=\"map-row\"><div class=\"map-card l\"><span class=\"tag\">Operaciones ∧, ∨, Δ sobre valores</span>Aplicadas bit a bit sobre palabras.</div><div class=\"map-arrow\">→</div><div class=\"map-card r\"><span class=\"tag\">U5 · Instrucciones</span>AND/OR/XOR/NOT como instrucciones, máscaras, puesta a cero de registros (x XOR x = 0).</div></div>\n    "}));}
+/* ============ UNIDADES ============ */
+const UNITS = [
+ {n:1,s:'Introducción',t:'Introducción a los computadores',lede:'Arquitectura y organización, niveles de abstracción, el modelo de Von Neumann y los parámetros que caracterizan a un computador.',
+  prog:['Computadoras digitales y niveles de abstracción','Visión estructural y funcional','Modelo de Von Neumann y generaciones de computadoras','Parámetros de un computador'],mods:()=>[vonNeumann(),niveles(),rendimiento(),generaciones()]},
+ {n:2,s:'Representación',t:'Representación de la información',lede:'Cómo se codifican números y símbolos: unidades de información, punto fijo, punto flotante y códigos redundantes.',
+  prog:['Bit, byte, palabra y doble palabra','Representación en punto fijo','Representación en punto flotante y normalización','Codificación numérica y alfabética','Códigos redundantes'],mods:()=>[tamanios(),enteros(),sumaC2(),flotante(),ascii(),hamming()]},
+ {n:3,s:'Lógica digital',t:'Lógica digital',lede:'De las compuertas a los elementos de memoria: álgebra de Boole, circuitos combinacionales y secuenciales.',
+  prog:['Compuertas y álgebra de Boole','Circuitos combinacionales: decodificadores, multiplexores, sumadores y restadores','Desplazamiento y ALU','Flip-flops, relojes y circuitos secuenciales','Registros y contadores','RAM, ROM y PLA'],mods:()=>[h('p',{class:'note'},'Antes de empezar, conviene repasar la lógica proposicional vista en Lógica y Matemática Computacional: ',h('a',{href:'#repaso'},'abrir el taller de repaso'),'.'),compuertas(),simplificador(),sumador(),flipflop(),...u3extra()]},
+ {n:4,s:'CPU',t:'Organización de la CPU',lede:'Unidad de control, microoperaciones, buses y ciclo de instrucción.',
+  prog:['Lógica cableada y programable','Microinstrucción y notación RTL','CPU, memoria y entrada/salida','Buses','Ciclo de búsqueda y ejecución','Subrutinas e interrupciones'],mods:()=>u4mods()},
+ {n:5,s:'Instrucciones',t:'Conjunto de instrucciones',lede:'Formatos, modos de direccionamiento, ensamblador y diseño de la unidad de control.',
+  prog:['Instrucciones de máquina y formatos','Modos de direccionamiento','Lenguaje ensamblador','Arquitecturas CISC y RISC','Unidad de control cableada y microprogramada','Firmware'],mods:()=>u5mods()},
+ {n:6,s:'Memoria',t:'Memoria',lede:'Jerarquía de memoria, caché y memoria virtual.',
+  prog:['Jerarquía de memoria','Memoria principal','Memoria secundaria','Memoria caché','Memoria virtual'],mods:()=>u6mods()},
+ {n:7,s:'Entrada/Salida',t:'Entrada y salida',lede:'Módulos de E/S y técnicas de transferencia.',
+  prog:['Módulos de E/S','E/S programada, por interrupciones y DMA','Canales de E/S','Interfaces','Puertos serie y paralelo'],mods:()=>u7mods()},
+ {n:8,s:'Paralelismo',t:'Procesamiento paralelo',lede:'Clasificación de Flynn y arquitecturas que explotan el paralelismo.',
+  prog:['Procesamiento paralelo','Taxonomía de Flynn','Procesadores superescalares','Procesadores vectoriales'],mods:()=>u8mods()},
+ {n:9,s:'Repaso LyMC',t:'Repaso y vinculación de conceptos de LyMC',lede:'Mapa de vinculación con Lógica y Matemática Computacional, asignatura correlativa anterior, y taller interactivo de lógica proposicional. Sirve de base para el álgebra de Boole y los circuitos de la Unidad 3.',
+  prog:['Sintaxis y semántica','Tablas de verdad, satisfacibilidad y clasificación de fórmulas','Consecuencia lógica y equivalencia','Reglas de inferencia','Redes de conmutación y circuitos'],mods:()=>[mapaCard(),lmcEl],noquiz:true}
+];
+const lmcEl=document.getElementById('lmc');
+const nav=document.getElementById('nav'), main=document.getElementById('main');
+function route(){
+  const m=/^#u([1-8])$/.exec(location.hash); const n=location.hash==='#repaso'?9:(m?+m[1]:1); const u=UNITS[n-1];
+  nav.replaceChildren(...UNITS.map(x=>h('a',{href:'#'+(x.n===9?'repaso':'u'+x.n),'aria-current':x.n===n?'page':null},h('b',null,x.n<=8?'U'+x.n:'↺'),x.s)));
+  const cur=nav.querySelector('[aria-current]'); if(cur&&cur.scrollIntoView) { try{cur.scrollIntoView({inline:'center',block:'nearest'});}catch(e){} }
+  lmcEl.hidden=!u.noquiz;
+  main.replaceChildren(
+    h('div',{class:'unit-head'},h('p',{class:'eyebrow'},u.n<=8?'Unidad '+u.n:'Repaso'),h('h2',null,u.t),h('p',null,u.lede)),
+    h('details',{class:'prog'},h('summary',null,'Contenidos del programa'),h('ul',null,...u.prog.map(p=>h('li',null,p)))),
+    ...(u.mods?u.mods():[ h('p',{class:'note'},'Esta unidad cuenta, por ahora, con autoevaluación. Los simuladores se incorporan a medida que avanza el desarrollo de la asignatura.') ]),
+    u.noquiz?null:quiz(n));
+}
+window.addEventListener('hashchange',()=>{route();window.scrollTo({top:0});});
+route();
+</script>
+</body></html>
