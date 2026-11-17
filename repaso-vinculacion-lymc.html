@@ -117,11 +117,11 @@
   .score-num{font-family:var(--font-display);font-size:56px;font-weight:700;color:var(--blue)}
   details.topic{background:var(--bg-panel);border:1px solid var(--line);border-radius:8px;margin-bottom:12px;overflow:hidden}
   details.topic[open]{border-color:var(--line-strong)}
-  details.topic summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:baseline;gap:12px;font-family:var(--font-display);font-size:17.5px;font-weight:600}
-  details.topic summary::-webkit-details-marker{display:none}
-  details.topic summary .idx{font-family:var(--font-mono);font-size:13px;color:var(--orange);font-weight:600;flex-shrink:0}
-  details.topic summary::after{content:'+';margin-left:auto;font-family:var(--font-mono);color:var(--text-faint);font-size:18px}
-  details.topic[open] summary::after{content:'–';color:var(--blue)}
+  details.topic>summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:baseline;gap:12px;font-family:var(--font-display);font-size:17.5px;font-weight:600}
+  details.topic>summary::-webkit-details-marker{display:none}
+  details.topic>summary .idx{font-family:var(--font-mono);font-size:13px;color:var(--orange);font-weight:600;flex-shrink:0}
+  details.topic>summary::after{content:'+';margin-left:auto;font-family:var(--font-mono);color:var(--text-faint);font-size:18px}
+  details.topic[open]>summary::after{content:'–';color:var(--blue)}
   .topic-body{padding:4px 20px 20px;font-size:14.5px;border-top:1px solid var(--line)}
   .topic-body h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 6px;font-weight:700}
   .topic-body h4.a{color:var(--orange)} .topic-body h4.l{color:var(--blue)} .topic-body h4.r{color:var(--green)}
@@ -145,6 +145,31 @@
   .fields{font-family:var(--font-mono);font-size:15px;margin:10px 0}
   .fields span{padding:3px 8px;border-radius:5px;margin-right:4px}
   .fields .tg{background:var(--blue-soft);color:var(--blue)} .fields .ix{background:var(--orange-soft);color:var(--orange)} .fields .of{background:var(--green-soft);color:var(--green)}
+
+  .dev{font-size:14.5px;margin:12px 0 4px}
+  .dev p{margin:8px 0}
+  .eq{font-family:var(--font-mono);font-size:13.5px;background:var(--bg-panel-2);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:0 6px 6px 0;padding:8px 12px;margin:10px 0;color:var(--blue)}
+  .widget{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:14px 0}
+  .widget h5{font-family:var(--font-body);font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--orange);margin:0 0 8px;font-weight:700}
+  .wrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  .wrow label{font-family:var(--font-mono);font-size:12px;color:var(--text-dim)}
+  .wrow input.num,.wrow select.sel{font-size:14px;padding:7px 9px;width:auto}
+  .wrow input.num{width:100px}
+  .toggle.sm{width:36px;height:36px;font-size:14px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .chip{font-family:var(--font-mono);font-size:12px;font-weight:600;background:var(--bg-panel);border:1px solid var(--line);color:var(--text-dim);border-radius:999px;padding:6px 12px;cursor:pointer}
+  .chip.active{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+  .out{font-family:var(--font-mono);font-size:13.5px;background:var(--bg-raised);border-radius:6px;padding:9px 12px;margin-top:8px;line-height:1.7}
+  .out b{color:var(--blue)} .out .o{color:var(--orange);font-weight:700} .out .g{color:var(--green);font-weight:700} .out .r{color:var(--red);font-weight:700}
+  .bit-s{background:var(--red-soft);color:var(--red);padding:1px 4px;border-radius:3px}
+  .bit-e{background:var(--orange-soft);color:var(--orange);padding:1px 4px;border-radius:3px}
+  .bit-m{background:var(--blue-soft);color:var(--blue);padding:1px 4px;border-radius:3px}
+  .bar{height:16px;border-radius:4px;background:var(--blue);margin:3px 0;min-width:2px}
+  .bar.o{background:var(--orange)} .bar.g{background:var(--green)}
+  table.gantt{border-collapse:collapse;font-family:var(--font-mono);font-size:11.5px;margin-top:6px}
+  table.gantt td,table.gantt th{border:1px solid var(--line);padding:3px 7px;text-align:center}
+  table.gantt td.f{background:var(--blue-soft);color:var(--blue);font-weight:700}
+  details.ans{margin-top:6px;font-size:13.5px} details.ans summary{cursor:pointer;color:var(--blue);font-weight:600}
   footer{margin-top:50px;color:var(--text-faint);font-size:12.5px;font-family:var(--font-mono);text-align:center}
 </style>
 </head>
@@ -193,15 +218,116 @@
   </section>
 
 <section class="panel" id="panel-unidades">
-    <div class="box"><h3>Programa de Arquitectura, unidades 1 a 8</h3><p class="unit-intro">Para cada unidad se indican sus contenidos, qué retoma de Lógica y Matemática Computacional y una pregunta de repaso para pensar antes de abrir el laboratorio.</p></div>
-    <details class="topic" open><summary><span class="idx">U1</span>Computadoras digitales y niveles de abstracción</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Computadora digital, niveles de abstracción (de la lógica digital al software).</li><li>Arquitectura de Von Neumann: programa y datos en la misma memoria.</li><li>Generaciones de computadoras.</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>Todo dato e instrucción se representa con valores de verdad 0/1: la lógica proposicional es el lenguaje de base.</li><li>El razonamiento por niveles de abstracción reaparece al pasar de fórmulas a compuertas y de compuertas a la CPU.</li></ul><h4 class="r">Para pensar</h4><ul><li>¿Por qué programa y datos pueden compartir memoria si ambos son cadenas de bits?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U2</span>Representación de la información</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Sistemas de numeración, tamaños principales (bit, byte, palabra).</li><li>Punto fijo y punto flotante; complemento a 1 y a 2.</li><li>Codificación numérica (BCD) y alfabética (ASCII, Unicode).</li><li>Códigos redundantes: paridad y detección/corrección de errores.</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>Cambios de base y aritmética modular de LyMC.</li><li>La paridad es una función XOR (Δ) de los bits: p Δ q Δ r.</li><li>La distancia de Hamming es un concepto de matemática discreta aplicado a códigos.</li></ul><h4 class="r">Para pensar</h4><ul><li>¿Cuántos bits de paridad detectan un error simple? ¿Y cuántos corrigen?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U3</span>Álgebra de Boole, circuitos combinacionales y secuenciales</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Álgebra de Boole, compuertas y simplificación.</li><li>Bloques combinacionales: decodificadores, multiplexores, sumadores; ALU.</li><li>Circuitos secuenciales: biestables, registros, contadores.</li><li>Memorias RAM y lógica programable (ROM, PLA).</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>Fórmula ⇔ circuito; tabla de verdad ⇔ especificación.</li><li>Equivalencias y De Morgan para simplificar; conectivos adecuados para NAND/NOR.</li><li>Redes de conmutación: serie = ∧, paralelo = ∨.</li></ul><h4 class="r">Para pensar</h4><ul><li>¿Qué diferencia a un circuito combinacional de uno secuencial en términos de la tabla de verdad?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U4</span>Subsistemas del computador, buses y ciclo de instrucción</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>CPU, memoria y E/S; buses de datos, direcciones y control.</li><li>Ciclo de búsqueda y ejecución de instrucciones.</li><li>Subrutinas e interrupciones.</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>El ciclo es un algoritmo: una secuencia finita y ordenada de pasos.</li><li>Las condiciones de atención de una interrupción son proposiciones compuestas (pedido ∧ habilitada ∧ ¬enmascarada).</li><li>Un bus de n líneas direcciona 2ⁿ posiciones.</li></ul><h4 class="r">Para pensar</h4><ul><li>Con un bus de direcciones de 16 líneas, ¿cuántas posiciones se direccionan?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U5</span>CPU, instrucciones y unidad de control</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Instrucciones máquina, formatos y modos de direccionamiento.</li><li>Lenguaje ensamblador.</li><li>Arquitecturas CISC y RISC.</li><li>Unidad de control cableada y microprogramada.</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>AND, OR, XOR y NOT bit a bit sobre registros: máscaras para poner, borrar o invertir bits.</li><li>La decodificación del código de operación es una función booleana de varias variables.</li><li>La unidad cableada es un circuito combinacional + secuencial.</li></ul><h4 class="r">Para pensar</h4><ul><li>¿Qué máscara y qué operación fuerzan a 0 los 4 bits altos de un byte?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U6</span>Jerarquía de memoria, caché y memoria virtual</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Memoria principal y secundaria; jerarquía y localidad.</li><li>Memoria caché: mapeo directo, asociativo y por conjuntos; aciertos y fallos.</li><li>Memoria virtual: paginación y traducción de direcciones.</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>La dirección se divide en campos (etiqueta, índice, desplazamiento) usando potencias de 2 y base binaria.</li><li>Índice = bloque mod número de líneas (aritmética modular).</li><li>Tasa de aciertos y tiempo medio de acceso: razonamiento cuantitativo básico.</li></ul><h4 class="r">Para pensar</h4><ul><li>En una caché de 8 líneas y bloques de 4 palabras, ¿cuántos bits ocupan índice y desplazamiento?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U7</span>Entrada/salida</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Módulos de E/S y puertos serie y paralelo.</li><li>Técnicas de transferencia: programada, por interrupción, por DMA; canales.</li><li>Interfaces reales.</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>Estados de un periférico como proposiciones (listo, ocupado, error) y condiciones de espera.</li><li>Detección de errores en la transmisión con paridad (XOR).</li></ul><h4 class="r">Para pensar</h4><ul><li>¿Qué técnica libera a la CPU de copiar cada dato y por qué?</li></ul></div></details>
-    <details class="topic"><summary><span class="idx">U8</span>Procesamiento paralelo y arquitecturas avanzadas</summary><div class="topic-body"><h4 class="a">Contenidos de la unidad</h4><ul><li>Clasificación de Flynn (SISD, SIMD, MISD, MIMD).</li><li>Procesadores superescalares y vectoriales.</li><li>Segmentación (pipeline).</li></ul><h4 class="l">Qué retoma de LyMC</h4><ul><li>Dependencias entre instrucciones como relaciones de orden: qué puede ejecutarse a la vez.</li><li>Ley de Amdahl: fracciones secuencial y paralela de un programa.</li></ul><h4 class="r">Para pensar</h4><ul><li>Si el 20 % de un programa es secuencial, ¿cuál es la aceleración máxima teórica?</li></ul></div></details>
+    <div class="box"><h3>Programa de Arquitectura, unidades 1 a 8</h3><p class="unit-intro">Cada unidad desarrolla sus conceptos, indica qué retoma de Lógica y Matemática Computacional y ofrece un componente interactivo para experimentar. Las unidades 4, 5 y 6 se complementan con los simuladores del Laboratorio.</p></div>
+    <details class="topic" open><summary><span class="idx">U1</span>Computadoras digitales y niveles de abstracción</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>Una computadora digital procesa información representada con dos valores, 0 y 1. Para dominar esa complejidad se la describe por <b>niveles de abstracción</b>: cada nivel usa los servicios del inferior y oculta sus detalles al superior.</p>
+<p>En la <b>arquitectura de Von Neumann</b>, la unidad de control, la ALU, la memoria y la E/S se comunican mediante buses, y el programa se almacena en la misma memoria que los datos. Por eso una instrucción es, para el hardware, una cadena de bits como cualquier otra.</p>
+<p>Las generaciones se asocian a la tecnología dominante: válvulas, transistores, circuitos integrados y microprocesadores con integración a gran escala (clasificación habitual en los textos).</p></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Todo dato e instrucción se representa con valores de verdad 0/1: la lógica proposicional es el lenguaje de base.</li><li>Pasar de fórmulas a compuertas y de compuertas a la CPU es un ejemplo de abstracción por niveles.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Niveles de abstracción (tocá un nivel)</h5>
+<div class="chips" id="u1lev"></div><div class="out" id="u1levOut"></div></div>
+<div class="widget"><h5>Generaciones (tocá una)</h5>
+<div class="chips" id="u1gen"></div><div class="out" id="u1genOut"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">¿Por qué un programa mal escrito puede «ejecutar» datos como si fueran instrucciones?</p><details class="ans"><summary>Ver respuesta</summary><p>Porque en Von Neumann programa y datos comparten memoria y bus. Lo que se interpreta como instrucción depende de a dónde apunta el PC, no de una marca en el dato.</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U2</span>Representación de la información</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>La información se codifica en bits. Los enteros se representan con signo en <b>complemento a 2</b>, con rango −2ⁿ⁻¹ a 2ⁿ⁻¹ − 1. Los reales usan <b>punto flotante</b> (norma IEEE 754): signo, exponente sesgado y mantisa.</p>
+<div class="eq">valor = (−1)^s × 1,m × 2^(e − 127)    (precisión simple: 1 + 8 + 23 bits)</div>
+<p>Los caracteres se codifican con tablas (ASCII, Unicode). Para detectar errores se agrega <b>redundancia</b>: un bit de paridad detecta errores simples; el código de Hamming los localiza y los corrige.</p>
+<p>La conversión entre bases y el complemento a 2 se practican en el conversor del <b>Laboratorio</b>.</p></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Cambios de base, potencias de 2 y aritmética modular.</li><li>La paridad es un XOR (Δ) de los bits; los bits de control de Hamming son XOR de subconjuntos de bits.</li><li>La distancia de Hamming es un concepto de matemática discreta aplicado a códigos.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Punto flotante IEEE 754 (32 bits)</h5>
+<div class="wrow"><label>Número decimal</label><input class="num" id="u2f" type="text" value="-6.625" oninput="u2float()"></div>
+<div class="out" id="u2fOut"></div></div>
+<div class="widget"><h5>Código ASCII y bit de paridad par</h5>
+<div class="wrow"><label>Carácter</label><input class="num" id="u2c" type="text" maxlength="1" value="A" oninput="u2ascii()" style="width:60px"></div>
+<div class="out" id="u2cOut"></div></div>
+<div class="widget"><h5>Código de Hamming (7,4): inyectá un error y mirá cómo se corrige</h5>
+<div class="wrow"><label>Datos d1 d2 d3 d4</label><span id="u2hd"></span></div>
+<div class="wrow"><label>Palabra recibida (tocá un bit para dañarlo)</label><span id="u2hr"></span></div>
+<div class="out" id="u2hOut"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">¿Cuántos bits de control necesita Hamming para proteger 4 bits de datos?</p><details class="ans"><summary>Ver respuesta</summary><p>Tres (p1, p2, p3), de modo que las 7 posiciones se identifican con un síndrome de 3 bits (2³ ≥ 4 + 3 + 1).</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U3</span>Álgebra de Boole, circuitos combinacionales y secuenciales</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>Un <b>circuito combinacional</b> calcula sus salidas solo a partir de las entradas actuales. Se especifica con una tabla de verdad y se implementa con compuertas. Ejemplos de bloques: <b>decodificador</b> (activa una de 2ⁿ salidas), <b>multiplexor</b> (elige una de 2ⁿ entradas), <b>sumador</b> (visto en el Laboratorio) y la <b>ALU</b>.</p>
+<p>Un <b>circuito secuencial</b> tiene memoria: su salida depende de las entradas y del estado almacenado. Sus bloques básicos son los biestables, que forman <b>registros</b> y <b>contadores</b>. Una señal de reloj sincroniza los cambios de estado.</p>
+<div class="eq">Y = ¬S1·¬S0·D0 ∨ ¬S1·S0·D1 ∨ S1·¬S0·D2 ∨ S1·S0·D3    (multiplexor 4:1)</div></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Equivalencias, De Morgan y minimización de fórmulas.</li><li>Cada salida de un decodificador es un minitérmino: una conjunción de variables y negaciones.</li><li>Conectivos adecuados: todo se construye con NAND.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Multiplexor 4:1 y decodificador 2:4</h5>
+<div class="wrow"><label>D0 D1 D2 D3</label><span id="u3d"></span></div>
+<div class="wrow"><label>Selección S1 S0</label><span id="u3s"></span></div>
+<div class="out" id="u3Out"></div></div>
+<div class="widget"><h5>Contador binario de 3 bits (circuito secuencial)</h5>
+<div class="wrow"><button class="go" onclick="u3tick()">Pulso de reloj</button><button class="sec" onclick="u3reset()">Reset</button></div>
+<div class="out" id="u3cOut"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">¿Por qué un contador no puede construirse solo con compuertas combinacionales sin realimentación?</p><details class="ans"><summary>Ver respuesta</summary><p>Porque necesita recordar su valor anterior para calcular el siguiente. Esa memoria la aportan los biestables.</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U4</span>Subsistemas del computador, buses y ciclo de instrucción</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>La computadora se organiza en <b>CPU</b>, <b>memoria</b> y <b>E/S</b>, unidas por buses de <b>direcciones</b>, <b>datos</b> y <b>control</b>. El ancho del bus de direcciones fija cuántas posiciones se pueden direccionar; el de datos, cuántos bits se transfieren por acceso.</p>
+<div class="eq">posiciones = 2ⁿ (n líneas de dirección)     capacidad = 2ⁿ × m bits</div>
+<p>El <b>ciclo de instrucción</b> repite búsqueda, decodificación y ejecución. Una <b>interrupción</b> suspende el programa en curso para atender un evento, guarda el estado y retoma luego. Una <b>subrutina</b> se invoca con una instrucción de llamada que guarda la dirección de retorno.</p>
+<p>El simulador paso a paso del ciclo está en el <b>Laboratorio</b>.</p></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Potencias de 2 y cardinalidad: n líneas distinguen 2ⁿ elementos.</li><li>Las condiciones de atención de una interrupción forman una proposición compuesta.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Calculadora de capacidad de memoria</h5>
+<div class="wrow"><label>Líneas de dirección n</label><input class="num" id="u4n" type="number" min="1" max="40" value="16" oninput="u4calc()"><label>Ancho de palabra m (bits)</label><input class="num" id="u4m" type="number" min="1" max="128" value="8" oninput="u4calc()"></div>
+<div class="out" id="u4Out"></div></div>
+<div class="widget"><h5>Interrupción habilitada</h5>
+<div class="wrow"><label>Pedido</label><button class="toggle sm" id="u4a" onclick="u4tog('a')">0</button><label>Habilitadas</label><button class="toggle sm on" id="u4b" onclick="u4tog('b')">1</button><label>Máscara activa</label><button class="toggle sm" id="u4c" onclick="u4tog('c')">0</button></div>
+<div class="out" id="u4iOut"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">Un computador direcciona 1 MiB con palabras de 8 bits. ¿Cuántas líneas de dirección tiene?</p><details class="ans"><summary>Ver respuesta</summary><p>1 MiB = 2²⁰ bytes, por lo tanto n = 20.</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U5</span>CPU, instrucciones y unidad de control</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>Una <b>instrucción máquina</b> tiene un código de operación y operandos. Los <b>modos de direccionamiento</b> indican cómo obtener el operando a partir del campo de dirección: inmediato, directo, indirecto, de registro, indexado, entre otros.</p>
+<p>Las arquitecturas <b>CISC</b> ofrecen muchas instrucciones y modos complejos; las <b>RISC</b> pocas instrucciones simples, de formato regular, que favorecen la segmentación. La <b>unidad de control</b> puede ser <b>cableada</b> (circuito lógico) o <b>microprogramada</b> (secuencias de microinstrucciones en una memoria de control).</p>
+<p>Las instrucciones lógicas operan bit a bit y se usan con <b>máscaras</b>: AND pone bits en 0, OR los pone en 1 y XOR los invierte.</p></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>AND, OR, XOR y NOT bit a bit sobre registros.</li><li>La decodificación del opcode es una función booleana.</li><li>x Δ x = 0 explica por qué XOR R,R pone el registro a cero.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Modos de direccionamiento</h5>
+<p style="margin:0 0 6px;font-size:13px;color:var(--text-dim)">Instrucción LOAD con campo operando = 20. Registro R1 = 15, registro índice X = 3. Memoria: M[20] = 30, M[23] = 99, M[30] = 11.</p>
+<div class="wrow"><label>Modo</label><select class="sel" id="u5m" onchange="u5mode()"><option value="imm">Inmediato</option><option value="dir">Directo</option><option value="ind">Indirecto</option><option value="reg">De registro (R1)</option><option value="idx">Indexado (campo + X)</option></select></div>
+<div class="out" id="u5Out"></div></div>
+<div class="widget"><h5>Máscaras con operaciones lógicas (bytes en hexadecimal)</h5>
+<div class="wrow"><label>Dato</label><input class="num" id="u5x" type="text" value="B6" maxlength="2" oninput="u5mask()" style="width:70px"><label>Máscara</label><input class="num" id="u5k" type="text" value="0F" maxlength="2" oninput="u5mask()" style="width:70px">
+<select class="sel" id="u5o" onchange="u5mask()"><option>AND</option><option>OR</option><option>XOR</option></select></div>
+<div class="out" id="u5mOut"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">¿Qué máscara y operación invierten solamente el bit 7 de un byte?</p><details class="ans"><summary>Ver respuesta</summary><p>XOR con 1000 0000 (80 en hexadecimal): x Δ 1 = ¬x y x Δ 0 = x.</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U6</span>Jerarquía de memoria, caché y memoria virtual</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>La <b>jerarquía de memoria</b> combina niveles rápidos y pequeños (registros, caché) con otros lentos y grandes (memoria principal, disco). Funciona gracias a la <b>localidad</b> temporal y espacial de los programas.</p>
+<p>En una <b>caché de mapeo directo</b>, cada bloque de memoria tiene una única línea posible: línea = bloque mod número de líneas. La dirección se divide en etiqueta, índice y desplazamiento. En la <b>memoria virtual</b>, las direcciones virtuales se traducen a físicas por páginas.</p>
+<div class="eq">T medio = T caché + (1 − h) × T penalidad       (h = tasa de aciertos)</div>
+<p>El simulador de caché está en el <b>Laboratorio</b>.</p></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Aritmética modular: índice = bloque mod líneas.</li><li>Descomposición binaria de direcciones en campos de bits.</li><li>Razonamiento con proporciones y promedios ponderados.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Tiempo medio de acceso</h5>
+<div class="wrow"><label>Tasa de aciertos h (%)</label><input class="num" id="u6h" type="number" min="0" max="100" value="95" oninput="u6calc()"><label>T caché (ns)</label><input class="num" id="u6c" type="number" min="0" value="2" oninput="u6calc()"><label>T memoria (ns)</label><input class="num" id="u6m" type="number" min="0" value="100" oninput="u6calc()"></div>
+<div class="out" id="u6Out"></div></div>
+<div class="widget"><h5>Traducción de dirección virtual (páginas de 4 KiB)</h5>
+<div class="wrow"><label>Dirección virtual (hex)</label><input class="num" id="u6v" type="text" value="3A7F" oninput="u6page()" style="width:110px"></div>
+<div class="out" id="u6pOut"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">Con T caché = 2 ns, T memoria = 100 ns y h = 95 %, ¿cuál es el tiempo medio de acceso?</p><details class="ans"><summary>Ver respuesta</summary><p>T = 2 + 0,05 × 100 = 7 ns.</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U7</span>Entrada/salida</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>Los periféricos se conectan mediante <b>módulos de E/S</b> con registros de estado, control y datos. Hay tres técnicas de transferencia: <b>programada</b> (la CPU consulta el estado repetidamente), <b>por interrupciones</b> (el periférico avisa cuando está listo) y <b>DMA</b> (un controlador mueve el bloque directamente entre periférico y memoria).</p>
+<p>Los puertos pueden ser <b>serie</b> (un bit por vez, menos líneas) o <b>paralelos</b> (varios bits a la vez). En las transmisiones se agregan bits de paridad o códigos de redundancia para detectar errores.</p></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Estados del periférico como proposiciones: listo, ocupado, error.</li><li>Paridad como XOR de los bits transmitidos.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Costo para la CPU de transferir un bloque (en ciclos)</h5>
+<div class="wrow"><label>Palabras N</label><input class="num" id="u7n" type="number" min="1" value="1000" oninput="u7calc()"><label>Consulta por palabra</label><input class="num" id="u7p" type="number" min="1" value="20" oninput="u7calc()"><label>Atención de interrupción</label><input class="num" id="u7i" type="number" min="1" value="8" oninput="u7calc()"><label>Preparación DMA</label><input class="num" id="u7d" type="number" min="1" value="60" oninput="u7calc()"></div>
+<div id="u7Out"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">¿Por qué DMA conviene para transferir un bloque grande y no para un solo byte?</p><details class="ans"><summary>Ver respuesta</summary><p>Porque DMA tiene un costo fijo de preparación. Con muchas palabras ese costo se reparte; con una sola, la interrupción o la consulta directa resulta más barata.</p></details>
+    </div></details>
+    <details class="topic"><summary><span class="idx">U8</span>Procesamiento paralelo y arquitecturas avanzadas</summary><div class="topic-body">
+      <h4 class="a">Desarrollo</h4><div class="dev"><p>La <b>clasificación de Flynn</b> distingue arquitecturas según los flujos de instrucciones y de datos: SISD, SIMD, MISD y MIMD. La <b>segmentación</b> (pipeline) divide la instrucción en etapas que se superponen. Los procesadores <b>superescalares</b> emiten varias instrucciones por ciclo y los <b>vectoriales</b> operan sobre vectores completos.</p>
+<div class="eq">Amdahl: aceleración = 1 / (f + (1 − f) / p)    (f = fracción secuencial, p = procesadores)</div></div>
+      <h4 class="l">Qué retoma de LyMC</h4><ul><li>Dependencias entre instrucciones como relación de orden: lo independiente puede ejecutarse en paralelo.</li><li>Razonamiento con fracciones y límites.</li></ul>
+      <h4 class="r">Interactivo</h4><div class="widget"><h5>Clasificación de Flynn</h5>
+<div class="chips" id="u8fl"></div><div class="out" id="u8flOut"></div></div>
+<div class="widget"><h5>Ley de Amdahl</h5>
+<div class="wrow"><label>Fracción secuencial f (%)</label><input class="num" id="u8f" type="number" min="0" max="100" value="20" oninput="u8calc()"><label>Procesadores p</label><input class="num" id="u8p" type="number" min="1" value="8" oninput="u8calc()"></div>
+<div class="out" id="u8Out"></div></div>
+<div class="widget"><h5>Segmentación de 5 etapas</h5>
+<div class="wrow"><label>Instrucciones n (1 a 8)</label><input class="num" id="u8n" type="number" min="1" max="8" value="5" oninput="u8pipe()"></div>
+<div class="out" id="u8pOut"></div><div class="adder-wrap" id="u8g"></div></div>
+      <h4 class="a">Para pensar</h4><p style="margin:4px 0">Con f = 20 %, ¿cambia mucho la aceleración si pasamos de 100 a 1000 procesadores?</p><details class="ans"><summary>Ver respuesta</summary><p>Casi no cambia: tiende a 5. La parte secuencial limita la aceleración sin importar cuántos procesadores se agreguen.</p></details>
+    </div></details>
   </section>
 
   <!-- LAB -->
@@ -431,6 +557,132 @@ document.getElementById('caGo').onclick=()=>caAccess(parseInt(document.getElemen
 document.getElementById('caSeq').onclick=()=>{caInit();for(let a=0;a<12;a++)caAccess(a);document.getElementById('caMsg').innerHTML+='<br>Con la secuencia 0 a 11, cada fallo trae un bloque de 4 palabras y los tres accesos siguientes son aciertos: es la <b>localidad espacial</b>.';};
 document.getElementById('caReset').onclick=caInit;
 cyInit();caInit();
+
+// ---------- Unidades: componentes interactivos ----------
+const $=id=>document.getElementById(id);
+function chips(id,items,outId,fmt){
+  const c=$(id);c.innerHTML='';
+  items.forEach((it,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=it[0];b.onclick=()=>{[...c.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');$(outId).innerHTML=fmt(it);};c.appendChild(b);});
+  c.firstChild.click();
+}
+chips('u1lev',[
+ ['Aplicación','Programas del usuario: editor, navegador, hoja de cálculo.','usa los servicios del lenguaje y del sistema operativo'],
+ ['Lenguaje de alto nivel','Python, Java o C. Un compilador o intérprete lo traduce a instrucciones máquina.','x = a + b'],
+ ['Sistema operativo','Administra memoria, procesos y dispositivos; ofrece llamadas al sistema.','planificador, gestor de memoria'],
+ ['Arquitectura del conjunto de instrucciones (ISA)','Frontera entre hardware y software: registros, instrucciones y modos de direccionamiento.','ADD R1, R2'],
+ ['Microarquitectura','Cómo se implementa la ISA: unidad de control, ALU, registros, segmentación.','ciclo búsqueda-ejecución'],
+ ['Lógica digital','Compuertas, biestables y bloques combinacionales y secuenciales.','sumador, registro, contador'],
+ ['Dispositivos','Transistores que actúan como llaves controladas, base de las compuertas.','CMOS']
+],'u1levOut',it=>'<b>'+it[0]+'</b><br>'+it[1]+'<br>Ejemplo: <span class="o">'+it[2]+'</span>');
+chips('u1gen',[
+ ['1ª generación','Válvulas de vacío. Máquinas grandes, de alto consumo y programación en lenguaje máquina.'],
+ ['2ª generación','Transistores. Menor tamaño y consumo; aparecen los primeros lenguajes de alto nivel.'],
+ ['3ª generación','Circuitos integrados. Mayor densidad, sistemas operativos y multiprogramación.'],
+ ['4ª generación','Microprocesador e integración a gran escala (LSI/VLSI): la computadora personal.'],
+ ['Etapa actual','Multinúcleo, paralelismo, aceleradores y jerarquías de memoria complejas.']
+],'u1genOut',it=>'<b>'+it[0]+'</b><br>'+it[1]);
+
+function u2float(){
+  const v=parseFloat($('u2f').value.replace(',','.')),o=$('u2fOut');
+  if(isNaN(v)){o.textContent='Ingresá un número válido.';return;}
+  const dv=new DataView(new ArrayBuffer(4));dv.setFloat32(0,v);const u=dv.getUint32(0);
+  const b=u.toString(2).padStart(32,'0'),sg=b[0],ex=b.slice(1,9),mn=b.slice(9),e=parseInt(ex,2);
+  let t='<span class="bit-s">'+sg+'</span> <span class="bit-e">'+ex+'</span> <span class="bit-m">'+mn+'</span><br>Hexadecimal: <b>'+u.toString(16).toUpperCase().padStart(8,'0')+'</b><br>Signo = '+sg+' → '+(sg==='1'?'negativo':'positivo')+' · exponente sesgado = '+e;
+  if(e===255)t+=' (valor especial: '+(parseInt(mn,2)?'NaN':'infinito')+')';
+  else if(e===0)t+=' (cero o denormalizado)';
+  else t+=' → exponente real = '+(e-127)+'<br>Valor = (−1)^'+sg+' × 1,'+mn.replace(/0+$/,'')+'₂ × 2^'+(e-127);
+  o.innerHTML=t+'<br>Almacenado: <b>'+dv.getFloat32(0)+'</b>';
+}
+function u2ascii(){
+  const ch=$('u2c').value[0],o=$('u2cOut');if(!ch){o.textContent='Ingresá un carácter.';return;}
+  const c=ch.charCodeAt(0);if(c>127){o.textContent='Fuera de ASCII de 7 bits (código '+c+').';return;}
+  const b=c.toString(2).padStart(7,'0'),ones=b.split('').filter(x=>x==='1').length,p=ones%2;
+  o.innerHTML='«'+ch+'» = '+c+' = <b>'+b+'</b> (hex '+c.toString(16).toUpperCase()+')<br>Unos: '+ones+' → bit de paridad par = <span class="o">'+p+'</span> = XOR de todos los bits<br>Byte transmitido: <b>'+p+b+'</b>';
+}
+let u2d=[1,0,1,1],u2r=[];
+function u2code(d){const p1=d[0]^d[1]^d[3],p2=d[0]^d[2]^d[3],p3=d[1]^d[2]^d[3];return [p1,p2,d[0],p3,d[1],d[2],d[3]];}
+function u2hDraw(){
+  $('u2hd').innerHTML='';u2d.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.textContent=v;b.onclick=()=>{u2d[i]^=1;u2r=u2code(u2d);u2hDraw();};$('u2hd').appendChild(b);});
+  $('u2hr').innerHTML='';const lab=['p1','p2','d1','p3','d2','d3','d4'];
+  u2r.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.title=lab[i]+' (posición '+(i+1)+')';b.textContent=v;b.onclick=()=>{u2r[i]^=1;u2hDraw();};$('u2hr').appendChild(b);});
+  const r=u2r,s1=r[0]^r[2]^r[4]^r[6],s2=r[1]^r[2]^r[5]^r[6],s3=r[3]^r[4]^r[5]^r[6],pos=s3*4+s2*2+s1;
+  let t='Orden de bits: p1 p2 d1 p3 d2 d3 d4<br>Síndrome (s3 s2 s1) = '+s3+s2+s1+' = '+pos+'<br>';
+  if(pos===0)t+='<span class="g">Sin errores detectados.</span>';
+  else{const c=r.slice();c[pos-1]^=1;t+='<span class="r">Error en la posición '+pos+'.</span> Corrección: <b>'+c.join('')+'</b> (datos '+[c[2],c[4],c[5],c[6]].join('')+')';}
+  $('u2hOut').innerHTML=t;
+}
+u2r=u2code(u2d);
+
+let u3D=[0,1,0,1],u3S=[0,0],u3c=0;
+function u3draw(){
+  $('u3d').innerHTML='';u3D.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.textContent=v;b.onclick=()=>{u3D[i]^=1;u3draw();};$('u3d').appendChild(b);});
+  $('u3s').innerHTML='';u3S.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle sm'+(v?' on':'');b.textContent=v;b.onclick=()=>{u3S[i]^=1;u3draw();};$('u3s').appendChild(b);});
+  const sel=u3S[0]*2+u3S[1];
+  const dec=[0,1,2,3].map(i=>i===sel?1:0);
+  $('u3Out').innerHTML='Selección S1S0 = '+u3S.join('')+' → entrada D'+sel+'<br>Multiplexor: Y = D'+sel+' = <span class="o">'+u3D[sel]+'</span><br>Decodificador: Y0 Y1 Y2 Y3 = <b>'+dec.join(' ')+'</b> (solo se activa Y'+sel+', el minitérmino S1'+(u3S[0]?'':'′')+' S0'+(u3S[1]?'':'′')+')';
+}
+function u3show(){const b=u3c.toString(2).padStart(3,'0');$('u3cOut').innerHTML='Q2 Q1 Q0 = <b>'+b+'</b> = '+u3c+'<br>Cada pulso suma 1 módulo 8; tras 111 vuelve a 000.';}
+function u3tick(){u3c=(u3c+1)%8;u3show();}function u3reset(){u3c=0;u3show();}
+
+function u4calc(){
+  const n=parseInt($('u4n').value),m=parseInt($('u4m').value);if(!(n>0&&m>0)){return;}
+  const pos=Math.pow(2,n),bits=pos*m,bytes=bits/8;
+  const f=x=>{const u=['bytes','KiB','MiB','GiB','TiB'];let i=0;while(x>=1024&&i<u.length-1){x/=1024;i++;}return (Math.round(x*100)/100)+' '+u[i];};
+  $('u4Out').innerHTML='Posiciones direccionables: 2^'+n+' = <b>'+pos.toLocaleString('es-AR')+'</b><br>Capacidad: <b>'+f(bytes)+'</b> ('+bits.toLocaleString('es-AR')+' bits)';
+}
+const u4s={a:0,b:1,c:0};
+function u4tog(k){u4s[k]^=1;const b=$('u4'+k);b.textContent=u4s[k];b.classList.toggle('on',!!u4s[k]);u4i();}
+function u4i(){const r=u4s.a&u4s.b&(1-u4s.c);$('u4iOut').innerHTML='pedido ∧ habilitadas ∧ ¬máscara = '+u4s.a+' ∧ '+u4s.b+' ∧ '+(1-u4s.c)+' = <b>'+r+'</b><br>'+(r?'<span class="g">La CPU atiende la interrupción: guarda PC y estado, y salta a la rutina de servicio.</span>':'<span class="r">La CPU continúa con el programa actual.</span>');}
+
+function u5mode(){
+  const m=$('u5m').value,mem={20:30,23:99,30:11};let t='';
+  if(m==='imm')t='Operando = campo = <b>20</b>. No se accede a memoria.';
+  if(m==='dir')t='Dirección efectiva = 20 → M[20] = <b>30</b>. Un acceso a memoria.';
+  if(m==='ind')t='M[20] = 30 es la dirección del operando → M[30] = <b>11</b>. Dos accesos a memoria.';
+  if(m==='reg')t='Operando = R1 = <b>15</b>. No se accede a memoria (rápido, pero hay pocos registros).';
+  if(m==='idx')t='Dirección efectiva = 20 + X = 20 + 3 = 23 → M[23] = <b>99</b>. Útil para recorrer vectores.';
+  $('u5Out').innerHTML=t;
+}
+function u5mask(){
+  const x=parseInt($('u5x').value,16),k=parseInt($('u5k').value,16),op=$('u5o').value,o=$('u5mOut');
+  if(isNaN(x)||isNaN(k)){o.textContent='Ingresá bytes en hexadecimal (00 a FF).';return;}
+  const r=op==='AND'?x&k:op==='OR'?x|k:x^k,bin=v=>{const s=v.toString(2).padStart(8,'0');return s.slice(0,4)+' '+s.slice(4);};
+  const eff=op==='AND'?'los bits donde la máscara vale 0 pasan a 0':op==='OR'?'los bits donde la máscara vale 1 pasan a 1':'los bits donde la máscara vale 1 se invierten';
+  o.innerHTML='dato     = '+bin(x)+'<br>máscara  = '+bin(k)+'<br>'+op+'      = <b>'+bin(r)+'</b> (hex '+r.toString(16).toUpperCase().padStart(2,'0')+')<br>Efecto: '+eff+'.';
+}
+function u6calc(){
+  const h=parseFloat($('u6h').value)/100,c=parseFloat($('u6c').value),m=parseFloat($('u6m').value);if(isNaN(h)||isNaN(c)||isNaN(m))return;
+  const t=c+(1-h)*m;$('u6Out').innerHTML='T medio = '+c+' + (1 − '+h.toFixed(2)+') × '+m+' = <b>'+(Math.round(t*100)/100)+' ns</b><br>Sin caché cada acceso costaría '+m+' ns: aceleración ≈ <span class="o">'+(m/t).toFixed(1)+'×</span>';
+}
+function u6page(){
+  const v=parseInt($('u6v').value,16),o=$('u6pOut');if(isNaN(v)||v>0xFFFF){o.textContent='Ingresá hasta 4 dígitos hexadecimales.';return;}
+  const pg=v>>12,off=v&0xFFF,fr=(pg*3+5)%16;
+  o.innerHTML='Dirección virtual '+v.toString(2).padStart(16,'0').replace(/^(.{4})(.*)$/,'<span class="bit-e">$1</span> <span class="bit-m">$2</span>')+'<br>Página virtual = '+pg+' · desplazamiento = '+off+' (12 bits)<br>Tabla de páginas de ejemplo: página '+pg+' → marco <b>'+fr+'</b><br>Dirección física = marco ‖ desplazamiento = <b>'+((fr<<12)|off).toString(16).toUpperCase().padStart(4,'0')+'</b> (hex)';
+}
+function u7calc(){
+  const n=+$('u7n').value,p=+$('u7p').value,i=+$('u7i').value,d=+$('u7d').value;if(!(n>0&&p>0&&i>0&&d>0))return;
+  const a=n*p,b=n*i,c=d+i,mx=Math.max(a,b,c);
+  const row=(name,v,cl)=>'<div style="font-family:var(--font-mono);font-size:12.5px">'+name+': <b>'+v.toLocaleString('es-AR')+'</b> ciclos</div><div class="bar '+cl+'" style="width:'+Math.max(1,v/mx*100)+'%"></div>';
+  $('u7Out').innerHTML=row('E/S programada (N × consulta)',a,'')+row('Por interrupciones (N × atención)',b,'o')+row('DMA (preparación + 1 interrupción final)',c,'g')+'<div class="out">Menor costo para la CPU: <b>'+(c<=Math.min(a,b)?'DMA':b<a?'interrupciones':'E/S programada')+'</b>. Probá N = 1 para ver cuándo DMA deja de convenir.</div>';
+}
+chips('u8fl',[
+ ['SISD','Un flujo de instrucciones, un flujo de datos.','Procesador secuencial clásico.'],
+ ['SIMD','Una instrucción actúa sobre muchos datos a la vez.','Procesadores vectoriales, unidades SIMD y GPU.'],
+ ['MISD','Varias instrucciones sobre un mismo flujo de datos.','Poco frecuente; ejemplo: sistemas tolerantes a fallos con redundancia.'],
+ ['MIMD','Varias instrucciones sobre varios flujos de datos.','Multinúcleo y multiprocesadores.']
+],'u8flOut',it=>'<b>'+it[0]+'</b>: '+it[1]+'<br>Ejemplo: '+it[2]);
+function u8calc(){
+  const f=parseFloat($('u8f').value)/100,p=parseFloat($('u8p').value);if(isNaN(f)||!(p>=1))return;
+  const s=1/(f+(1-f)/p);$('u8Out').innerHTML='Aceleración = 1 / ('+f.toFixed(2)+' + '+(1-f).toFixed(2)+' / '+p+') = <b>'+s.toFixed(2)+'×</b><br>Límite con infinitos procesadores: <span class="o">'+(f>0?(1/f).toFixed(2)+'×':'sin límite')+'</span>';
+}
+function u8pipe(){
+  const n=Math.max(1,Math.min(8,parseInt($('u8n').value)||1)),k=5,E=['IF','ID','EX','MEM','WB'],cy=k+n-1;
+  let h='<table class="gantt"><tr><th></th>'+Array.from({length:cy},(_,i)=>'<th>'+(i+1)+'</th>').join('')+'</tr>';
+  for(let i=0;i<n;i++){h+='<tr><th>I'+(i+1)+'</th>';for(let c=0;c<cy;c++){const e=c-i;h+=e>=0&&e<k?'<td class="f">'+E[e]+'</td>':'<td></td>';}h+='</tr>';}
+  $('u8g').innerHTML=h+'</table>';
+  $('u8pOut').innerHTML='Sin segmentación: '+k+' × '+n+' = <b>'+(k*n)+'</b> ciclos · Con segmentación: '+k+' + '+n+' − 1 = <b>'+cy+'</b> ciclos · Aceleración = <span class="o">'+(k*n/cy).toFixed(2)+'×</span> (tiende a 5 al crecer n)';
+}
+u2float();u2ascii();u2hDraw();u3draw();u3show();u4calc();u4i();u5mode();u5mask();u6calc();u6page();u7calc();u8calc();u8pipe();
 
 // ---------- quiz ----------
 const QUIZ=[
