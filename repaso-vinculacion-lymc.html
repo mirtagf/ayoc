@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  html.embed header,html.embed footer{display:none}
+  html.embed .wrap{padding-top:4px;padding-bottom:20px}
+  html.embed body{background:transparent}
   :root{
     --bg:#E9EEF3; --bg-panel:#FFFFFF; --bg-panel-2:#F2F5F9; --bg-raised:#E1E8EF;
     --line:#C7D3DE; --line-strong:#9FB0C1; --text:#16212B; --text-dim:#51637A; --text-faint:#8698AC;
@@ -152,7 +155,7 @@
     <h1 class="title">Repaso y vinculación de conceptos: <em>de LyMC a la Arquitectura</em></h1>
     <p class="subtitle">Adicional de repaso de Lógica y Matemática Computacional. Recorre las unidades 1 a 8 de Arquitectura y muestra cómo la lógica proposicional, el álgebra de Boole y los sistemas de numeración se vuelven compuertas, circuitos aritméticos, ciclo de instrucción, caché y representación de datos.</p>
     <p class="affiliation">Lic. Walter Barrios — UNNE</p>
-    <a class="crosslink" href="taller-logica-proposicional.html">← Taller de Lógica Proposicional</a>
+    <a class="crosslink" href="logica-proposicional-taller.html">← Taller de Lógica Proposicional</a>
   </header>
 
   <nav class="tabs">
@@ -278,6 +281,7 @@
 </div>
 
 <script>
+if(location.search.indexOf("embed=1")>-1)document.documentElement.classList.add("embed");
 // ---------- tabs ----------
 document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('active',x===b));
