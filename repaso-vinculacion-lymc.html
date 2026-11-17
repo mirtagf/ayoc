@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repaso y vinculación de conceptos · LyMC → Arquitectura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E9EEF3; --bg-panel:#FFFFFF; --bg-panel-2:#F2F5F9; --bg-raised:#E1E8EF;
+    --line:#C7D3DE; --line-strong:#9FB0C1; --text:#16212B; --text-dim:#51637A; --text-faint:#8698AC;
+    --blue:#1B5FA6; --blue-soft:rgba(27,95,166,0.10); --orange:#D9662B; --orange-soft:rgba(217,102,43,0.12);
+    --green:#2F8F5B; --green-soft:rgba(47,143,91,0.12); --red:#C1443A; --red-soft:rgba(193,68,58,0.12);
+    --font-display:'IBM Plex Serif',Georgia,serif; --font-body:'IBM Plex Sans',-apple-system,sans-serif; --font-mono:'IBM Plex Mono','Courier New',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:repeating-linear-gradient(0deg,rgba(159,176,193,.16) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(159,176,193,.16) 0 1px,transparent 1px 28px),var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 20px 80px}
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:0 0 10px;font-weight:600}
+  h1.title{font-family:var(--font-display);font-weight:700;font-size:clamp(26px,4.2vw,40px);margin:0 0 8px;letter-spacing:-.01em}
+  h1.title em{font-style:italic;color:var(--orange)}
+  .subtitle{color:var(--text-dim);font-size:15.5px;max-width:680px;margin:0}
+  .affiliation{color:var(--text-faint);font-family:var(--font-mono);font-size:12.5px;margin:10px 0 0}
+  .crosslink{display:inline-block;margin-top:12px;font-family:var(--font-mono);font-size:12.5px;color:var(--blue);text-decoration:none;border:1px solid var(--blue);border-radius:999px;padding:5px 12px;background:var(--blue-soft)}
+  .crosslink:hover{background:var(--blue);color:#fff}
+  nav.tabs{display:flex;gap:6px;margin:22px 0 24px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+  nav.tabs button{font-family:var(--font-body);font-weight:700;font-size:14.5px;color:var(--text-dim);background:transparent;border:none;border-bottom:3px solid transparent;padding:11px 6px 12px;margin-right:20px;margin-bottom:-2px;cursor:pointer}
+  nav.tabs button .n{font-family:var(--font-mono);color:var(--text-faint);margin-right:8px;font-size:12px;font-weight:500}
+  nav.tabs button.active{color:var(--blue);border-bottom-color:var(--blue)}
+  nav.tabs button.active .n{color:var(--blue)}
+  .panel{display:none}.panel.active{display:block;animation:fade .22s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .box{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:18px}
+  .box h3{font-family:var(--font-display);font-size:20px;margin:0 0 6px;font-weight:700}
+  .box p.hint{color:var(--text-dim);font-size:14px;margin:0 0 14px}
+  .mono{font-family:var(--font-mono)}
+  .formula{font-family:var(--font-mono);color:var(--blue);background:var(--bg-panel-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;font-size:.9em}
+
+  /* mapa */
+  .map-row{display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;align-items:stretch;margin-bottom:12px}
+  .map-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:8px;padding:13px 15px;font-size:14px}
+  .map-card .tag{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;display:block;margin-bottom:4px}
+  .map-card.l .tag{color:var(--blue)} .map-card.r .tag{color:var(--orange)}
+  .map-card.r{border-left:3px solid var(--orange)} .map-card.l{border-left:3px solid var(--blue)}
+  .map-arrow{display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-family:var(--font-mono);font-size:20px}
+  .map-card .ex{display:block;margin-top:6px;font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim)}
+  .map-head{display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;margin-bottom:8px;font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+  .map-head .a{color:var(--blue)} .map-head .b{color:var(--orange)}
+  @media(max-width:620px){.map-row,.map-head{grid-template-columns:1fr}.map-arrow{transform:rotate(90deg);height:20px}.map-head span:nth-child(2){display:none}}
+
+  /* lab */
+  .lab-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .lab-tabs button{font-family:var(--font-mono);font-size:12.5px;font-weight:600;background:var(--bg-panel);color:var(--text-dim);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+  .lab-tabs button.active{background:var(--blue-soft);color:var(--blue);border-color:var(--blue)}
+  .lab{display:none}.lab.active{display:block}
+  input.num,select.sel{font-family:var(--font-mono);font-size:16px;background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:10px 12px;outline:none}
+  input.num:focus,select.sel:focus{border-color:var(--blue)}
+  .conv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}
+  .conv-cell{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+  .conv-cell .k{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);display:block}
+  .conv-cell .v{font-family:var(--font-mono);font-size:17px;color:var(--blue);font-weight:600;word-break:break-all}
+  .note{font-size:13.5px;color:var(--text-dim);background:var(--bg-panel-2);border-left:3px solid var(--orange);border-radius:0 6px 6px 0;padding:10px 14px;margin-top:14px}
+
+  .toggle{font-family:var(--font-mono);font-weight:700;font-size:16px;width:46px;height:46px;border-radius:8px;border:2px solid var(--line-strong);background:var(--bg-panel);color:var(--text-faint);cursor:pointer}
+  .toggle.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .out-led{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;border:2px solid var(--line-strong);font-family:var(--font-mono);font-weight:700;color:var(--text-faint);background:var(--bg-panel-2)}
+  .out-led.on{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 0 12px rgba(217,102,43,.55)}
+  .gate-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:14px 0}
+  .gate-row .lbl{font-family:var(--font-mono);font-size:12px;color:var(--text-dim)}
+  table.tv{border-collapse:collapse;font-family:var(--font-mono);font-size:13.5px;margin:10px 0}
+  table.tv th,table.tv td{border:1px solid var(--line);padding:6px 16px;text-align:center}
+  table.tv th{background:var(--bg-raised);color:var(--blue)}
+  table.tv tr.cur{background:var(--orange-soft)}
+  table.tv td.one{color:var(--blue);font-weight:700} table.tv td.zero{color:var(--text-faint)}
+  .nand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}
+  .nand-card{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:13.5px}
+  .nand-card b{color:var(--orange);font-family:var(--font-body)}
+  .nand-card .f{font-family:var(--font-mono);color:var(--blue);display:block;margin:6px 0;font-size:13px}
+  .nand-card .ok{font-family:var(--font-mono);font-size:12px;color:var(--green);font-weight:700}
+
+  .bits{display:flex;gap:6px;align-items:center;margin:6px 0 12px;font-family:var(--font-mono)}
+  .bits .bl{width:36px;font-size:12px;color:var(--text-dim)}
+  .adder-wrap{overflow-x:auto}
+  table.stage{border-collapse:collapse;font-family:var(--font-mono);font-size:13px;margin-top:12px}
+  table.stage th,table.stage td{border:1px solid var(--line);padding:6px 12px;text-align:center}
+  table.stage th{background:var(--bg-raised);color:var(--text-dim);font-size:11.5px}
+  table.stage td.s{color:var(--blue);font-weight:700} table.stage td.c{color:var(--orange);font-weight:700}
+  .sum-result{font-family:var(--font-mono);font-size:15px;margin-top:12px;background:var(--bg-raised);border-radius:6px;padding:10px 14px}
+  .sum-result b{color:var(--blue)} .sum-result .ovf{color:var(--red);font-weight:700}
+
+  /* quiz */
+  .quiz-top{display:flex;justify-content:space-between;margin-bottom:12px;font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim)}
+  .progress-bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:20px}
+  .progress-fill{height:100%;background:var(--blue);transition:width .3s}
+  .q-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:24px}
+  .q-topic{font-family:var(--font-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:10px;font-weight:600}
+  .q-text{font-family:var(--font-display);font-size:19px;font-weight:600;margin-bottom:18px;line-height:1.4}
+  .q-options{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+  .q-opt{text-align:left;font-family:var(--font-body);font-size:14.5px;background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:11px 14px;cursor:pointer}
+  .q-opt:hover{border-color:var(--blue)}
+  .q-opt.correct{border-color:var(--green);background:var(--green-soft)}
+  .q-opt.wrong{border-color:var(--red);background:var(--red-soft)}
+  .q-opt:disabled{cursor:default}
+  .q-explain{font-size:13.5px;color:var(--text-dim);background:var(--bg-panel-2);border-radius:6px;padding:12px 14px;margin-bottom:16px;display:none}
+  .q-explain.show{display:block}
+  .q-actions{display:flex;justify-content:flex-end}
+  button.next,button.go{font-family:var(--font-body);font-weight:700;font-size:13.5px;border-radius:6px;padding:10px 18px;cursor:pointer}
+  button.next{background:var(--bg-raised);color:var(--text);border:1px solid var(--line)}
+  button.next:disabled{opacity:.35;cursor:default}
+  button.go{background:var(--blue);color:#fff;border:none}
+  .score-card{text-align:center;padding:40px 20px}
+  .score-num{font-family:var(--font-display);font-size:56px;font-weight:700;color:var(--blue)}
+  footer{margin-top:50px;color:var(--text-faint);font-size:12.5px;font-family:var(--font-mono);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Arquitectura y Organización de Computadoras · FaCENA-UNNE</p>
+    <h1 class="title">Repaso y vinculación de conceptos: <em>de LyMC a la Arquitectura</em></h1>
+    <p class="subtitle">Adicional de repaso de Lógica y Matemática Computacional: cómo la lógica proposicional, el álgebra de Boole y los sistemas de numeración se vuelven compuertas, circuitos aritméticos y representación de datos en la computadora.</p>
+    <p class="affiliation">Lic. Walter Barrios — UNNE</p>
+    <a class="crosslink" href="logica-proposicional-taller.html">← Taller de Lógica Proposicional</a>
+  </header>
+
+  <nav class="tabs">
+    <button class="active" data-tab="mapa"><span class="n">01</span>Mapa de vinculación</button>
+    <button data-tab="lab"><span class="n">02</span>Laboratorio</button>
+    <button data-tab="quiz"><span class="n">03</span>Autoevaluación</button>
+  </nav>
+
+  <!-- MAPA -->
+  <section class="panel active" id="panel-mapa">
+    <div class="box">
+      <h3>¿Qué se retoma y dónde reaparece?</h3>
+      <p class="hint">Cada concepto de LyMC (izquierda) es la base de un tema de la materia (derecha). Los números de unidad corresponden al programa de Arquitectura y Organización de Computadoras.</p>
+      <div class="map-head"><span class="a">LyMC (repaso)</span><span></span><span class="b">Arquitectura</span></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Lógica proposicional</span>Conectivos ¬, ∧, ∨, →, ↔ y Δ; valores de verdad V/F.<span class="ex">V/F ⇔ 1/0</span></div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U3 · Álgebra de Boole</span>Variables y funciones lógicas; compuertas NOT, AND, OR, XOR.<span class="ex">p ∧ q ⇔ AND(p,q) · Δ ⇔ XOR</span></div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Tablas de verdad</span>Evaluación de una fórmula para todas las interpretaciones.<span class="ex">2ⁿ filas para n variables</span></div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U3 · Circuitos combinacionales</span>La tabla de verdad es la especificación del circuito; de ella se obtiene la función.<span class="ex">salida = f(entradas), sin memoria</span></div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Equivalencia lógica y De Morgan</span>¬(p ∧ q) ⇔ ¬p ∨ ¬q; distributiva, absorción, idempotencia.<span class="ex">transformar sin cambiar el significado</span></div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U3 · Simplificación</span>Reducir compuertas aplicando leyes (o mapas de Karnaugh) para un circuito más barato y rápido.</div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Conectivos adecuados</span>{¬,∧} o {¬,∨} bastan para expresar cualquier fórmula.<span class="ex">p | q (NAND) es adecuado por sí solo</span></div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U3 · Compuertas universales</span>NAND y NOR permiten construir cualquier circuito con un único tipo de compuerta.</div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Circuitos de conmutación</span>Serie = ∧, paralelo = ∨, interruptor invertido = ¬.</div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U3 · Compuertas y redes</span>Mismo modelo, con transistores como llaves controladas.</div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Sistemas de numeración</span>Base 2, 8, 16; cambios de base; complemento.<span class="ex">101101₂ = 2D₁₆ = 45₁₀</span></div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U2 · Representación de datos</span>Binario, hexadecimal, punto fijo, complemento a 2 y rango de representación.</div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Aritmética binaria + lógica</span>Suma bit a bit con acarreo, expresada como fórmulas booleanas.</div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U3 / U5 · Sumador y ALU</span>Semisumador, sumador completo y ALU como circuitos combinacionales dentro de la CPU.</div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Condicionales y consecuencia</span>p → q, razonamiento por casos, Modus Ponens.</div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U4 / U5 · Control de flujo</span>Banderas (cero, signo, acarreo) y condiciones de salto: «si Z = 1 entonces saltar».</div></div>
+
+      <div class="map-row"><div class="map-card l"><span class="tag">Operaciones ∧, ∨, Δ sobre valores</span>Aplicadas bit a bit sobre palabras.</div><div class="map-arrow">→</div><div class="map-card r"><span class="tag">U5 · Instrucciones</span>AND/OR/XOR/NOT como instrucciones, máscaras, puesta a cero de registros (x XOR x = 0).</div></div>
+    </div>
+  </section>
+
+  <!-- LAB -->
+  <section class="panel" id="panel-lab">
+    <div class="lab-tabs">
+      <button class="active" data-lab="conv">Sistemas de numeración</button>
+      <button data-lab="gate">Compuertas</button>
+      <button data-lab="nand">NAND universal</button>
+      <button data-lab="add">Sumador binario</button>
+    </div>
+
+    <div class="box lab active" id="lab-conv">
+      <h3>Conversor de numeración y complemento a 2</h3>
+      <p class="hint">Ingresá un número entero decimal (entre −128 y 255) y mirá su representación.</p>
+      <input class="num" id="convIn" type="number" value="45" min="-128" max="255" step="1">
+      <div class="conv-grid" id="convOut"></div>
+      <div class="note" id="convNote"></div>
+    </div>
+
+    <div class="box lab" id="lab-gate">
+      <h3>Compuertas = conectivos lógicos</h3>
+      <p class="hint">Elegí la compuerta, accioná las entradas y compará con la fórmula proposicional equivalente.</p>
+      <div class="gate-row">
+        <select class="sel" id="gateSel">
+          <option value="AND">AND</option><option value="OR">OR</option><option value="XOR">XOR</option>
+          <option value="NAND">NAND</option><option value="NOR">NOR</option><option value="XNOR">XNOR</option><option value="NOT">NOT</option>
+        </select>
+        <span class="lbl">A</span><button class="toggle" id="gA">0</button>
+        <span class="lbl" id="gBlbl">B</span><button class="toggle" id="gB">0</button>
+        <span class="lbl">→ salida</span><span class="out-led" id="gOut">0</span>
+      </div>
+      <div class="mono" id="gFormula" style="color:var(--blue);margin-bottom:6px"></div>
+      <div id="gTable"></div>
+    </div>
+
+    <div class="box lab" id="lab-nand">
+      <h3>NAND como compuerta universal</h3>
+      <p class="hint">Con una sola compuerta (p | q = ¬(p ∧ q)) se construyen las demás. Verificación sobre todas las filas de la tabla de verdad.</p>
+      <div class="nand-grid" id="nandGrid"></div>
+      <div class="note">Idea de LyMC: un conjunto de conectivos es <b>adecuado</b> si permite expresar cualquier fórmula. {|} lo es por sí solo; por eso toda la lógica de un procesador puede fabricarse con un único tipo de compuerta.</div>
+    </div>
+
+    <div class="box lab" id="lab-add">
+      <h3>Sumador de 4 bits con propagación de acarreo</h3>
+      <p class="hint">Cada etapa es un sumador completo: <span class="formula">s = a Δ b Δ c</span> y <span class="formula">c' = (a ∧ b) ∨ (c ∧ (a Δ b))</span>. Accioná los bits de A y B.</p>
+      <div class="bits"><span class="bl">A</span><span id="aBits"></span></div>
+      <div class="bits"><span class="bl">B</span><span id="bBits"></span></div>
+      <div class="adder-wrap"><table class="stage" id="stageTbl"></table></div>
+      <div class="sum-result" id="sumRes"></div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="panel" id="panel-quiz"><div id="quizRoot"></div></section>
+
+  <footer>Repaso y vinculación de conceptos · Arquitectura y Organización de Computadoras (FaCENA-UNNE) — adicional de apoyo basado en Lógica y Matemática Computacional</footer>
+</div>
+
+<script>
+// ---------- tabs ----------
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+b.dataset.tab));
+}));
+document.querySelectorAll('.lab-tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.lab-tabs button').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.lab').forEach(p=>p.classList.toggle('active',p.id==='lab-'+b.dataset.lab));
+}));
+
+// ---------- conversor ----------
+function renderConv(){
+  const raw=parseInt(document.getElementById('convIn').value,10);
+  const out=document.getElementById('convOut'), note=document.getElementById('convNote');
+  if(isNaN(raw)||raw<-128||raw>255){out.innerHTML='';note.textContent='Ingresá un entero entre −128 y 255.';return;}
+  const u=raw<0?(256+raw):raw;
+  const bin=u.toString(2).padStart(8,'0');
+  const grp=bin.slice(0,4)+' '+bin.slice(4);
+  const cells=[['Decimal',String(raw)],['Binario (8 bits)',grp],['Octal',u.toString(8)],['Hexadecimal',u.toString(16).toUpperCase().padStart(2,'0')]];
+  if(raw<0) cells.push(['Complemento a 2 (8 bits)',grp]);
+  else if(raw<=127){const inv=bin.split('').map(x=>x==='0'?'1':'0').join('');cells.push(['Complemento a 1',inv.slice(0,4)+' '+inv.slice(4)]);const c2=((256-u)&255).toString(2).padStart(8,'0');cells.push(['Complemento a 2 de '+raw+' (= −'+raw+')',c2.slice(0,4)+' '+c2.slice(4)]);}
+  out.innerHTML=cells.map(c=>'<div class="conv-cell"><span class="k">'+c[0]+'</span><span class="v">'+c[1]+'</span></div>').join('');
+  let msg='Rango en 8 bits: sin signo 0…255; con complemento a 2: −128…127.';
+  if(raw>127) msg+=' El patrón '+grp+' se interpreta como '+u+' sin signo o como '+(u-256)+' en complemento a 2: el mismo patrón de bits, distinta interpretación.';
+  if(raw<0) msg+=' Complemento a 2 = invertir los bits de '+(-raw)+' y sumar 1.';
+  note.textContent=msg;
+}
+document.getElementById('convIn').addEventListener('input',renderConv);
+
+// ---------- compuertas ----------
+const GATES={
+  AND:{f:(a,b)=>a&b,s:'p ∧ q',two:true},OR:{f:(a,b)=>a|b,s:'p ∨ q',two:true},
+  XOR:{f:(a,b)=>a^b,s:'p Δ q  ⇔  (p ∧ ¬q) ∨ (¬p ∧ q)',two:true},
+  NAND:{f:(a,b)=>1-(a&b),s:'¬(p ∧ q)  ⇔  ¬p ∨ ¬q',two:true},
+  NOR:{f:(a,b)=>1-(a|b),s:'¬(p ∨ q)  ⇔  ¬p ∧ ¬q',two:true},
+  XNOR:{f:(a,b)=>1-(a^b),s:'p ↔ q',two:true},
+  NOT:{f:(a)=>1-a,s:'¬p',two:false}
+};
+let gA=0,gB=0;
+function renderGate(){
+  const name=document.getElementById('gateSel').value,g=GATES[name];
+  document.getElementById('gA').textContent=gA;document.getElementById('gA').classList.toggle('on',!!gA);
+  document.getElementById('gB').textContent=gB;document.getElementById('gB').classList.toggle('on',!!gB);
+  document.getElementById('gB').style.display=g.two?'':'none';
+  document.getElementById('gBlbl').style.display=g.two?'':'none';
+  const o=g.f(gA,gB);const led=document.getElementById('gOut');led.textContent=o;led.classList.toggle('on',!!o);
+  document.getElementById('gFormula').textContent=name+'  ⇔  '+g.s;
+  let h='<table class="tv"><tr><th>A</th>'+(g.two?'<th>B</th>':'')+'<th>'+name+'</th></tr>';
+  const rows=g.two?[[0,0],[0,1],[1,0],[1,1]]:[[0],[1]];
+  rows.forEach(r=>{const v=g.f(r[0],r[1]);const cur=(r[0]===gA&&(!g.two||r[1]===gB))?' class="cur"':'';
+    h+='<tr'+cur+'><td>'+r[0]+'</td>'+(g.two?'<td>'+r[1]+'</td>':'')+'<td class="'+(v?'one':'zero')+'">'+v+'</td></tr>';});
+  document.getElementById('gTable').innerHTML=h+'</table>';
+}
+document.getElementById('gA').onclick=()=>{gA^=1;renderGate()};
+document.getElementById('gB').onclick=()=>{gB^=1;renderGate()};
+document.getElementById('gateSel').onchange=renderGate;
+
+// ---------- NAND universal ----------
+const nand=(a,b)=>1-(a&b);
+const NAND_DEFS=[
+  {n:'NOT p',f:'p | p',fn:(p,q)=>nand(p,p),ref:(p,q)=>1-p},
+  {n:'p AND q',f:'(p | q) | (p | q)',fn:(p,q)=>{const x=nand(p,q);return nand(x,x)},ref:(p,q)=>p&q},
+  {n:'p OR q',f:'(p | p) | (q | q)',fn:(p,q)=>nand(nand(p,p),nand(q,q)),ref:(p,q)=>p|q},
+  {n:'p NOR q',f:'((p | p) | (q | q)) | ((p | p) | (q | q))',fn:(p,q)=>{const x=nand(nand(p,p),nand(q,q));return nand(x,x)},ref:(p,q)=>1-(p|q)},
+  {n:'p → q',f:'p | (q | q)',fn:(p,q)=>nand(p,nand(q,q)),ref:(p,q)=>(1-p)|q},
+  {n:'p XOR q',f:'(p | (p | q)) | (q | (p | q))',fn:(p,q)=>{const x=nand(p,q);return nand(nand(p,x),nand(q,x))},ref:(p,q)=>p^q}
+];
+document.getElementById('nandGrid').innerHTML=NAND_DEFS.map(d=>{
+  let ok=true;[[0,0],[0,1],[1,0],[1,1]].forEach(r=>{if(d.fn(r[0],r[1])!==d.ref(r[0],r[1]))ok=false;});
+  return '<div class="nand-card"><b>'+d.n+'</b><span class="f">'+d.f+'</span><span class="ok">'+(ok?'✓ coincide en las 4 filas':'✗ no coincide')+'</span></div>';
+}).join('');
+
+// ---------- sumador ----------
+const aB=[0,1,0,1],bB=[0,0,1,1]; // MSB..LSB: A=0101=5, B=0011=3
+function makeBits(id,arr){
+  const c=document.getElementById(id);c.innerHTML='';
+  arr.forEach((v,i)=>{const b=document.createElement('button');b.className='toggle'+(v?' on':'');b.textContent=v;b.onclick=()=>{arr[i]^=1;makeBits(id,arr);renderAdder();};c.appendChild(b);c.appendChild(document.createTextNode(' '));});
+}
+function renderAdder(){
+  let carry=0,rows=[],sumBits=[];
+  for(let k=3;k>=0;k--){
+    const a=aB[k],b=bB[k],x=a^b,s=x^carry,cout=(a&b)|(carry&x);
+    rows.push({pos:3-k,a,b,cin:carry,s,cout});sumBits[k]=s;carry=cout;
+  }
+  let h='<tr><th>Etapa</th><th>a</th><th>b</th><th>c (entra)</th><th>s = aΔbΔc</th><th>c\' (sale)</th></tr>';
+  rows.forEach(r=>{h+='<tr><td>bit '+r.pos+(r.pos===0?' (LSB)':r.pos===3?' (MSB)':'')+'</td><td>'+r.a+'</td><td>'+r.b+'</td><td>'+r.cin+'</td><td class="s">'+r.s+'</td><td class="c">'+r.cout+'</td></tr>';});
+  document.getElementById('stageTbl').innerHTML=h;
+  const A=parseInt(aB.join(''),2),B=parseInt(bB.join(''),2),total=A+B;
+  const sb=sumBits.join('');
+  let t='<b>'+aB.join('')+'</b> ('+A+') + <b>'+bB.join('')+'</b> ('+B+') = <b>'+(carry?'1':'')+sb+'</b> ('+total+')';
+  if(carry) t+=' <span class="ovf">· acarreo final = 1: desborda 4 bits sin signo</span>';
+  const sA=aB[0]?A-16:A,sBv=bB[0]?B-16:B,sS=sumBits[0]?parseInt(sb,2)-16:parseInt(sb,2);
+  if((sA+sBv)!==sS) t+=' <span class="ovf">· desborde en complemento a 2 (resultado '+sS+', esperado '+(sA+sBv)+')</span>';
+  document.getElementById('sumRes').innerHTML=t;
+}
+
+// ---------- quiz ----------
+const QUIZ=[
+ {t:'Lógica y compuertas',q:'¿Qué compuerta lógica corresponde al conectivo de implicación p → q?',o:['No existe una compuerta única: se arma como ¬p ∨ q','AND','XOR','NOR'],c:0,e:'p → q ⇔ ¬p ∨ q. Se construye con una NOT y una OR (o con NAND: p | (q | q)).'},
+ {t:'Lógica y compuertas',q:'El conectivo Δ (disyunción exclusiva) de LyMC equivale en circuitos a la compuerta…',o:['XOR','XNOR','NAND','OR'],c:0,e:'p Δ q es verdadera cuando p y q difieren: es XOR. Su negación, p ↔ q, es XNOR.'},
+ {t:'Tablas de verdad',q:'Un circuito combinacional con 5 entradas tiene una tabla de verdad con…',o:['32 filas','10 filas','25 filas','5 filas'],c:0,e:'Con n variables hay 2ⁿ interpretaciones: 2⁵ = 32.'},
+ {t:'De Morgan',q:'¿Qué circuito es equivalente a ¬(A ∧ B)?',o:['¬A ∨ ¬B','¬A ∧ ¬B','A ∨ B','¬A Δ ¬B'],c:0,e:'De Morgan: la negación de una conjunción es la disyunción de las negaciones.'},
+ {t:'Conectivos adecuados',q:'¿Por qué se dice que NAND es una compuerta universal?',o:['Porque {NAND} es un conjunto adecuado de conectivos: expresa cualquier fórmula','Porque es la más rápida','Porque tiene una sola entrada','Porque no necesita alimentación'],c:0,e:'Con NAND se obtienen ¬, ∧ y ∨, y con ellos cualquier función booleana.'},
+ {t:'Numeración',q:'El número 45 decimal en binario de 8 bits es…',o:['0010 1101','0011 0101','0010 0111','0100 1101'],c:0,e:'45 = 32 + 8 + 4 + 1 = 0010 1101₂ = 2D₁₆.'},
+ {t:'Numeración',q:'En complemento a 2 con 8 bits, el patrón 1111 1111 representa…',o:['−1','255','−127','0'],c:0,e:'Con signo, 1111 1111 = 255 − 256 = −1. Sin signo sería 255: mismo patrón, otra interpretación.'},
+ {t:'Numeración',q:'¿Cuál es el rango de enteros representables en complemento a 2 con 8 bits?',o:['−128 a 127','−127 a 127','0 a 255','−255 a 255'],c:0,e:'Rango −2ⁿ⁻¹ … 2ⁿ⁻¹ − 1 con n = 8.'},
+ {t:'Sumador',q:'En un sumador completo, la salida de suma s se expresa como…',o:['a Δ b Δ c','a ∧ b ∧ c','a ∨ b ∨ c','a → b'],c:0,e:'La suma es 1 cuando hay un número impar de unos entre a, b y c: XOR de las tres.'},
+ {t:'Sumador',q:'El acarreo de salida de un sumador completo es 1 cuando…',o:['al menos dos de a, b, c valen 1','a, b, c valen 1 todos','exactamente un valor es 1','a vale 1'],c:0,e:'c\' = (a ∧ b) ∨ (c ∧ (a Δ b)): ocurre con dos o más unos (función mayoría).'},
+ {t:'Instrucciones',q:'¿Por qué la instrucción XOR R, R deja el registro en cero?',o:['Porque x Δ x es falso para todo x','Porque x ∧ x = 0','Porque x ∨ x = 0','Porque borra la memoria'],c:0,e:'Δ es verdadero solo si los operandos difieren; bit a bit, un valor nunca difiere de sí mismo.'},
+ {t:'Control de flujo',q:'Una instrucción de salto condicional «saltar si Z = 1» se apoya en una bandera. ¿Qué lógica la genera?',o:['Una NOR de todos los bits del resultado','Una AND de todos los bits','Una XOR de dos bits','Una NOT del acarreo'],c:0,e:'Z = 1 cuando todos los bits del resultado son 0: NOR de todos ellos.'}
+];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let session=[],qi=0,score=0,answered=false;
+function startQuiz(){
+  session=shuffle(QUIZ).map(q=>{const opts=q.o.map((t,i)=>({t,ok:i===q.c}));return {t:q.t,q:q.q,e:q.e,opts:shuffle(opts)};});
+  qi=0;score=0;answered=false;renderQuiz();
+}
+function renderQuiz(){
+  const root=document.getElementById('quizRoot');
+  if(qi>=session.length){
+    root.innerHTML='<div class="q-card score-card"><div class="score-num">'+score+' / '+session.length+'</div><p>'+(score===session.length?'Excelente: los conceptos están bien vinculados.':score>=session.length*0.7?'Buen dominio. Repasá las explicaciones de los errores.':'Conviene volver al mapa de vinculación y al laboratorio.')+'</p><button class="go" id="again">Reintentar</button></div>';
+    document.getElementById('again').onclick=startQuiz;return;
+  }
+  const q=session[qi];answered=false;
+  root.innerHTML='<div class="quiz-top"><span>Pregunta '+(qi+1)+' de '+session.length+'</span><span>Aciertos: '+score+'</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+(qi/session.length*100)+'%"></div></div><div class="q-card"><div class="q-topic">'+q.t+'</div><div class="q-text">'+q.q+'</div><div class="q-options" id="opts"></div><div class="q-explain" id="expl">'+q.e+'</div><div class="q-actions"><button class="next" id="nxt" disabled>'+(qi===session.length-1?'Ver resultado':'Siguiente')+'</button></div></div>';
+  const od=document.getElementById('opts');
+  q.opts.forEach(op=>{const b=document.createElement('button');b.className='q-opt';b.textContent=op.t;b.onclick=()=>{
+    if(answered)return;answered=true;if(op.ok)score++;
+    [...od.children].forEach((x,i)=>{x.disabled=true;if(q.opts[i].ok)x.classList.add('correct');});
+    if(!op.ok)b.classList.add('wrong');
+    document.getElementById('expl').classList.add('show');document.getElementById('nxt').disabled=false;};od.appendChild(b);});
+  document.getElementById('nxt').onclick=()=>{qi++;renderQuiz();};
+}
+
+makeBits('aBits',aB);makeBits('bBits',bB);
+renderConv();renderGate();renderAdder();startQuiz();
+</script>
+</body>
+</html>
