@@ -388,6 +388,15 @@ footer{margin-top:40px;color:var(--muted);font-size:.84rem;border-top:1px solid 
 .xw .map-card.l{border-left:3px solid var(--accent)} .xw .map-card.l .tag{color:var(--accent)}
 .xw .map-card.r{border-left:3px solid var(--warn)} .xw .map-card.r .tag{color:var(--warn)}
 .xw .map-card .ex{display:block;margin-top:6px;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.xw table.pla td.cell{cursor:pointer;text-align:center;color:var(--muted);user-select:none}
+.xw table.pla td.cell:hover{background:var(--accent-soft)}
+.xw table.pla td.on{color:var(--accent);font-weight:700;background:var(--accent-soft)}
+.xw table.pla td.fix{text-align:center;color:var(--muted)}
+.xw table.mem td.chg{background:var(--orange-soft);color:var(--warn);font-weight:700}
+.xw .cmpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:8px}
+.xw .cmpcol{min-width:0;overflow-x:auto}
+.xw .cmpcol .eq{margin:6px 0}
+.xw table.mem{display:block;overflow-x:auto}
 .xw .map-arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:1.2rem}
 @media(max-width:620px){.xw .map-row,.xw .map-head{grid-template-columns:1fr}.xw .map-arrow{transform:rotate(90deg);height:20px}.xw .map-head span:nth-child(2){display:none}}
 .aff{color:var(--muted);font-family:var(--mono);font-size:.8rem;margin:10px 0 0}
@@ -2222,10 +2231,111 @@ function u3extra(){return [
   xw("Multiplexor 4:1 y decodificador 2:4",null,"\n<div class=\"wrow\"><label>D0 D1 D2 D3</label><span id=\"u3d\"></span></div>\n<div class=\"wrow\"><label>Selección S1 S0</label><span id=\"u3s\"></span></div>\n<div class=\"out\" id=\"u3Out\"></div>",()=>{u3draw();}),
   xw("Contador binario de 3 bits (circuito secuencial)",null,"\n<div class=\"wrow\"><button class=\"go\" onclick=\"u3tick()\">Pulso de reloj</button><button class=\"sec\" onclick=\"u3reset()\">Reset</button></div>\n<div class=\"out\" id=\"u3cOut\"></div>",()=>{u3show();})
 ];}
+/* ===== U4: simulador ROM/PLA y comparación cableada vs programable ===== */
+const ROMP={
+  clear:{n:'Limpiar',names:['F0','F1','F2','F3'],rom:[[],[],[],[]],pla:[]},
+  suma:{n:'Sumador completo',names:['S','Cout','—','—'],rom:[[1,2,4,7],[3,5,6,7],[],[]],
+    pla:[[[2,2,1],[0]],[[2,1,2],[0]],[[1,2,2],[0]],[[1,1,1],[0]],[[1,1,0],[1]],[[1,0,1],[1]],[[0,1,1],[1]]]},
+  op:{n:'Decodificador de opcode',names:['MEM_RD','MEM_WR','ALU_ADD','PC_LOAD'],rom:[[0,2],[1],[2],[3]],
+    pla:[[[2,0,2],[0]],[[2,2,1],[1]],[[2,1,2],[2]],[[2,1,1],[3]]]}
+};
+const R={mode:'rom',and:[],or:[],names:['F0','F1','F2','F3'],inp:[0,0,0],pre:'op'};
+function romMinterms(){R.and=[];for(let t=0;t<8;t++)R.and.push([(t>>2&1)?1:2,(t>>1&1)?1:2,(t&1)?1:2]);}
+function romBlank(){R.or=[0,1,2,3].map(()=>Array(8).fill(0));}
+function romLoad(k){
+  R.pre=k;const p=ROMP[k];R.names=p.names.slice();romBlank();
+  if(R.mode==='rom'){romMinterms();p.rom.forEach((ms,o)=>ms.forEach(m=>R.or[o][m]=1));}
+  else{R.and=[];for(let t=0;t<8;t++)R.and.push([0,0,0]);
+    p.pla.forEach((r,t)=>{R.and[t]=r[0].slice();r[1].forEach(o=>R.or[o][t]=1);});}
+  romDraw();
+}
+function romMode(m){
+  R.mode=m;
+  if(m==='rom'){romLoad(R.pre);}
+  else{ // PLA arranca como un decodificador completo programable: se puede simplificar
+    const p=ROMP[R.pre];romMinterms();romBlank();p.rom.forEach((ms,o)=>ms.forEach(x=>R.or[o][x]=1));R.names=p.names.slice();romDraw();}
+}
+function romAnd(t,i){if(R.mode!=='pla')return;R.and[t][i]=(R.and[t][i]+1)%3;romDraw();}
+function romOr(o,t){R.or[o][t]^=1;romDraw();}
+function romIn(i){R.inp[i]^=1;romDraw();}
+function romTerm(t,x){const a=R.and[t];let used=false,v=1;for(let i=0;i<3;i++){if(a[i]===0)continue;used=true;if(a[i]===1&&!x[i])v=0;if(a[i]===2&&x[i])v=0;}return used?v:0;}
+function romOut(x){return [0,1,2,3].map(o=>{let v=0;for(let t=0;t<8;t++)if(R.or[o][t]&&romTerm(t,x))v=1;return v;});}
+function romEq(o){const L=['A','B','C'];const ts=[];for(let t=0;t<8;t++)if(R.or[o][t]){const a=R.and[t];const s=a.map((c,i)=>c===1?L[i]:c===2?'¬'+L[i]:'').filter(Boolean).join('·');if(s)ts.push(s);}return ts.length?ts.join(' + '):'0';}
+function romDraw(){
+  const box=$('romBox');if(!box)return;
+  const L=['A','B','C'],pla=R.mode==='pla',x=R.inp;
+  const cell=(c,i)=>c===0?'·':c===1?L[i]:'¬'+L[i];
+  let h='<table class="mem pla"><tr><th>término</th>'+L.map(l=>'<th>'+l+'</th>').join('')+'<th>valor</th>'+R.names.map(n=>'<th>'+n+'</th>').join('')+'</tr>';
+  for(let t=0;t<8;t++){
+    const v=romTerm(t,x);
+    h+='<tr'+(v?' class="cur"':'')+'><td>P'+t+'</td>'+R.and[t].map((c,i)=>'<td class="'+(pla?'cell ':'fix ')+(c?'on':'')+'"'+(pla?' onclick="romAnd('+t+','+i+')" title="clic: sin conexión → X → ¬X"':'')+'>'+cell(c,i)+'</td>').join('')+'<td>'+v+'</td>'
+      +[0,1,2,3].map(o=>'<td class="cell '+(R.or[o][t]?'on':'')+'" onclick="romOr('+o+','+t+')" title="clic: conectar / desconectar">'+(R.or[o][t]?'●':'○')+'</td>').join('')+'</tr>';
+  }
+  h+='</table>';
+  $('romBox').innerHTML=h;
+  const out=romOut(x);
+  let o='<b>Entrada</b> ABC = '+x.join('')+' → ';o+=R.names.map((n,i)=>n==='—'?'':n+' = <b>'+out[i]+'</b>').filter(Boolean).join(' · ');
+  o+='<br><br><b>Tabla de verdad</b> (calculada a partir de la matriz)<br>';
+  o+='<table class="mem"><tr><th>A</th><th>B</th><th>C</th>'+R.names.map(n=>'<th>'+n+'</th>').join('')+'</tr>';
+  for(let m=0;m<8;m++){const xx=[m>>2&1,m>>1&1,m&1],y=romOut(xx);o+='<tr'+(m===x[0]*4+x[1]*2+x[2]?' class="cur"':'')+'><td>'+xx[0]+'</td><td>'+xx[1]+'</td><td>'+xx[2]+'</td>'+y.map(b=>'<td>'+b+'</td>').join('')+'</tr>';}
+  o+='</table><br>';
+  let fu=0;R.and.forEach(a=>a.forEach(c=>{if(c)fu++;}));let fo=0;R.or.forEach(a=>a.forEach(c=>{fo+=c;}));
+  const usedT=[...Array(8).keys()].filter(t=>R.and[t].some(c=>c)&&R.or.some(r=>r[t])).length;
+  o+='<b>Ecuaciones</b> (suma de productos)<br>'+R.names.map((n,i)=>n==='—'?'':n+' = '+romEq(i)).filter(Boolean).join('<br>');
+  o+='<br><br><b>Conexiones quemadas</b>: plano AND '+(pla?fu:'fijo (decodificador completo de 8 salidas)')+' · plano OR '+fo+' · términos producto en uso: '+usedT+' de 8';
+  $('romOut').innerHTML=o;
+  $('romIn').innerHTML=L.map((l,i)=>'<label>'+l+'</label><button class="toggle sm '+(x[i]?'on':'')+'" onclick="romIn('+i+')">'+x[i]+'</button>').join('');
+  ['rom','pla'].forEach(m=>$('romM_'+m).classList.toggle('active',R.mode===m));
+  Object.keys(ROMP).forEach(k=>$('romP_'+k).classList.toggle('active',R.pre===k&&k!=='clear'));
+  $('romNote').innerHTML=pla?'<b>PLA</b>: ambos planos son programables. Cada término puede usar solo las entradas necesarias, por eso una función simple ocupa pocos términos. Arranca como decodificador completo; <b>simplifique</b> reuniendo términos.':'<b>ROM</b>: el plano AND es fijo (decodifica las 8 combinaciones) y solo se «quema» el plano OR: es una memoria de 8 palabras de 4 bits (dirección = ABC, contenido = salidas).';
+}
+function romInit(){romMode('rom');romLoad('op');}
+function romClear(){R.pre='clear';R.names=['F0','F1','F2','F3'];romBlank();
+  if(R.mode==='rom')romMinterms();else{R.and=[];for(let t=0;t<8;t++)R.and.push([0,0,0]);}romDraw();}
+
+/* Comparación cableada vs programable: decodificación de opcode */
+const CMP={v:1,op:2,
+ sig:['MEM_RD','MEM_WR','ALU_ADD','PC_LOAD'],
+ isa:{1:{'000':'LOAD','001':'STORE','010':'ADD','011':'JMP'},2:{'000':'LOAD','001':'STORE','010':'ADD','100':'JMP'}}};
+function cmpWord(v,m){const n=CMP.isa[v][m.toString(2).padStart(3,'0')]||null;
+  return [n==='LOAD'||n==='ADD'?1:0,n==='STORE'?1:0,n==='ADD'?1:0,n==='JMP'?1:0];}
+function cmpEq(v){return ['¬A·¬C','¬A·¬B·C','¬A·B·¬C',v===1?'¬A·B·C':'A·¬B·¬C'];}
+function cmpWired(v,m){const A=m>>2&1,B=m>>1&1,C=m&1,nA=1-A,nB=1-B,nC=1-C;
+  return [nA&nC,nA&nB&C,nA&B&nC,v===1?(nA&B&C):(A&nB&nC)];}
+function cmpVer(v){CMP.v=v;cmpDraw();}
+function cmpOp(m){CMP.op=m;cmpDraw();}
+function cmpDraw(){
+  if(!$('cmpBox'))return;
+  const v=CMP.v,m=CMP.op,bin=m.toString(2).padStart(3,'0');
+  const w=cmpWired(v,m),p=cmpWord(v,m);
+  const nm=CMP.isa[v][bin]||'(no definido)';
+  const ops=[...Array(8).keys()].map(i=>'<button class="chip '+(i===m?'active':'')+'" onclick="cmpOp('+i+')">'+i.toString(2).padStart(3,'0')+'</button>').join('');
+  const eq=cmpEq(v);
+  let a='<div class="cmpcol"><b>Lógica cableada</b><div class="eq">'+CMP.sig.map((s,i)=>s+' = '+eq[i]).join('\n')+'</div>'
+    +'<div class="out">'+CMP.sig.map((s,i)=>s+' = <b>'+w[i]+'</b>').join(' · ')+'<br>Retardo: 1 inversor + 1 AND ≈ 2 compuertas</div></div>';
+  let tb='<table class="mem"><tr><th>dir (opcode)</th>'+CMP.sig.map(s=>'<th>'+s+'</th>').join('')+'</tr>';
+  for(let i=0;i<8;i++){const wd=cmpWord(v,i),w1=cmpWord(1,i),ch=wd.join('')!==w1.join('');
+    tb+='<tr'+(i===m?' class="cur"':'')+'><td>'+i.toString(2).padStart(3,'0')+'</td>'+wd.map(b=>'<td'+(ch?' class="chg"':'')+'>'+b+'</td>').join('')+'</tr>';}
+  tb+='</table>';
+  let b='<div class="cmpcol"><b>Lógica programable</b> (memoria de control de 8 × 4)'+tb
+    +'<div class="out">'+CMP.sig.map((s,i)=>s+' = <b>'+p[i]+'</b>').join(' · ')+'<br>Retardo: 1 acceso a memoria de control</div></div>';
+  let diffW=0;if(v===2)diffW=1;let diffP=0;for(let i=0;i<8;i++)if(cmpWord(2,i).join('')!==cmpWord(1,i).join(''))diffP++;
+  let msg='';
+  if(v===1)msg='<span class="g">Versión inicial de la ISA: ambos diseños realizan la misma función.</span>';
+  else msg='<span class="o">La ISA cambia: JMP pasa de 011 a 100.</span><br><b>Cableada</b>: cambia la ecuación de PC_LOAD (y puede cambiar el diseño completo): hay que <span class="r">rediseñar y volver a fabricar o recablear</span> el circuito.<br><b>Programable</b>: se reescriben <span class="g">'+diffP+' palabras</span> de la memoria de control; el hardware no se toca.';
+  $('cmpBox').innerHTML='<div class="wrow"><label>Opcode</label><span class="chips">'+ops+'</span></div>'
+    +'<div class="wrow"><label>Especificación</label><button class="chip '+(v===1?'active':'')+'" onclick="cmpVer(1)">ISA v1 · JMP = 011</button><button class="chip '+(v===2?'active':'')+'" onclick="cmpVer(2)">ISA v2 · JMP = 100</button></div>'
+    +'<p style="margin:6px 0">Instrucción decodificada: <b>'+nm+'</b></p>'
+    +'<div class="cmpgrid">'+a+b+'</div><div class="out" style="margin-top:10px">'+msg+'<br>Resultado equivalente en ambos: <b>'+(w.join('')===p.join('')?'coinciden ✓':'difieren ✗')+'</b></div>';
+}
+
 function u4mods(){return [
   devCard("<p>Una computadora se organiza en tres subsistemas: la <b>CPU</b> (unidad de control, ALU y registros), la <b>memoria principal</b> y los <b>módulos de entrada/salida</b>. Todos se comunican por un sistema de <b>buses</b>. El bus de <b>direcciones</b> lo maneja la CPU en un solo sentido y su ancho n define cuántas posiciones se direccionan (2ⁿ). El bus de <b>datos</b> es bidireccional y su ancho es el de la palabra. El bus de <b>control</b> transporta señales como lectura, escritura, reloj, pedido de interrupción y su reconocimiento.</p>\n<p>El comportamiento de la CPU se describe con <b>microoperaciones</b> en notación de transferencia entre registros (RTL). La flecha indica el sentido de la transferencia: <span class=\"mono\">MAR ← PC</span> copia el contador de programa al registro de direcciones. La búsqueda de una instrucción se escribe así:</p>\n<div class=\"eq\">T0: MAR ← PC      T1: MBR ← M[MAR], PC ← PC + 1      T2: IR ← MBR</div>\n<p>El <b>ciclo de instrucción</b> repite las etapas de búsqueda, decodificación, cálculo de la dirección del operando, búsqueda del operando, ejecución y escritura del resultado. Antes de comenzar la instrucción siguiente, la CPU consulta si hay una <b>interrupción</b> pendiente y habilitada. Si la hay, guarda el PC y el estado (habitualmente en la pila), carga en el PC la dirección de la rutina de servicio, la ejecuta y al retornar restaura el estado.</p>\n<p>Las <b>subrutinas</b> siguen una lógica parecida. La instrucción CALL guarda la dirección de retorno en la <b>pila</b> (estructura LIFO apuntada por SP) y salta a la subrutina; RET recupera esa dirección. La pila permite anidar llamadas e implementar recursión.</p>\n<p>La unidad de control que genera las señales de cada microoperación puede ser <b>cableada</b> (circuito combinacional y secuencial) o <b>programable</b> (PLA o memoria de control). Ambas se retoman en la Unidad 5.</p>"),
   xw('Ciclo de búsqueda y ejecución','Máquina didáctica de un acumulador. Avance micro-paso a micro-paso y observe PC, MAR, MDR, IR y ACC. Programa: ACC ← M[6] + M[7]; M[8] ← ACC.',"<div class=\"regs\" id=\"cyRegs\"></div><div class=\"phase\" id=\"cyPhase\"></div>\n<div class=\"btn-row\"><button class=\"go\" id=\"cyStep\" onclick=\"cyStep()\">Siguiente micro-paso</button><button class=\"sec\" onclick=\"cyInit()\">Reiniciar</button></div><div id=\"cyMem\"></div>",()=>{cyInit();}),
-  xw("Calculadora de capacidad de memoria",null,"\n<div class=\"wrow\"><label>Líneas de dirección n</label><input class=\"num\" id=\"u4n\" type=\"number\" min=\"1\" max=\"40\" value=\"16\" oninput=\"u4calc()\"><label>Ancho de palabra m (bits)</label><input class=\"num\" id=\"u4m\" type=\"number\" min=\"1\" max=\"128\" value=\"8\" oninput=\"u4calc()\"></div>\n<div class=\"out\" id=\"u4Out\"></div>",()=>{u4calc();}),
+  devCard("<p>La <b>unidad de control</b> puede realizarse de dos maneras. En la <b>lógica cableada</b> (hardwired) las señales de control son la salida de un circuito de compuertas y flip-flops construido para el repertorio de instrucciones concreto: el opcode y el estado del ciclo entran, las señales salen. Es rápida, porque la señal se produce en pocos retardos de compuerta, pero su diseño es laborioso y cualquier cambio del repertorio exige rediseñar el circuito. Es la elección típica de las arquitecturas RISC, con repertorios chicos y regulares.</p><p>En la <b>lógica programable</b> (microprogramada) cada instrucción se descompone en microinstrucciones almacenadas en una <b>memoria de control</b>; la unidad de control lee la palabra siguiente y emite sus bits como señales. Es más lenta, porque agrega un acceso a memoria por paso, pero es ordenada y modificable: agregar o corregir una instrucción es cambiar contenido, no hardware. Es frecuente en repertorios amplios y complejos (CISC).</p><p>Los dispositivos lógicos programables que se ven más abajo son la pieza común: una <b>ROM</b> es un plano AND fijo (decodificador completo) seguido de un plano OR programable; una <b>PLA</b> hace programables los dos planos y expresa la función como suma de productos, con lo cual aprovecha mejor los términos. Programar significa «quemar» las conexiones que definen la función.</p>"),
+  xw('Simulador de ROM y PLA','Defina una función de 3 entradas (A, B, C) y 4 salidas conectando la matriz. Haga clic en un círculo para quemar o borrar una conexión del plano OR; en modo PLA también edite el plano AND (clic: sin conexión, X, ¬X). Cambie A, B y C y observe cómo se calcula la salida.',"<div class=\"wrow\"><span class=\"chips\"><button class=\"chip\" id=\"romM_rom\" onclick=\"romMode('rom')\">ROM (AND fijo)</button><button class=\"chip\" id=\"romM_pla\" onclick=\"romMode('pla')\">PLA (AND y OR programables)</button></span></div><div class=\"wrow\"><label>Cargar función</label><span class=\"chips\"><button class=\"chip\" id=\"romP_op\" onclick=\"romLoad('op')\">Decodificador de opcode</button><button class=\"chip\" id=\"romP_suma\" onclick=\"romLoad('suma')\">Sumador completo</button><button class=\"chip\" id=\"romP_clear\" onclick=\"romClear()\">Limpiar</button></span></div><div class=\"wrow\" id=\"romIn\"></div><div class=\"adder-wrap\" id=\"romBox\"></div><p id=\"romNote\" style=\"font-size:.85rem;margin:8px 0\"></p><div class=\"out\" id=\"romOut\"></div>",()=>{romInit();}),
+  xw('Lógica cableada frente a lógica programable','Misma función: decodificar un código de operación de 3 bits en cuatro señales de control. Elija un opcode y luego cambie la especificación de la ISA para ver qué cuesta modificar cada diseño.',"<div id=\"cmpBox\"></div><table class=\"mem\" style=\"margin-top:12px\"><tr><th>Criterio</th><th>Cableada</th><th>Programable</th></tr><tr><td>Velocidad</td><td>Mayor</td><td>Menor (acceso a memoria)</td></tr><tr><td>Modificar o agregar instrucciones</td><td>Rediseño del circuito</td><td>Reescribir la memoria de control</td></tr><tr><td>Costo de diseño y verificación</td><td>Alto si el repertorio es grande</td><td>Menor, más sistemático</td></tr><tr><td>Repertorios típicos</td><td>RISC</td><td>CISC</td></tr></table>",()=>{cmpDraw();}),
+xw("Calculadora de capacidad de memoria",null,"\n<div class=\"wrow\"><label>Líneas de dirección n</label><input class=\"num\" id=\"u4n\" type=\"number\" min=\"1\" max=\"40\" value=\"16\" oninput=\"u4calc()\"><label>Ancho de palabra m (bits)</label><input class=\"num\" id=\"u4m\" type=\"number\" min=\"1\" max=\"128\" value=\"8\" oninput=\"u4calc()\"></div>\n<div class=\"out\" id=\"u4Out\"></div>",()=>{u4calc();}),
   xw("Interrupción habilitada",null,"\n<div class=\"wrow\"><label>Pedido</label><button class=\"toggle sm\" id=\"u4a\" onclick=\"u4tog('a')\">0</button><label>Habilitadas</label><button class=\"toggle sm on\" id=\"u4b\" onclick=\"u4tog('b')\">1</button><label>Máscara activa</label><button class=\"toggle sm\" id=\"u4c\" onclick=\"u4tog('c')\">0</button></div>\n<div class=\"out\" id=\"u4iOut\"></div>",()=>{u4i();}),
   thinkCard("Un computador direcciona 1 MiB con palabras de 8 bits. ¿Cuántas líneas de dirección tiene?","<p>1 MiB = 2²⁰ bytes, por lo tanto n = 20.</p>")];}
 function u5mods(){return [
